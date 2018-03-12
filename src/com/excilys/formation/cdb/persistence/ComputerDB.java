@@ -54,6 +54,14 @@ public class ComputerDB {
 		Statement s = conn.createStatement();
 		s.executeUpdate("DELETE FROM Computer WHERE id='"+id+"'");
 	}
+	
+	public Computer selectOne (int id) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Computer "
+				+ "WHERE id = ?;");
+		ps.setInt(1, id);
+		ResultSet res = ps.executeQuery();
+		return ComputerMP.resToComputer(res);
+	}
  	
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
