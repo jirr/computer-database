@@ -1,12 +1,13 @@
 package com.excilys.formation.cdb.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Computer {
 	private int id;
 	private String name;
-	private Date dateIntroduced;
-	private Date dateDiscontinued;
+	private Timestamp dateIntroduced;
+	private Timestamp dateDiscontinued;
 	private int idCompany;
 	
 	/**
@@ -15,7 +16,7 @@ public class Computer {
 	 * @param dateDiscontinued
 	 * @param manufacturer
 	 */
-	public Computer(int id, String name, Date dateIntroduced, Date dateDiscontinued, int idCompany) {
+	public Computer(int id, String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, int idCompany) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -52,25 +53,25 @@ public class Computer {
 	/**
 	 * @return the dateIntroduced
 	 */
-	public Date getDateIntroduced() {
+	public Timestamp getDateIntroduced() {
 		return dateIntroduced;
 	}
 	/**
 	 * @param dateIntroduced the dateIntroduced to set
 	 */
-	public void setDateIntroduced(Date dateIntroduced) {
+	public void setDateIntroduced(Timestamp dateIntroduced) {
 		this.dateIntroduced = dateIntroduced;
 	}
 	/**
 	 * @return the dateDiscontinued
 	 */
-	public Date getDateDiscontinued() {
+	public Timestamp getDateDiscontinued() {
 		return dateDiscontinued;
 	}
 	/**
 	 * @param dateDiscontinued the dateDiscontinued to set
 	 */
-	public void setDateDiscontinued(Date dateDiscontinued) {
+	public void setDateDiscontinued(Timestamp dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
 

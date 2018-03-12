@@ -7,9 +7,24 @@ public class Company {
 	/**
 	 * @param name
 	 */
-	public Company(String name) {
+	public Company(int id, String name) {
 		super();
+		this.id = id;
 		this.name = name;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

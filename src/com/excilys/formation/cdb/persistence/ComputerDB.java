@@ -1,20 +1,22 @@
 package com.excilys.formation.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import com.excilys.formation.cdb.model.Computer;
 
 public class ComputerDB {
 
 	Connection conn = ConnexionManager.INSTANCE.getConn();
-	ArrayList<Computer> computerList = new ArrayList(); 
+	ArrayList<Computer> computerList = new ArrayList<>(); 
 	
 	
-	public ComputerDB () throws SQLException {
+	public void list () throws SQLException {
 			
 		Statement s = conn.createStatement();
 		ResultSet res = s
@@ -23,8 +25,8 @@ public class ComputerDB {
 		while(res.next()) {
 		    int idComputer = res.getInt( "id" );
 		    String nameComputer = res.getString( "name" );
-		    Date introducedComputer = res.getDate( "introduced" );
-		    Date discontinuedComputer = res.getDate( "discontinued" );
+		    Timestamp introducedComputer = res.getTimestamp( "introduced" );
+		    Timestamp discontinuedComputer = res.getTimestamp( "discontinued" );
 		    int idCompany = res.getInt( "company_id" );
 		    
 		    computerList.add(new Computer(	idComputer, 
@@ -36,17 +38,26 @@ public class ComputerDB {
 	}
 	
 	public void create (Computer computer) throws SQLException {
-		Statement s = conn.createStatement();
-		s.executeUpdate( "INSERT INTO "
-				+ "Computer (id, name, introduced, discontinued, company_id) "
-				+ "VALUES ('"+ computer.getId() +"', '"
-						+ computer.getName() +"', '"
-						+ computer.getDateIntroduced() +"', '"
-						+ computer.getDateDiscontinued() +"', '"
-						+ computer.getIdCompany() +"', ');" );
+		PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
+				+ "Computer (name, introduced, discontinued, company_id) "
+				+ "VALUES (?, ?, ?, ?);" );
+		ps.setString(1, computer.getName());
+		ps.setTimestamp(2, computer.getDateIntroduced());
+		ps.setTimestamp(3, computer.getDateDiscontinued());
+		ps.setInt(4, computer.getIdCompany());
+		ps.executeUpdate();
 	}
 	
-	public void update (Computer computer) {
+	public void update (Computer computer) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement( "UPDATE Computer "
+				+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
+				+ "WHERE id = ?;" );
+		ps.setString(1, computer.getName());
+		ps.setTimestamp(2, computer.getDateIntroduced());
+		ps.setTimestamp(3, computer.getDateDiscontinued());
+		ps.setInt(4, computer.getIdCompany());
+		ps.setInt(5, computer.getId());
+		ps.executeUpdate();
 		
 	}
 	
