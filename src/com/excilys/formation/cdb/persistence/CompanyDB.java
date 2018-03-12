@@ -1,7 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,21 +11,20 @@ import com.excilys.formation.cdb.model.Company;
 public class CompanyDB {
 
 	Connection conn = ConnexionManager.INSTANCE.getConn();
-	ArrayList<Company> companyList = new ArrayList<>(); 
 	
-	
-	public void list () throws SQLException {
-			
+	public ArrayList<Company> list () throws SQLException {
+		ArrayList<Company> companyList = new ArrayList<>(); 
 		Statement s = conn.createStatement();
 		ResultSet res = s
 				.executeQuery("SELECT * FROM COMPUTER");
 		
 		while(res.next()) {
-		    int idComputer = res.getInt( "id" );
-		    String nameComputer = res.getString( "name" );
+		    int idCompany = res.getInt( "id" );
+		    String nameCompany = res.getString( "name" );
 		    
-		    companyList.add(new Company(	idComputer, 
-		    								nameComputer));
+		    companyList.add(new Company(	idCompany, 
+		    								nameCompany));
 		}
+		return companyList;
 	}
 }

@@ -1,7 +1,6 @@
 package com.excilys.formation.cdb.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Computer {
 	private int id;

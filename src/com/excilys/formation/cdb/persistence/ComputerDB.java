@@ -5,36 +5,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import com.excilys.formation.cdb.mapper.ComputerMP;
 import com.excilys.formation.cdb.model.Computer;
 
 public class ComputerDB {
 
 	Connection conn = ConnexionManager.INSTANCE.getConn();
-	ArrayList<Computer> computerList = new ArrayList<>(); 
 	
-	
-	public void list () throws SQLException {
-			
+	public ArrayList<Computer> list () throws SQLException {
+		ArrayList<Computer> computerList = new ArrayList<>(); 
 		Statement s = conn.createStatement();
 		ResultSet res = s
 				.executeQuery("SELECT * FROM COMPUTER");
 		
 		while(res.next()) {
-		    int idComputer = res.getInt( "id" );
-		    String nameComputer = res.getString( "name" );
-		    Timestamp introducedComputer = res.getTimestamp( "introduced" );
-		    Timestamp discontinuedComputer = res.getTimestamp( "discontinued" );
-		    int idCompany = res.getInt( "company_id" );
-		    
-		    computerList.add(new Computer(	idComputer, 
-		    								nameComputer, 
-		    								introducedComputer,
-		    								discontinuedComputer,
-		    								idCompany));
+		    computerList.add(ComputerMP.resToComputer(res));
 		}
+		return computerList;
 	}
 	
 	public void create (Computer computer) throws SQLException {
