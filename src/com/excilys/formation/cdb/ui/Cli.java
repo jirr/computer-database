@@ -9,14 +9,21 @@ public class Cli {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		listFeature();
+		applicationLoop();
 	}
 	
-	public static void listFeature () {
+	public static void applicationLoop () {
+		boolean loop = true;
 		Scanner sc = new Scanner(System.in);
+		while(loop) {
+			loop = listFeature(sc);
+		}
+		sc.close();
+	}
+	
+	public static boolean listFeature (Scanner sc) {
 		String saisie;
 		boolean valid = false;
-		boolean loop = true;
 		
 		while(!valid) {
 			valid = true;
@@ -49,12 +56,15 @@ public class Cli {
 				case "6":
 					deleteComputer(sc);
 				break;
+				case "7":
+					return false;
 				default:
 					System.out.println("Saisie invalide.");
 					valid = false;
 				break;
 			}
 		}
+		return true;
 	}
 	
 	public static void listComputer () {
