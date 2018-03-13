@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 
@@ -22,18 +23,25 @@ public class ComputerService {
 	}
 	
 	public static String selectOne (int id) {
-		// ID A PASSER DANS LE VALIDATOR
-		String res = ComputerDB.selectOne(id).toString();
-		return res;
+		if (Validator.computerIdValidation(id)) {
+			return ComputerDB.selectOne(id).toString();
+		} else {
+			return "Invalid Computer ID.";
+		}
 	}
 	
 	public static String createComputer (String name, String introducedStr, String discontinuedStr, int companyId) {
 		Timestamp introduced = stringToTimestamp(introducedStr);
 		Timestamp discontinued = stringToTimestamp(introducedStr);
 		Computer newCptr = new Computer(name, introduced, discontinued, companyId);
-		//Passage dans le validator > Renvoi différents messages (error, ou ok)
-		ComputerDB.create(newCptr);
-		return "New computer added to database.";
+		if (!Validator.computerDatesValidation(introduced, discontinued)) {
+			return "Dates compatibility error.";
+		} else if (!Validator.companyIdValidation(companyId)) {
+			return "Invalid Company ID.";
+		} else {
+			ComputerDB.create(newCptr);
+			return "New computer added to database.";
+		}
 	}
 	
 	public static void updateComputer () {
@@ -41,9 +49,12 @@ public class ComputerService {
 	}
 	
 	public static String deleteComputer (int id) {
-		// ID à tester dans le validator /!\
-		ComputerDB.delete(id);
-		return "Computer "+id+" removed from database.";
+		if (Validator.computerIdValidation(id)) {
+			ComputerDB.delete(id);
+			return "Computer "+id+" removed from database.";
+		} else {
+			return "Invalid Computer ID.";
+		}
 	}
 	
 	public static Timestamp stringToTimestamp(String str_date) {

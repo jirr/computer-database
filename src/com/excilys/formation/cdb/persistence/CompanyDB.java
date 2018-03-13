@@ -1,6 +1,7 @@
 package com.excilys.formation.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,5 +28,21 @@ public class CompanyDB {
 				e.printStackTrace();
 		}
 		return companyList;
+	}
+	
+	public static Company selectOne (int id) {
+		Company cres = null;
+		ResultSet res = null;
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
+					+ "WHERE id = ?;");
+			ps.setInt(1, id);
+			res = ps.executeQuery();
+			res.next();
+			cres = CompanyMP.resToCompany(res);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cres;
 	}
 }
