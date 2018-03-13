@@ -13,7 +13,7 @@ import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 
-public class userUI {
+public class Cli {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -24,8 +24,9 @@ public class userUI {
 		Scanner sc = new Scanner(System.in);
 		String saisie;
 		boolean valid = false;
+		boolean loop = true;
 		
-		while(!valid) {
+		while(!valid && loop) {
 			valid = true;
 			System.out.println("Chose a function:\n"
 					+ "\t1) List computers\n" 
@@ -33,7 +34,8 @@ public class userUI {
 					+ "\t3) Show one computer details\n" 
 					+ "\t4) Create a computer\n" 
 					+ "\t5) Update a computer\n" 
-					+ "\t6) Delete a computer");
+					+ "\t6) Delete a computer\n"
+					+ "\t7) Stop the application");
 			saisie = sc.next();
 			
 			switch(saisie) {
@@ -55,12 +57,15 @@ public class userUI {
 				case "6":
 					deleteComputer(sc);
 				break;
+				case "7":
+					loop = false;
+					sc.close();
+				break;
 				default:
 					System.out.println("Saisie invalide.");
 					valid = false;
 				break;
 			}
-			sc.close();
 		}
 	}
 	
@@ -85,7 +90,7 @@ public class userUI {
 	public static void oneComputerDetails (Scanner sc) {
 		System.out.println("Computer Id to detail ?");
 		int id = sc.nextInt();
-		ComputerDB.oneComputerDetail(id);
+		ComputerDB.selectOne(id);
 	}
 	
 	public static void createComputer (Scanner sc) {
@@ -98,7 +103,6 @@ public class userUI {
 		Timestamp discontinued = stringToTimestamp(sc.next());
 		System.out.println("Company Id ?");
 		int companyId = sc.nextInt();
-		
 		ComputerDB.create(new Computer(name, introduced, discontinued, companyId));
 	}
 	
@@ -125,9 +129,8 @@ public class userUI {
 		    Timestamp timestampDate = new Timestamp(date.getTime());
 		    return timestampDate;
 	    } catch (ParseException e) {
-		    System.out.println("Exception :" + e);
-		    return null;
+	    	e.printStackTrace();
+	    	return null;
 	    }
 	}
-
 }

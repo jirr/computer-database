@@ -32,7 +32,7 @@ public class ComputerDB {
 	public static void create (Computer computer) {
 		try {
 			PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
-					+ "Computer (name, introduced, discontinued, company_id) "
+					+ "computer (name, introduced, discontinued, company_id) "
 					+ "VALUES (?, ?, ?, ?);" );
 			ps.setString(1, computer.getName());
 			ps.setTimestamp(2, computer.getDateIntroduced());
@@ -69,18 +69,19 @@ public class ComputerDB {
 		}
 	}
 	
-	public Computer selectOne (int id) {
-		ResultSet res;
+	public static Computer selectOne (int id) {
+		Computer cres = null;
+		ResultSet res = null;
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
 					+ "WHERE id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
-			return ComputerMP.resToComputer(res);
+			res.next();
+			cres = ComputerMP.resToComputer(res);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
-
+		return cres;
 	}
 }

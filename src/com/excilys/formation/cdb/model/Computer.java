@@ -41,13 +41,6 @@ public class Computer {
 	}
 
 	/**
-	 * Construction without params for errors gestion
-	 */
-	public Computer() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
 	 * @return the id
 	 */
 	public int getId() {
