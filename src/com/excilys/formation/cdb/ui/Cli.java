@@ -1,17 +1,9 @@
 package com.excilys.formation.cdb.ui;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
-import com.excilys.formation.cdb.model.Company;
-import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.CompanyDB;
-import com.excilys.formation.cdb.persistence.ComputerDB;
+import com.excilys.formation.cdb.service.CompanyService;
+import com.excilys.formation.cdb.service.ComputerService;
 
 public class Cli {
 
@@ -26,7 +18,7 @@ public class Cli {
 		boolean valid = false;
 		boolean loop = true;
 		
-		while(!valid && loop) {
+		while(!valid) {
 			valid = true;
 			System.out.println("Chose a function:\n"
 					+ "\t1) List computers\n" 
@@ -46,7 +38,7 @@ public class Cli {
 					listCompany();
 				break;
 				case "3":
-					oneComputerDetails(sc);
+					selectOne(sc);
 				break;
 				case "4":
 					createComputer(sc);
@@ -57,10 +49,6 @@ public class Cli {
 				case "6":
 					deleteComputer(sc);
 				break;
-				case "7":
-					loop = false;
-					sc.close();
-				break;
 				default:
 					System.out.println("Saisie invalide.");
 					valid = false;
@@ -70,27 +58,21 @@ public class Cli {
 	}
 	
 	public static void listComputer () {
-		ArrayList<Computer> list = ComputerDB.list();
 		String res = "Computers list: \n";
-		for (Computer p : list) {
-			res += p.toString() + "\n";
-		}
+		res += ComputerService.listComputer();
 		System.out.println(res);
 	}
 	
 	public static void listCompany () {
-		ArrayList<Company> list = CompanyDB.list();
 		String res = "Companies list: \n";
-		for (Company c : list) {
-			res += c.toString() + "\n";
-		}
+		res += CompanyService.listCompany();
 		System.out.println(res);
 	}
 	
-	public static void oneComputerDetails (Scanner sc) {
+	public static void selectOne (Scanner sc) {
 		System.out.println("Computer Id to detail ?");
 		int id = sc.nextInt();
-		ComputerDB.selectOne(id);
+		System.out.println(ComputerService.selectOne(id));
 	}
 	
 	public static void createComputer (Scanner sc) {
@@ -98,12 +80,12 @@ public class Cli {
 				+ "Computer name ?");
 		String name = sc.next();
 		System.out.println("Introduced date ? (Format: dd/mm/yyyy)");
-		Timestamp introduced = stringToTimestamp(sc.next());
+		String introduced = sc.next();
 		System.out.println("Discontinued date ? (Format: dd/mm/yyyy)");
-		Timestamp discontinued = stringToTimestamp(sc.next());
+		String discontinued = sc.next();
 		System.out.println("Company Id ?");
 		int companyId = sc.nextInt();
-		ComputerDB.create(new Computer(name, introduced, discontinued, companyId));
+		System.out.println(ComputerService.createComputer(name, introduced, discontinued, companyId));
 	}
 	
 	public static void updateComputer (Scanner sc) {
@@ -112,25 +94,14 @@ public class Cli {
 	
 	public static void deleteComputer (Scanner sc) {
 		String saisie;
+		int id = -1;
 		System.out.println("Enter the computer id to delete:");
 		saisie = sc.next();
 		try {
-			int id = Integer.parseInt(saisie);
-			ComputerDB.delete(id);
+			id = Integer.parseInt(saisie);
 		} catch (NumberFormatException e){
 			e.printStackTrace();
 		}
-	}
-	
-	public static Timestamp stringToTimestamp(String str_date) {
-	    try {
-		    DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-		    Date date = format.parse(str_date);
-		    Timestamp timestampDate = new Timestamp(date.getTime());
-		    return timestampDate;
-	    } catch (ParseException e) {
-	    	e.printStackTrace();
-	    	return null;
-	    }
+		System.out.println(ComputerService.deleteComputer(id));
 	}
 }
