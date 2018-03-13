@@ -12,16 +12,19 @@ import com.excilys.formation.cdb.model.Computer;
 
 public class ComputerDB {
 
-	Connection conn = ConnexionManager.INSTANCE.getConn();
+	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	public ArrayList<Computer> list () throws SQLException {
+	public static ArrayList<Computer> list () {
 		ArrayList<Computer> computerList = new ArrayList<>(); 
-		Statement s = conn.createStatement();
-		ResultSet res = s
-				.executeQuery("SELECT * FROM COMPUTER");
-		
-		while(res.next()) {
-		    computerList.add(ComputerMP.resToComputer(res));
+		try {
+			Statement s = conn.createStatement();
+			ResultSet res = s
+					.executeQuery("SELECT * FROM computer");
+			while(res.next()) {
+			    computerList.add(ComputerMP.resToComputer(res));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return computerList;
 	}
@@ -38,7 +41,7 @@ public class ComputerDB {
 	}
 	
 	public void update (Computer computer) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement( "UPDATE Computer "
+		PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
 				+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
 				+ "WHERE id = ?;" );
 		ps.setString(1, computer.getName());
@@ -52,11 +55,11 @@ public class ComputerDB {
 	
 	public void delete (int id) throws SQLException {
 		Statement s = conn.createStatement();
-		s.executeUpdate("DELETE FROM Computer WHERE id='"+id+"'");
+		s.executeUpdate("DELETE FROM computer WHERE id='"+id+"'");
 	}
 	
 	public Computer selectOne (int id) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Computer "
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
 				+ "WHERE id = ?;");
 		ps.setInt(1, id);
 		ResultSet res = ps.executeQuery();

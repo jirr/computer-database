@@ -94,7 +94,7 @@ public class Computer {
 		result += " {nom: " + this.name;
 		result += ", date1: " + this.dateIntroduced;
 		result += ", date2: " + this.dateDiscontinued;
-		result += ", constructeurId: " + this.idCompany;
+		result += ", constructeurId: " + this.idCompany + "}";
 		return result;
 	}
 

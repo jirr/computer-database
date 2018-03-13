@@ -6,24 +6,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.excilys.formation.cdb.mapper.CompanyMP;
 import com.excilys.formation.cdb.model.Company;
 
 public class CompanyDB {
 
-	Connection conn = ConnexionManager.INSTANCE.getConn();
+	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	public ArrayList<Company> list () throws SQLException {
+	public static ArrayList<Company> list () {
 		ArrayList<Company> companyList = new ArrayList<>(); 
-		Statement s = conn.createStatement();
-		ResultSet res = s
-				.executeQuery("SELECT * FROM COMPUTER");
-		
-		while(res.next()) {
-		    int idCompany = res.getInt( "id" );
-		    String nameCompany = res.getString( "name" );
-		    
-		    companyList.add(new Company(	idCompany, 
-		    								nameCompany));
+		try {
+			Statement s = conn.createStatement();
+			ResultSet res = s
+					.executeQuery("SELECT * FROM company");
+			
+			while(res.next()) {
+				companyList.add(CompanyMP.resToCompany(res));;
+			} 
+		} catch (SQLException e) {
+				e.printStackTrace();
 		}
 		return companyList;
 	}

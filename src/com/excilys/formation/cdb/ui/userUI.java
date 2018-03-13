@@ -1,11 +1,22 @@
 package com.excilys.formation.cdb.ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.persistence.CompanyDB;
+import com.excilys.formation.cdb.persistence.ComputerDB;
 
 public class userUI {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		listFeature();
+		
+	}
+	
+	public static void listFeature () {
 		Scanner sc = new Scanner(System.in);
 		String saisie;
 		boolean valid = false;
@@ -46,15 +57,24 @@ public class userUI {
 				break;
 			}
 		}
-		
 	}
 	
 	public static void listComputer () {
-		
+		ArrayList<Computer> list = ComputerDB.list();
+		String res = "Computers list: \n";
+		for (Computer p : list) {
+			res += p.toString() + "\n";
+		}
+		System.out.println(res);
 	}
 	
 	public static void listCompany () {
-		
+		ArrayList<Company> list = CompanyDB.list();
+		String res = "Companies list: \n";
+		for (Company c : list) {
+			res += c.toString() + "\n";
+		}
+		System.out.println(res);
 	}
 	
 	public static void oneComputerDetails () {

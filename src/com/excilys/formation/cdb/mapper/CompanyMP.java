@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.excilys.formation.cdb.model.Company;
 
 public class CompanyMP {
-	public static Company resToComputer(ResultSet res) throws SQLException {
+	public static Company resToCompany(ResultSet res) throws SQLException {
 		    int idCompany = res.getInt( "id" );
 		    String nameCompany = res.getString( "name" );
 		    
