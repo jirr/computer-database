@@ -23,22 +23,22 @@ public class userUI {
 			
 			switch(saisie) {
 				case "1":
-					
+					listComputer();
 				break;
 				case "2":
-					
+					listCompany();
 				break;
 				case "3":
-					
+					oneComputerDetails();
 				break;
 				case "4":
-					
+					createComputer();
 				break;
 				case "5":
-					
+					updateComputer();
 				break;
 				case "6":
-					
+					deleteComputer();
 				break;
 				default:
 					System.out.println("Saisie invalide.");
@@ -46,6 +46,30 @@ public class userUI {
 				break;
 			}
 		}
+		
+	}
+	
+	public static void listComputer () {
+		
+	}
+	
+	public static void listCompany () {
+		
+	}
+	
+	public static void oneComputerDetails () {
+		
+	}
+	
+	public static void createComputer () {
+		
+	}
+	
+	public static void updateComputer () {
+		
+	}
+	
+	public static void deleteComputer () {
 		
 	}
 

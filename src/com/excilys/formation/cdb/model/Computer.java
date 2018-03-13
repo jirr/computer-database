@@ -87,5 +87,15 @@ public class Computer {
 	public void setIdCompany(int idCompany) {
 		this.idCompany = idCompany;
 	}
+	
+	public String toString () {
+		String result = "";
+		result += "id: " + this.id;
+		result += " {nom: " + this.name;
+		result += ", date1: " + this.dateIntroduced;
+		result += ", date2: " + this.dateDiscontinued;
+		result += ", constructeurId: " + this.idCompany;
+		return result;
+	}
 
 }
