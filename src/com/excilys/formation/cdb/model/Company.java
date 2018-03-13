@@ -40,4 +40,11 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String toString () {
+		String result = "";
+		result += "id: " + this.id;
+		result += " {nom: " + this.name + "}";
+		return result;
+	}
 }
