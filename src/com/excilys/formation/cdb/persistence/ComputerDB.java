@@ -29,45 +29,58 @@ public class ComputerDB {
 		return computerList;
 	}
 	
-	public void create (Computer computer) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
-				+ "Computer (name, introduced, discontinued, company_id) "
-				+ "VALUES (?, ?, ?, ?);" );
-		ps.setString(1, computer.getName());
-		ps.setTimestamp(2, computer.getDateIntroduced());
-		ps.setTimestamp(3, computer.getDateDiscontinued());
-		ps.setInt(4, computer.getIdCompany());
-		ps.executeUpdate();
+	public static void create (Computer computer) {
+		try {
+			PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
+					+ "Computer (name, introduced, discontinued, company_id) "
+					+ "VALUES (?, ?, ?, ?);" );
+			ps.setString(1, computer.getName());
+			ps.setTimestamp(2, computer.getDateIntroduced());
+			ps.setTimestamp(3, computer.getDateDiscontinued());
+			ps.setInt(4, computer.getIdCompany());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void update (Computer computer) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
-				+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
-				+ "WHERE id = ?;" );
-		ps.setString(1, computer.getName());
-		ps.setTimestamp(2, computer.getDateIntroduced());
-		ps.setTimestamp(3, computer.getDateDiscontinued());
-		ps.setInt(4, computer.getIdCompany());
-		ps.setInt(5, computer.getId());
-		ps.executeUpdate();
-		
+	public static void update (Computer computer) {
+		try {	
+			PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
+					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
+					+ "WHERE id = ?;" );
+			ps.setString(1, computer.getName());
+			ps.setTimestamp(2, computer.getDateIntroduced());
+			ps.setTimestamp(3, computer.getDateDiscontinued());
+			ps.setInt(4, computer.getIdCompany());
+			ps.setInt(5, computer.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void delete (int id) throws SQLException {
-		Statement s = conn.createStatement();
-		s.executeUpdate("DELETE FROM computer WHERE id='"+id+"'");
+	public static void delete (int id) {
+		try {
+			Statement s = conn.createStatement();
+			s.executeUpdate("DELETE FROM computer WHERE id='"+id+"'");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public Computer selectOne (int id) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
-				+ "WHERE id = ?;");
-		ps.setInt(1, id);
-		ResultSet res = ps.executeQuery();
-		return ComputerMP.resToComputer(res);
-	}
- 	
-	public static void main(String[] args) throws SQLException {
-		// TODO Auto-generated method stub
+	public Computer selectOne (int id) {
+		ResultSet res;
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
+					+ "WHERE id = ?;");
+			ps.setInt(1, id);
+			res = ps.executeQuery();
+			return ComputerMP.resToComputer(res);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 }

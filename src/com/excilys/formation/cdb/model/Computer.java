@@ -10,6 +10,7 @@ public class Computer {
 	private int idCompany;
 	
 	/**
+	 * @param id
 	 * @param name
 	 * @param dateIntroduced
 	 * @param dateDiscontinued
@@ -24,6 +25,28 @@ public class Computer {
 		this.idCompany = idCompany;
 	}
 	
+	/**
+	 * Constructor without id for creation in BDD
+	 * @param name
+	 * @param dateIntroduced
+	 * @param dateDiscontinued
+	 * @param idCompany
+	 */
+	public Computer(String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, int idCompany) {
+		super();
+		this.name = name;
+		this.dateIntroduced = dateIntroduced;
+		this.dateDiscontinued = dateDiscontinued;
+		this.idCompany = idCompany;
+	}
+
+	/**
+	 * Construction without params for errors gestion
+	 */
+	public Computer() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @return the id
 	 */
