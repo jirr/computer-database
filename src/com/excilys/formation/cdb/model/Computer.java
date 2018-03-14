@@ -17,12 +17,8 @@ public class Computer {
 	 * @param manufacturer
 	 */
 	public Computer(int id, String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
-		super();
+		this(name, dateIntroduced, dateDiscontinued, manufactor);
 		this.id = id;
-		this.name = name;
-		this.dateIntroduced = dateIntroduced;
-		this.dateDiscontinued = dateDiscontinued;
-		this.manufactor = manufactor;
 	}
 	
 	/**
@@ -34,6 +30,7 @@ public class Computer {
 	 */
 	public Computer(String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
 		super();
+		
 		this.name = name;
 		this.dateIntroduced = dateIntroduced;
 		this.dateDiscontinued = dateDiscontinued;

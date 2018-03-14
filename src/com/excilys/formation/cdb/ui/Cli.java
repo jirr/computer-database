@@ -6,6 +6,8 @@ import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 
 public class Cli {
+	
+	private int from, to;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -29,21 +31,18 @@ public class Cli {
 		while(!valid) {
 			valid = true;
 			System.out.println("Chose a function:\n"
-					+ "\t1) List computers\n" 
-					+ "\t2) List companies\n" 
-					+ "\t3) Show one computer details\n" 
-					+ "\t4) Create a computer\n" 
-					+ "\t5) Update a computer\n" 
-					+ "\t6) Delete a computer\n"
+					+ "\t1) List computers\n" 				+ "\t2) List companies\n" 
+					+ "\t3) Show one computer details\n" 	+ "\t4) Create a computer\n" 
+					+ "\t5) Update a computer\n" 			+ "\t6) Delete a computer\n"
 					+ "\t7) Stop the application");
 			saisie = sc.next();
 			
 			switch(saisie) {
 				case "1":
-					listComputer();
+					listComputer(sc);
 				break;
 				case "2":
-					listCompany();
+					listCompany(sc);
 				break;
 				case "3":
 					selectOne(sc);
@@ -60,7 +59,7 @@ public class Cli {
 				case "7":
 					return false;
 				default:
-					System.out.println("Saisie invalide.");
+					System.err.println("Invalid choice.");
 					valid = false;
 				break;
 			}
@@ -68,16 +67,52 @@ public class Cli {
 		return true;
 	}
 	
-	private void listComputer () {
+	private void listComputer (Scanner sc) {
 		String res = "Computers list: \n";
-		res += ComputerService.INSTANCE.listComputer();
-		System.out.println(res);
+		boolean nextPage = true;
+		from = 0;
+		to = 50;
+		while (nextPage) {
+			res += ComputerService.INSTANCE.listComputer(from, to);
+			System.out.println(res);
+			nextPage = paginationChoices(sc);
+		}
 	}
 	
-	private void listCompany () {
+	private void listCompany (Scanner sc) {
 		String res = "Companies list: \n";
-		res += CompanyService.INSTANCE.listCompany();
-		System.out.println(res);
+		boolean nextPage = true;
+		from = 0;
+		to = 50;
+		while (nextPage) {
+			try {
+				res += CompanyService.INSTANCE.listCompany(from, to);
+			} catch (IllegalArgumentException e) {
+				System.err.println("No more entry.");
+				return;
+			}
+			System.out.println(res);
+			nextPage = paginationChoices(sc);
+		}
+	}
+	
+	private boolean paginationChoices (Scanner sc) {
+		System.out.println("Next(n) Previous(p) Quit(q) ?");
+		switch (sc.next()) {
+			case "n" :
+				from = to;
+				to += 50;
+			break;
+			case "p" :
+				to = from;
+				from -= 50;
+			case "q" :
+				return false;
+			default:
+				System.err.println("Invalid choice.");
+			break;
+		}
+		return true;
 	}
 	
 	public void selectOne (Scanner sc) {

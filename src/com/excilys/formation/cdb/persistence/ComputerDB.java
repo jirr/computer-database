@@ -54,7 +54,7 @@ public enum ComputerDB {
 	public void update (Computer computer) {
 		try {	
 			PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
-					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
+					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ? "
 					+ "WHERE id = ?;" );
 			ps.setString(1, computer.getName());
 			ps.setTimestamp(2, computer.getDateIntroduced());

@@ -9,10 +9,12 @@ public enum CompanyService {
 	
 	INSTANCE;
 	
-	public String listCompany () {
-		ArrayList<Company> list = CompanyDB.INSTANCE.list();
+	private ArrayList<Company> list = CompanyDB.INSTANCE.list();
+	
+	public String listCompany (int from, int to) {
 		String res = "";
-		for (Company c : list) {
+		if (to > list.size()) {to = list.size();}
+		for (Company c : list.subList(from, to)) {
 			res += c.toString() + "\n";
 		}
 		return res;

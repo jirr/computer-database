@@ -15,10 +15,12 @@ public enum ComputerService {
 	
 	INSTANCE;
 	
-	public String listComputer () {
-		ArrayList<Computer> list = ComputerDB.INSTANCE.list();
+	private ArrayList<Computer> list = ComputerDB.INSTANCE.list();
+	
+	public String listComputer (int from, int to) {
 		String res = "";
-		for (Computer p : list) {
+		if (to > list.size()) {to = list.size();}
+		for (Computer p : list.subList(from, to)) {
 			res += p.toString() + "\n";
 		}
 		return res;
