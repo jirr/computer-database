@@ -69,7 +69,7 @@ public enum ComputerService {
 	private Timestamp stringToTimestamp(String str_date) throws Exception {
 		Timestamp timestampDate = null;
 	    try {
-		    DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+		    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		    Date date = format.parse(str_date);
 		    timestampDate = new Timestamp(date.getTime());
 	    } catch (ParseException e) {

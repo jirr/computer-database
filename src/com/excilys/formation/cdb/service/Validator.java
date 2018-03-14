@@ -9,8 +9,10 @@ public enum Validator {
 	INSTANCE;
 	
 	public void datesValidation (Timestamp d1, Timestamp d2) throws Exception {
-		if (false) {
-			throw new Exception("Incompatibility of dates.");
+		if (!(d1==null && d2==null)) {
+			if (d2.compareTo(d1) >0) {
+				throw new Exception("Incompatibility of dates.");
+			}
 		}
 	}
 	

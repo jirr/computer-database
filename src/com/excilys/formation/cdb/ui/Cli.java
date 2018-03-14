@@ -95,9 +95,9 @@ public class Cli {
 				+ "Computer name ?");
 		String name = sc.next();
 		sc.nextLine();
-		System.out.println("Introduced date ? (Format: dd/mm/yyyy)");
+		System.out.println("Introduced date ? (Format: dd/MM/yyyy)");
 		String introduced = sc.nextLine();
-		System.out.println("Discontinued date ? (Format: dd/mm/yyyy)");
+		System.out.println("Discontinued date ? (Format: dd/MM/yyyy)");
 		String discontinued = sc.nextLine();
 		System.out.println("Company Id ?");
 		String companyId = sc.nextLine();

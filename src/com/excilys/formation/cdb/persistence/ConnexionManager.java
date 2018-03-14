@@ -18,7 +18,7 @@ public enum ConnexionManager{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String url = "jdbc:mysql://localhost:3306/computer-database-db";
+		String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
 		
 		try {
 			conn = DriverManager.getConnection(url, "admincdb", "qwerty1234");
