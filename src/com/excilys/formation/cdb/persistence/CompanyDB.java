@@ -19,7 +19,7 @@ public class CompanyDB {
 		try {
 			Statement s = conn.createStatement();
 			ResultSet res = s
-					.executeQuery("SELECT * FROM company");
+					.executeQuery("SELECT ca.id as caId, ca.name as caName FROM company ca");
 			
 			while(res.next()) {
 				companyList.add(CompanyMP.resToCompany(res));;
@@ -34,8 +34,8 @@ public class CompanyDB {
 		Company cres = null;
 		ResultSet res = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
-					+ "WHERE id = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT ca.id as caId, ca.name as caName FROM company ca "
+					+ "WHERE caId = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
 			res.next();

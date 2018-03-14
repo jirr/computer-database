@@ -4,20 +4,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.model.*;
 
 public class ComputerMP {
 	public static Computer resToComputer(ResultSet res) throws SQLException {
-	    int idComputer = res.getInt("id");
-	    String nameComputer = res.getString("name");
+	    int idComputer = res.getInt("cuId");
+	    String nameComputer = res.getString("cuName");
 	    Timestamp introducedComputer = res.getTimestamp("introduced");
 	    Timestamp discontinuedComputer = res.getTimestamp("discontinued");
-	    int idCompany = res.getInt("company_id");
+	    Company manufactor = CompanyMP.resToCompany(res);
 	    
 	    return new Computer(idComputer, 
 	    					nameComputer, 
 	    					introducedComputer,
 	    					discontinuedComputer,
-	    					idCompany);
+	    					manufactor);
 	}
 }

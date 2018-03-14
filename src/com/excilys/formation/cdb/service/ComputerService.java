@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 
 public class ComputerService {
 	
 	
 	public static String listComputer () {
-		ArrayList<Computer> list = ComputerDB.list();
+		ArrayList<Computer> list = ComputerDB.INSTANCE.list();
 		String res = "";
 		for (Computer p : list) {
 			res += p.toString() + "\n";
@@ -24,7 +25,7 @@ public class ComputerService {
 	
 	public static String selectOne (int id) {
 		if (Validator.computerIdValidation(id)) {
-			return ComputerDB.selectOne(id).toString();
+			return ComputerDB.INSTANCE.selectOne(id).toString();
 		} else {
 			return "Invalid Computer ID.";
 		}
@@ -33,13 +34,12 @@ public class ComputerService {
 	public static String createComputer (String name, String introducedStr, String discontinuedStr, int companyId) {
 		Timestamp introduced = stringToTimestamp(introducedStr);
 		Timestamp discontinued = stringToTimestamp(introducedStr);
-		Computer newCptr = new Computer(name, introduced, discontinued, companyId);
 		if (!Validator.computerDatesValidation(introduced, discontinued)) {
 			return "Dates compatibility error.";
-		} else if (!Validator.companyIdValidation(companyId)) {
+		} else if (!Validator.manufactorValidation(companyId)) {
 			return "Invalid Company ID.";
 		} else {
-			ComputerDB.create(newCptr);
+			ComputerDB.INSTANCE.create(new Computer(name, introduced, discontinued, CompanyDB.selectOne(companyId)));
 			return "New computer added to database.";
 		}
 	}

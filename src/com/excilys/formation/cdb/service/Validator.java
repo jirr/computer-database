@@ -9,7 +9,7 @@ public class Validator {
 	public static boolean computerValidation (Computer computer) {
 		return computerDatesValidation(	computer.getDateIntroduced(), 
 										computer.getDateDiscontinued() ) 
-				&& companyIdValidation(	computer.getIdCompany()) ? true:false;
+				&& manufactorValidation(	computer.getManufactor().getId()) ? true:false;
 	}
 	
 	public static boolean computerDatesValidation (Timestamp d1, Timestamp d2) {
@@ -18,12 +18,10 @@ public class Validator {
 	}
 	
 	public static boolean computerIdValidation (int id) {
-		return (ComputerDB.selectOne(id) == null)?false:true;
+		return (ComputerDB.INSTANCE.selectOne(id) == null)?false:true;
 	}
 	
-	public static boolean companyIdValidation (int id) {
+	public static boolean manufactorValidation (int id) {
 		return (CompanyDB.selectOne(id) == null)?false:true;
 	}
-	
-	
 }

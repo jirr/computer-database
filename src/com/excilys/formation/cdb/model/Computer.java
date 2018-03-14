@@ -7,7 +7,7 @@ public class Computer {
 	private String name;
 	private Timestamp dateIntroduced;
 	private Timestamp dateDiscontinued;
-	private int idCompany;
+	private Company manufactor;
 	
 	/**
 	 * @param id
@@ -16,13 +16,13 @@ public class Computer {
 	 * @param dateDiscontinued
 	 * @param manufacturer
 	 */
-	public Computer(int id, String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, int idCompany) {
+	public Computer(int id, String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.dateIntroduced = dateIntroduced;
 		this.dateDiscontinued = dateDiscontinued;
-		this.idCompany = idCompany;
+		this.manufactor = manufactor;
 	}
 	
 	/**
@@ -30,14 +30,14 @@ public class Computer {
 	 * @param name
 	 * @param dateIntroduced
 	 * @param dateDiscontinued
-	 * @param idCompany
+	 * @param manufactor
 	 */
-	public Computer(String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, int idCompany) {
+	public Computer(String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
 		super();
 		this.name = name;
 		this.dateIntroduced = dateIntroduced;
 		this.dateDiscontinued = dateDiscontinued;
-		this.idCompany = idCompany;
+		this.manufactor = manufactor;
 	}
 
 	/**
@@ -93,15 +93,15 @@ public class Computer {
 	/**
 	 * @return the idCompany
 	 */
-	public int getIdCompany() {
-		return idCompany;
+	public Company getManufactor() {
+		return manufactor;
 	}
 
 	/**
-	 * @param idCompany the idCompany to set
+	 * @param manufactor the idCompany to set
 	 */
-	public void setIdCompany(int idCompany) {
-		this.idCompany = idCompany;
+	public void setManufactor(Company manufactor) {
+		this.manufactor = manufactor;
 	}
 	
 	public String toString () {
@@ -110,7 +110,7 @@ public class Computer {
 		result += " {nom: " + this.name;
 		result += ", date1: " + this.dateIntroduced;
 		result += ", date2: " + this.dateDiscontinued;
-		result += ", constructeurId: " + this.idCompany + "}";
+		result += ", manufactor: " + this.manufactor.getName() + "}";
 		return result;
 	}
 

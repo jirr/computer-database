@@ -10,16 +10,25 @@ import java.util.ArrayList;
 import com.excilys.formation.cdb.mapper.ComputerMP;
 import com.excilys.formation.cdb.model.Computer;
 
-public class ComputerDB {
+public enum ComputerDB {
+	
+	INSTANCE;
 
 	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	public static ArrayList<Computer> list () {
+	private String 	selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, "
+											+ "ca.id as caId, ca.name as caName "
+											+ "FROM computer cu "
+											+ "LEFT JOIN company ca ON caId = cu.company_id",
+			createRequest = "",
+			updateRequest = "";
+	
+	public ArrayList<Computer> list () {
 		ArrayList<Computer> computerList = new ArrayList<>(); 
 		try {
 			Statement s = conn.createStatement();
 			ResultSet res = s
-					.executeQuery("SELECT * FROM computer");
+					.executeQuery(selectAllRequest + ";");
 			while(res.next()) {
 			    computerList.add(ComputerMP.resToComputer(res));
 			}
@@ -29,7 +38,7 @@ public class ComputerDB {
 		return computerList;
 	}
 	
-	public static void create (Computer computer) {
+	public void create (Computer computer) {
 		try {
 			PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
 					+ "computer (name, introduced, discontinued, company_id) "
@@ -37,7 +46,7 @@ public class ComputerDB {
 			ps.setString(1, computer.getName());
 			ps.setTimestamp(2, computer.getDateIntroduced());
 			ps.setTimestamp(3, computer.getDateDiscontinued());
-			ps.setInt(4, computer.getIdCompany());
+			ps.setInt(4, computer.getManufactor().getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,7 +61,7 @@ public class ComputerDB {
 			ps.setString(1, computer.getName());
 			ps.setTimestamp(2, computer.getDateIntroduced());
 			ps.setTimestamp(3, computer.getDateDiscontinued());
-			ps.setInt(4, computer.getIdCompany());
+			ps.setInt(4, computer.getManufactor().getId());
 			ps.setInt(5, computer.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -69,12 +78,11 @@ public class ComputerDB {
 		}
 	}
 	
-	public static Computer selectOne (int id) {
+	public Computer selectOne (int id) {
 		Computer cres = null;
 		ResultSet res = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM computer "
-					+ "WHERE id = ?;");
+			PreparedStatement ps = conn.prepareStatement(selectAllRequest + "WHERE cu.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
 			res.next();

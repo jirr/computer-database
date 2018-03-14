@@ -7,8 +7,8 @@ import com.excilys.formation.cdb.model.Company;
 
 public class CompanyMP {
 	public static Company resToCompany(ResultSet res) throws SQLException {
-	    int idCompany = res.getInt( "id" );
-	    String nameCompany = res.getString( "name" );
+	    int idCompany = res.getInt( "caId" );
+	    String nameCompany = res.getString( "caName" );
 	    
 	    return new Company(idCompany, 
 	    					nameCompany);
