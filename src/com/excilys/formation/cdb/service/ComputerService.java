@@ -24,49 +24,57 @@ public enum ComputerService {
 		return res;
 	}
 	
-	public String selectOne (int id) {
-		if (Validator.INSTANCE.computerIdValidation(id)) {
-			return ComputerDB.INSTANCE.selectOne(id).toString();
-		} else {
-			return "Invalid Computer ID.";
+	public String selectOne (int id) throws Exception {
+		String details = "";
+		try {
+			Validator.INSTANCE.computerIdValidation(id);
+			details = ComputerDB.INSTANCE.selectOne(id).toString();
+		} catch (Exception e) {
+			throw e;
 		}
+		return details;
 	}
 	
-	public String createComputer (String name, String introducedStr, String discontinuedStr, int companyId) {
-		Timestamp introduced = stringToTimestamp(introducedStr);
-		Timestamp discontinued = stringToTimestamp(introducedStr);
-		if (!Validator.INSTANCE.computerDatesValidation(introduced, discontinued)) {
-			return "Dates compatibility error.";
-		} else if (!Validator.INSTANCE.manufactorValidation(companyId)) {
-			return "Invalid Company ID.";
-		} else {
+	public String createComputer (String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
+		try {
+			Timestamp introduced = stringToTimestamp(introducedStr);
+			Timestamp discontinued = stringToTimestamp(introducedStr);
+			int companyId = Integer.parseInt(companyIdStr);
+			Validator.INSTANCE.nameValidation(name);
+			Validator.INSTANCE.datesValidation(introduced, discontinued);
+			Validator.INSTANCE.manufactorValidation(companyId);
 			ComputerDB.INSTANCE.create(new Computer(name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
-			return "New computer added to database.";
+		} catch (NumberFormatException e) {
+			throw new Exception("Wrong format company ID.");
+		} catch (Exception e) {
+			throw e;
 		}
+		return "New computer added to database.";
 	}
 	
 	public void updateComputer () {
 		
 	}
 	
-	public String deleteComputer (int id) {
-		if (Validator.INSTANCE.computerIdValidation(id)) {
+	public String deleteComputer (int id) throws Exception {
+		try {
+			Validator.INSTANCE.computerIdValidation(id);
 			ComputerDB.delete(id);
-			return "Computer "+id+" removed from database.";
-		} else {
-			return "Invalid Computer ID.";
+		} catch (Exception e) {
+			throw e;
 		}
+		return "Computer "+id+" removed from database.";
 	}
 	
-	private Timestamp stringToTimestamp(String str_date) {
+	private Timestamp stringToTimestamp(String str_date) throws Exception {
+		Timestamp timestampDate = null;
 	    try {
 		    DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
 		    Date date = format.parse(str_date);
-		    Timestamp timestampDate = new Timestamp(date.getTime());
-		    return timestampDate;
+		    timestampDate = new Timestamp(date.getTime());
 	    } catch (ParseException e) {
-	    	e.printStackTrace();
-	    	return null;
+	    	throw new Exception("Date format invalid.");
 	    }
+	    return timestampDate;
 	}
 }

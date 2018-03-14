@@ -37,11 +37,14 @@ public enum CompanyDB {
 		ResultSet res = null;
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT ca.id as caId, ca.name as caName FROM company ca "
-					+ "WHERE caId = ?;");
+					+ "WHERE ca.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
-			res.next();
-			cres = CompanyMP.resToCompany(res);
+			if (!res.next()) {
+				return null;
+			} else {
+				cres = CompanyMP.resToCompany(res);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

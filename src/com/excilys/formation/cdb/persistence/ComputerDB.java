@@ -83,8 +83,11 @@ public enum ComputerDB {
 			PreparedStatement ps = conn.prepareStatement(selectAllRequest + "WHERE cu.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
-			res.next();
-			cres = ComputerMP.resToComputer(res);
+			if(!res.next()) {
+				return null;
+			} else {
+				cres = ComputerMP.resToComputer(res);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

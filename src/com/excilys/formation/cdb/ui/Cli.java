@@ -83,20 +83,29 @@ public class Cli {
 	public void selectOne (Scanner sc) {
 		System.out.println("Computer Id to detail ?");
 		int id = sc.nextInt();
-		System.out.println(ComputerService.INSTANCE.selectOne(id));
+		try {
+			System.out.println(ComputerService.INSTANCE.selectOne(id));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void createComputer (Scanner sc) {
 		System.out.println("Creating computer:\n"
 				+ "Computer name ?");
 		String name = sc.next();
+		sc.nextLine();
 		System.out.println("Introduced date ? (Format: dd/mm/yyyy)");
-		String introduced = sc.next();
+		String introduced = sc.nextLine();
 		System.out.println("Discontinued date ? (Format: dd/mm/yyyy)");
-		String discontinued = sc.next();
+		String discontinued = sc.nextLine();
 		System.out.println("Company Id ?");
-		int companyId = sc.nextInt();
-		System.out.println(ComputerService.INSTANCE.createComputer(name, introduced, discontinued, companyId));
+		String companyId = sc.nextLine();
+		try {
+			System.out.println(ComputerService.INSTANCE.createComputer(name, introduced, discontinued, companyId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void updateComputer (Scanner sc) {
@@ -113,6 +122,10 @@ public class Cli {
 		} catch (NumberFormatException e){
 			e.printStackTrace();
 		}
-		System.out.println(ComputerService.INSTANCE.deleteComputer(id));
+		try {
+			System.out.println(ComputerService.INSTANCE.deleteComputer(id));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
