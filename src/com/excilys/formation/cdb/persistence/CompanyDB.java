@@ -27,7 +27,7 @@ public enum CompanyDB {
 				companyList.add(CompanyMP.resToCompany(res));;
 			} 
 		} catch (SQLException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 		return companyList;
 	}

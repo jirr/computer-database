@@ -68,13 +68,17 @@ public enum ComputerService {
 	
 	private Timestamp stringToTimestamp(String str_date) throws Exception {
 		Timestamp timestampDate = null;
-	    try {
-		    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		    Date date = format.parse(str_date);
-		    timestampDate = new Timestamp(date.getTime());
-	    } catch (ParseException e) {
-	    	throw new Exception("Date format invalid.");
-	    }
+		if(str_date.compareTo("")==0) {
+			return timestampDate;
+		} else {
+		    try {
+			    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			    Date date = format.parse(str_date);
+			    timestampDate = new Timestamp(date.getTime());
+		    } catch (ParseException e) {
+		    	throw new Exception("Date format invalid.");
+		    }
+		}
 	    return timestampDate;
 	}
 }

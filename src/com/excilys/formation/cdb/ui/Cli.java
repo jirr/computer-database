@@ -86,7 +86,7 @@ public class Cli {
 		try {
 			System.out.println(ComputerService.INSTANCE.selectOne(id));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class Cli {
 		try {
 			System.out.println(ComputerService.INSTANCE.createComputer(name, introduced, discontinued, companyId));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 	
@@ -120,12 +120,12 @@ public class Cli {
 		try {
 			id = Integer.parseInt(saisie);
 		} catch (NumberFormatException e){
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		try {
 			System.out.println(ComputerService.INSTANCE.deleteComputer(id));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 }
