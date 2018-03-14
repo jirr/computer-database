@@ -27,4 +27,5 @@ public enum Validator {
 	public boolean manufactorValidation (int id) {
 		return (CompanyDB.INSTANCE.selectOne(id) == null)?false:true;
 	}
+	
 }
