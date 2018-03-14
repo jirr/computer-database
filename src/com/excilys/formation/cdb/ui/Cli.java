@@ -109,7 +109,23 @@ public class Cli {
 	}
 	
 	private void updateComputer (Scanner sc) {
-		
+		System.out.println("Update computer:\n"
+				+ "Computer ID ?");
+		String id = sc.next();
+		System.out.println("Company name ?");
+		String name = sc.next();
+		sc.nextLine();
+		System.out.println("Introduced date ? (Format: dd/MM/yyyy)");
+		String introduced = sc.nextLine();
+		System.out.println("Discontinued date ? (Format: dd/MM/yyyy)");
+		String discontinued = sc.nextLine();
+		System.out.println("Company Id ?");
+		String companyId = sc.nextLine();
+		try {
+			System.out.println(ComputerService.INSTANCE.updateComputer(id, name, introduced, discontinued, companyId));
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	private void deleteComputer (Scanner sc) {

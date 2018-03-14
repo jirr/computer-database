@@ -37,9 +37,9 @@ public enum ComputerService {
 	
 	public String createComputer (String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
 		try {
+			int companyId = Integer.parseInt(companyIdStr);
 			Timestamp introduced = stringToTimestamp(introducedStr);
 			Timestamp discontinued = stringToTimestamp(introducedStr);
-			int companyId = Integer.parseInt(companyIdStr);
 			Validator.INSTANCE.nameValidation(name);
 			Validator.INSTANCE.datesValidation(introduced, discontinued);
 			Validator.INSTANCE.manufactorValidation(companyId);
@@ -52,14 +52,30 @@ public enum ComputerService {
 		return "New computer added to database.";
 	}
 	
-	public void updateComputer () {
-		
+	public String updateComputer (String idStr, String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
+		int id = -1;
+		try {
+			id = Integer.parseInt(idStr);
+			int companyId = Integer.parseInt(companyIdStr);
+			Timestamp introduced = stringToTimestamp(introducedStr);
+			Timestamp discontinued = stringToTimestamp(introducedStr);
+			Validator.INSTANCE.computerIdValidation(id);
+			Validator.INSTANCE.nameValidation(name);
+			Validator.INSTANCE.datesValidation(introduced, discontinued);
+			Validator.INSTANCE.manufactorValidation(companyId);
+			ComputerDB.INSTANCE.update(new Computer(id, name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
+		} catch (NumberFormatException e) {
+			throw new Exception("Wrong format company ID.");
+		} catch (Exception e) {
+			throw e;
+		}
+		return "Computer "+id+" updated.";
 	}
 	
 	public String deleteComputer (int id) throws Exception {
 		try {
 			Validator.INSTANCE.computerIdValidation(id);
-			ComputerDB.delete(id);
+			ComputerDB.INSTANCE.delete(id);
 		} catch (Exception e) {
 			throw e;
 		}

@@ -51,7 +51,7 @@ public enum ComputerDB {
 		}
 	}
 	
-	public static void update (Computer computer) {
+	public void update (Computer computer) {
 		try {	
 			PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
 					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ?"
@@ -67,7 +67,7 @@ public enum ComputerDB {
 		}
 	}
 	
-	public static void delete (int id) {
+	public void delete (int id) {
 		try {
 			Statement s = conn.createStatement();
 			s.executeUpdate("DELETE FROM computer WHERE id='"+id+"'");
