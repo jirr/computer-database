@@ -9,10 +9,11 @@ public class Cli {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		applicationLoop();
+		Cli cli = new Cli();
+		cli.applicationLoop();
 	}
 	
-	public static void applicationLoop () {
+	public void applicationLoop () {
 		boolean loop = true;
 		Scanner sc = new Scanner(System.in);
 		while(loop) {
@@ -21,7 +22,7 @@ public class Cli {
 		sc.close();
 	}
 	
-	public static boolean listFeature (Scanner sc) {
+	private boolean listFeature (Scanner sc) {
 		String saisie;
 		boolean valid = false;
 		
@@ -67,25 +68,25 @@ public class Cli {
 		return true;
 	}
 	
-	public static void listComputer () {
+	private void listComputer () {
 		String res = "Computers list: \n";
-		res += ComputerService.listComputer();
+		res += ComputerService.INSTANCE.listComputer();
 		System.out.println(res);
 	}
 	
-	public static void listCompany () {
+	private void listCompany () {
 		String res = "Companies list: \n";
-		res += CompanyService.listCompany();
+		res += CompanyService.INSTANCE.listCompany();
 		System.out.println(res);
 	}
 	
-	public static void selectOne (Scanner sc) {
+	public void selectOne (Scanner sc) {
 		System.out.println("Computer Id to detail ?");
 		int id = sc.nextInt();
-		System.out.println(ComputerService.selectOne(id));
+		System.out.println(ComputerService.INSTANCE.selectOne(id));
 	}
 	
-	public static void createComputer (Scanner sc) {
+	private void createComputer (Scanner sc) {
 		System.out.println("Creating computer:\n"
 				+ "Computer name ?");
 		String name = sc.next();
@@ -95,14 +96,14 @@ public class Cli {
 		String discontinued = sc.next();
 		System.out.println("Company Id ?");
 		int companyId = sc.nextInt();
-		System.out.println(ComputerService.createComputer(name, introduced, discontinued, companyId));
+		System.out.println(ComputerService.INSTANCE.createComputer(name, introduced, discontinued, companyId));
 	}
 	
-	public static void updateComputer (Scanner sc) {
+	private void updateComputer (Scanner sc) {
 		
 	}
 	
-	public static void deleteComputer (Scanner sc) {
+	private void deleteComputer (Scanner sc) {
 		String saisie;
 		int id = -1;
 		System.out.println("Enter the computer id to delete:");
@@ -112,6 +113,6 @@ public class Cli {
 		} catch (NumberFormatException e){
 			e.printStackTrace();
 		}
-		System.out.println(ComputerService.deleteComputer(id));
+		System.out.println(ComputerService.INSTANCE.deleteComputer(id));
 	}
 }

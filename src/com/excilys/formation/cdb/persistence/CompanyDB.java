@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import com.excilys.formation.cdb.mapper.CompanyMP;
 import com.excilys.formation.cdb.model.Company;
 
-public class CompanyDB {
+public enum CompanyDB {
+	
+	INSTANCE;
 
 	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	public static ArrayList<Company> list () {
+	public ArrayList<Company> list () {
 		ArrayList<Company> companyList = new ArrayList<>(); 
 		try {
 			Statement s = conn.createStatement();
@@ -30,7 +32,7 @@ public class CompanyDB {
 		return companyList;
 	}
 	
-	public static Company selectOne (int id) {
+	public Company selectOne (int id) {
 		Company cres = null;
 		ResultSet res = null;
 		try {

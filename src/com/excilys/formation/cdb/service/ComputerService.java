@@ -11,10 +11,11 @@ import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 
-public class ComputerService {
+public enum ComputerService {
 	
+	INSTANCE;
 	
-	public static String listComputer () {
+	public String listComputer () {
 		ArrayList<Computer> list = ComputerDB.INSTANCE.list();
 		String res = "";
 		for (Computer p : list) {
@@ -23,33 +24,33 @@ public class ComputerService {
 		return res;
 	}
 	
-	public static String selectOne (int id) {
-		if (Validator.computerIdValidation(id)) {
+	public String selectOne (int id) {
+		if (Validator.INSTANCE.computerIdValidation(id)) {
 			return ComputerDB.INSTANCE.selectOne(id).toString();
 		} else {
 			return "Invalid Computer ID.";
 		}
 	}
 	
-	public static String createComputer (String name, String introducedStr, String discontinuedStr, int companyId) {
+	public String createComputer (String name, String introducedStr, String discontinuedStr, int companyId) {
 		Timestamp introduced = stringToTimestamp(introducedStr);
 		Timestamp discontinued = stringToTimestamp(introducedStr);
-		if (!Validator.computerDatesValidation(introduced, discontinued)) {
+		if (!Validator.INSTANCE.computerDatesValidation(introduced, discontinued)) {
 			return "Dates compatibility error.";
-		} else if (!Validator.manufactorValidation(companyId)) {
+		} else if (!Validator.INSTANCE.manufactorValidation(companyId)) {
 			return "Invalid Company ID.";
 		} else {
-			ComputerDB.INSTANCE.create(new Computer(name, introduced, discontinued, CompanyDB.selectOne(companyId)));
+			ComputerDB.INSTANCE.create(new Computer(name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
 			return "New computer added to database.";
 		}
 	}
 	
-	public static void updateComputer () {
+	public void updateComputer () {
 		
 	}
 	
-	public static String deleteComputer (int id) {
-		if (Validator.computerIdValidation(id)) {
+	public String deleteComputer (int id) {
+		if (Validator.INSTANCE.computerIdValidation(id)) {
 			ComputerDB.delete(id);
 			return "Computer "+id+" removed from database.";
 		} else {
@@ -57,7 +58,7 @@ public class ComputerService {
 		}
 	}
 	
-	public static Timestamp stringToTimestamp(String str_date) {
+	private Timestamp stringToTimestamp(String str_date) {
 	    try {
 		    DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
 		    Date date = format.parse(str_date);

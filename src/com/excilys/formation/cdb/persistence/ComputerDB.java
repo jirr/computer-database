@@ -19,9 +19,7 @@ public enum ComputerDB {
 	private String 	selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, "
 											+ "ca.id as caId, ca.name as caName "
 											+ "FROM computer cu "
-											+ "LEFT JOIN company ca ON caId = cu.company_id",
-			createRequest = "",
-			updateRequest = "";
+											+ "LEFT JOIN company ca ON ca.id = cu.company_id ";
 	
 	public ArrayList<Computer> list () {
 		ArrayList<Computer> computerList = new ArrayList<>(); 

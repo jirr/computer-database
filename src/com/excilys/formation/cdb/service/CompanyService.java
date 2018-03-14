@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.persistence.CompanyDB;
 
-public class CompanyService {
+public enum CompanyService {
 	
-	public static String listCompany () {
-		ArrayList<Company> list = CompanyDB.list();
+	INSTANCE;
+	
+	public String listCompany () {
+		ArrayList<Company> list = CompanyDB.INSTANCE.list();
 		String res = "";
 		for (Company c : list) {
 			res += c.toString() + "\n";
