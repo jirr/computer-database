@@ -8,7 +8,7 @@ public enum Validator {
 	
 	INSTANCE;
 	
-	public void datesValidation (Timestamp d1, Timestamp d2) throws Exception {
+	protected void datesValidation (Timestamp d1, Timestamp d2) throws Exception {
 		if (!(d1==null && d2==null)) {
 			if (d2.compareTo(d1) >0) {
 				throw new Exception("Incompatibility of dates.");
@@ -16,19 +16,19 @@ public enum Validator {
 		}
 	}
 	
-	public void nameValidation (String name) throws Exception {
+	protected void nameValidation (String name) throws Exception {
 		if (name.compareTo("") == 0) {
 			throw new Exception("Name is required.");
 		}
 	}
 	
-	public void computerIdValidation (int id) throws Exception {
+	protected void computerIdValidation (int id) throws Exception {
 		if (ComputerDB.INSTANCE.selectOne(id) == null) {
 			throw new Exception("Computer ID does not exist.");
 		}
 	}
 	
-	public void manufactorValidation (int id) throws Exception {
+	protected void manufactorValidation (int id) throws Exception {
 		if (CompanyDB.INSTANCE.selectOne(id) == null) {
 			throw new Exception("Company ID does not exist.");
 		}

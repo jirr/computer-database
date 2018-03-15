@@ -15,7 +15,7 @@ public class Cli {
 		cli.applicationLoop();
 	}
 	
-	public void applicationLoop () {
+	private void applicationLoop () {
 		boolean loop = true;
 		Scanner sc = new Scanner(System.in);
 		while(loop) {
