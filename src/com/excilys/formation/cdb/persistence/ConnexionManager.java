@@ -20,14 +20,15 @@ public enum ConnexionManager{
 	 * @return the conn
 	 */
 	public Connection getConn() {
+		props = new Properties();
 		try {
-			file = new FileInputStream("db/db.properties");
+			file = new FileInputStream("config/db/db.properties");
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
-			props.load((file));
+			props.load(file);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
