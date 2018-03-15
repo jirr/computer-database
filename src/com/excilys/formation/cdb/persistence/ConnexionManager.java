@@ -1,27 +1,46 @@
 package com.excilys.formation.cdb.persistence;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public enum ConnexionManager{
 	
 	INSTANCE;
 	
 	private Connection conn;
+	private Properties props;
+	private FileInputStream file;
+	
 		
 	private ConnexionManager () {
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			file = new FileInputStream("db/db.properties");
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			props.load((file));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			Class.forName(props.getProperty("jdbc.driver"));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-		
 		try {
-			conn = DriverManager.getConnection(url, "admincdb", "qwerty1234");
+			conn = DriverManager.getConnection(	props.getProperty ("jdbc.url"), 
+												props.getProperty ("jdbc.username"),
+												props.getProperty ("jdbc.password"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
