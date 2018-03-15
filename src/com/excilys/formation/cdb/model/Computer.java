@@ -1,12 +1,12 @@
 package com.excilys.formation.cdb.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class Computer {
 	private int id;
 	private String name;
-	private Timestamp dateIntroduced;
-	private Timestamp dateDiscontinued;
+	private LocalDate dateIntroduced;
+	private LocalDate dateDiscontinued;
 	private Company manufactor;
 	
 	/**
@@ -16,7 +16,7 @@ public class Computer {
 	 * @param dateDiscontinued
 	 * @param manufacturer
 	 */
-	public Computer(int id, String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
+	public Computer(int id, String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
 		this(name, dateIntroduced, dateDiscontinued, manufactor);
 		this.id = id;
 	}
@@ -28,7 +28,7 @@ public class Computer {
 	 * @param dateDiscontinued
 	 * @param manufactor
 	 */
-	public Computer(String name, Timestamp dateIntroduced, Timestamp dateDiscontinued, Company manufactor) {
+	public Computer(String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
 		super();
 		
 		this.name = name;
@@ -65,25 +65,25 @@ public class Computer {
 	/**
 	 * @return the dateIntroduced
 	 */
-	public Timestamp getDateIntroduced() {
+	public LocalDate getDateIntroduced() {
 		return dateIntroduced;
 	}
 	/**
 	 * @param dateIntroduced the dateIntroduced to set
 	 */
-	public void setDateIntroduced(Timestamp dateIntroduced) {
+	public void setDateIntroduced(LocalDate dateIntroduced) {
 		this.dateIntroduced = dateIntroduced;
 	}
 	/**
 	 * @return the dateDiscontinued
 	 */
-	public Timestamp getDateDiscontinued() {
+	public LocalDate getDateDiscontinued() {
 		return dateDiscontinued;
 	}
 	/**
 	 * @param dateDiscontinued the dateDiscontinued to set
 	 */
-	public void setDateDiscontinued(Timestamp dateDiscontinued) {
+	public void setDateDiscontinued(LocalDate dateDiscontinued) {
 		this.dateDiscontinued = dateDiscontinued;
 	}
 

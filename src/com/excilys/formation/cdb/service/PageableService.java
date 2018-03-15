@@ -1,5 +1,7 @@
 package com.excilys.formation.cdb.service;
 
-public class PageableService {
+public enum PageableService {
+
+	INSTANCE;
 
 }

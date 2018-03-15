@@ -1,6 +1,7 @@
 package com.excilys.formation.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,8 +43,8 @@ public enum ComputerDB {
 					+ "computer (name, introduced, discontinued, company_id) "
 					+ "VALUES (?, ?, ?, ?);" );
 			ps.setString(1, computer.getName());
-			ps.setTimestamp(2, computer.getDateIntroduced());
-			ps.setTimestamp(3, computer.getDateDiscontinued());
+			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
+			ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
 			ps.setInt(4, computer.getManufactor().getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -57,8 +58,8 @@ public enum ComputerDB {
 					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ? "
 					+ "WHERE id = ?;" );
 			ps.setString(1, computer.getName());
-			ps.setTimestamp(2, computer.getDateIntroduced());
-			ps.setTimestamp(3, computer.getDateDiscontinued());
+			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
+			ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
 			ps.setInt(4, computer.getManufactor().getId());
 			ps.setInt(5, computer.getId());
 			ps.executeUpdate();

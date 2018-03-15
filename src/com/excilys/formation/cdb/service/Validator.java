@@ -1,6 +1,6 @@
 package com.excilys.formation.cdb.service;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import com.excilys.formation.cdb.persistence.*;
 
@@ -8,7 +8,7 @@ public enum Validator {
 	
 	INSTANCE;
 	
-	protected void datesValidation (Timestamp d1, Timestamp d2) throws Exception {
+	protected void datesValidation (LocalDate d1, LocalDate d2) throws Exception {
 		if (!(d1==null && d2==null)) {
 			if (d2.compareTo(d1) >0) {
 				throw new Exception("Incompatibility of dates.");

@@ -1,11 +1,7 @@
 package com.excilys.formation.cdb.service;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.CompanyDB;
@@ -40,8 +36,8 @@ public enum ComputerService {
 	public String createComputer (String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
 		try {
 			int companyId = Integer.parseInt(companyIdStr);
-			Timestamp introduced = stringToTimestamp(introducedStr);
-			Timestamp discontinued = stringToTimestamp(introducedStr);
+			LocalDate introduced = LocalDate.parse(introducedStr);
+			LocalDate discontinued = LocalDate.parse(introducedStr);
 			Validator.INSTANCE.nameValidation(name);
 			Validator.INSTANCE.datesValidation(introduced, discontinued);
 			Validator.INSTANCE.manufactorValidation(companyId);
@@ -59,8 +55,8 @@ public enum ComputerService {
 		try {
 			id = Integer.parseInt(idStr);
 			int companyId = Integer.parseInt(companyIdStr);
-			Timestamp introduced = stringToTimestamp(introducedStr);
-			Timestamp discontinued = stringToTimestamp(introducedStr);
+			LocalDate introduced = LocalDate.parse(introducedStr);
+			LocalDate discontinued = LocalDate.parse(discontinuedStr);
 			Validator.INSTANCE.computerIdValidation(id);
 			Validator.INSTANCE.nameValidation(name);
 			Validator.INSTANCE.datesValidation(introduced, discontinued);
@@ -82,21 +78,5 @@ public enum ComputerService {
 			throw e;
 		}
 		return "Computer "+id+" removed from database.";
-	}
-	
-	private Timestamp stringToTimestamp(String str_date) throws Exception {
-		Timestamp timestampDate = null;
-		if(str_date.compareTo("")==0) {
-			return timestampDate;
-		} else {
-		    try {
-			    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-			    Date date = format.parse(str_date);
-			    timestampDate = new Timestamp(date.getTime());
-		    } catch (ParseException e) {
-		    	throw new Exception("Date format invalid.");
-		    }
-		}
-	    return timestampDate;
 	}
 }
