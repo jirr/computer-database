@@ -1,11 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 import com.excilys.formation.cdb.mapper.ComputerMP;
@@ -17,10 +12,10 @@ public enum ComputerDB {
 
 	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	private String 	selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, "
-											+ "ca.id as caId, ca.name as caName "
-											+ "FROM computer cu "
-											+ "LEFT JOIN company ca ON ca.id = cu.company_id ";
+	private String selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id ";
+	private String createRequest 	= "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
+	private String updateRequest 	= "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
+	private String deleteRequest 	= "DELETE FROM computer WHERE id=?;";
 	
 	public ArrayList<Computer> list () {
 		ArrayList<Computer> computerList = new ArrayList<>(); 
@@ -37,11 +32,9 @@ public enum ComputerDB {
 		return computerList;
 	}
 	
-	public void create (Computer computer) {
+	public void createComputer (Computer computer) {
 		try {
-			PreparedStatement ps = conn.prepareStatement( "INSERT INTO "
-					+ "computer (name, introduced, discontinued, company_id) "
-					+ "VALUES (?, ?, ?, ?);" );
+			PreparedStatement ps = conn.prepareStatement(createRequest);
 			ps.setString(1, computer.getName());
 			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
 			ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
@@ -52,11 +45,9 @@ public enum ComputerDB {
 		}
 	}
 	
-	public void update (Computer computer) {
+	public void updateComputer (Computer computer) {
 		try {	
-			PreparedStatement ps = conn.prepareStatement( "UPDATE computer "
-					+ "SET name = ?, introduced = ?, discontinued = ?, company_id = ? "
-					+ "WHERE id = ?;" );
+			PreparedStatement ps = conn.prepareStatement(updateRequest);
 			ps.setString(1, computer.getName());
 			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
 			ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
@@ -68,10 +59,11 @@ public enum ComputerDB {
 		}
 	}
 	
-	public void delete (int id) {
+	public void deleteComputer (int id) {
 		try {
-			Statement s = conn.createStatement();
-			s.executeUpdate("DELETE FROM computer WHERE id='"+id+"'");
+			PreparedStatement ps = conn.prepareStatement(deleteRequest);
+			ps.setInt(1, id);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

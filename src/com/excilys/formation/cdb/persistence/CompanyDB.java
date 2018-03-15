@@ -1,10 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 import com.excilys.formation.cdb.mapper.CompanyMP;
@@ -16,12 +12,13 @@ public enum CompanyDB {
 
 	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
+	private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
+	
 	public ArrayList<Company> list () {
 		ArrayList<Company> companyList = new ArrayList<>(); 
 		try {
 			Statement s = conn.createStatement();
-			ResultSet res = s
-					.executeQuery("SELECT ca.id as caId, ca.name as caName FROM company ca");
+			ResultSet res = s.executeQuery(selectAllRequest);
 			
 			while(res.next()) {
 				companyList.add(CompanyMP.resToCompany(res));;
@@ -36,8 +33,7 @@ public enum CompanyDB {
 		Company cres = null;
 		ResultSet res = null;
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT ca.id as caId, ca.name as caName FROM company ca "
-					+ "WHERE ca.id = ?;");
+			PreparedStatement ps = conn.prepareStatement(selectAllRequest+"WHERE ca.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
 			if (!res.next()) {

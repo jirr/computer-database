@@ -41,7 +41,7 @@ public enum ComputerService {
 			Validator.INSTANCE.nameValidation(name);
 			Validator.INSTANCE.datesValidation(introduced, discontinued);
 			Validator.INSTANCE.manufactorValidation(companyId);
-			ComputerDB.INSTANCE.create(new Computer(name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
+			ComputerDB.INSTANCE.createComputer(new Computer(name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
 		} catch (NumberFormatException e) {
 			throw new Exception("Wrong format company ID.");
 		} catch (Exception e) {
@@ -61,7 +61,7 @@ public enum ComputerService {
 			Validator.INSTANCE.nameValidation(name);
 			Validator.INSTANCE.datesValidation(introduced, discontinued);
 			Validator.INSTANCE.manufactorValidation(companyId);
-			ComputerDB.INSTANCE.update(new Computer(id, name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
+			ComputerDB.INSTANCE.updateComputer(new Computer(id, name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId)));
 		} catch (NumberFormatException e) {
 			throw new Exception("Wrong format company ID.");
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public enum ComputerService {
 	public String deleteComputer (int id) throws Exception {
 		try {
 			Validator.INSTANCE.computerIdValidation(id);
-			ComputerDB.INSTANCE.delete(id);
+			ComputerDB.INSTANCE.deleteComputer(id);
 		} catch (Exception e) {
 			throw e;
 		}
