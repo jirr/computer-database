@@ -10,14 +10,12 @@ import com.excilys.formation.cdb.model.Company;
 public enum CompanyDB {
 	
 	INSTANCE;
-
-	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
 	private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
 	
 	public List<Company> list () {
 		List<Company> companyList = new ArrayList<>(); 
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()){
 			Statement s = conn.createStatement();
 			ResultSet res = s.executeQuery(selectAllRequest);
 			
@@ -33,7 +31,7 @@ public enum CompanyDB {
 	public Company selectOne (int id) {
 		Company cres = null;
 		ResultSet res = null;
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
 			PreparedStatement ps = conn.prepareStatement(selectAllRequest+"WHERE ca.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();

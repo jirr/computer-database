@@ -16,9 +16,10 @@ public enum ConnexionManager{
 	private Properties props;
 	private FileInputStream file;
 	
-		
-	private ConnexionManager () {
-		
+	/**
+	 * @return the conn
+	 */
+	public Connection getConn() {
 		try {
 			file = new FileInputStream("db/db.properties");
 		} catch (FileNotFoundException e1) {
@@ -45,12 +46,6 @@ public enum ConnexionManager{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * @return the conn
-	 */
-	public Connection getConn() {
 		return conn;
 	}
 }

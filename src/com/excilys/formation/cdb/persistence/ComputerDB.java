@@ -10,17 +10,15 @@ import com.excilys.formation.cdb.model.Computer;
 public enum ComputerDB {
 	
 	INSTANCE;
-
-	static Connection conn = ConnexionManager.INSTANCE.getConn();
 	
-	private String selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id ";
-	private String createRequest 	= "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
-	private String updateRequest 	= "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
-	private String deleteRequest 	= "DELETE FROM computer WHERE id=?;";
+	private final static String selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id ";
+	private final static String createRequest 	 = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
+	private final static String updateRequest 	 = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
+	private final static String deleteRequest 	 = "DELETE FROM computer WHERE id=?;";
 	
 	public List<Computer> list () {
 		List<Computer> computerList = new ArrayList<>(); 
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
 			Statement s = conn.createStatement();
 			ResultSet res = s.executeQuery(selectAllRequest + ";");
 			while(res.next()) {
@@ -33,7 +31,7 @@ public enum ComputerDB {
 	}
 	
 	public void createComputer (Computer computer) {
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
 			PreparedStatement ps = conn.prepareStatement(createRequest);
 			ps.setString(1, computer.getName());
 			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
@@ -46,7 +44,7 @@ public enum ComputerDB {
 	}
 	
 	public void updateComputer (Computer computer) {
-		try {	
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {	
 			PreparedStatement ps = conn.prepareStatement(updateRequest);
 			ps.setString(1, computer.getName());
 			ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
@@ -60,7 +58,7 @@ public enum ComputerDB {
 	}
 	
 	public void deleteComputer (int id) {
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()){
 			PreparedStatement ps = conn.prepareStatement(deleteRequest);
 			ps.setInt(1, id);
 			ps.executeUpdate();
@@ -72,7 +70,7 @@ public enum ComputerDB {
 	public Computer selectOne (int id) {
 		Computer cres = null;
 		ResultSet res = null;
-		try {
+		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
 			PreparedStatement ps = conn.prepareStatement(selectAllRequest + "WHERE cu.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
