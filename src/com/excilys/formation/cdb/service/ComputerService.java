@@ -1,7 +1,7 @@
 package com.excilys.formation.cdb.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.CompanyDB;
@@ -11,7 +11,7 @@ public enum ComputerService {
 	
 	INSTANCE;
 	
-	private ArrayList<Computer> list = ComputerDB.INSTANCE.list();
+	private List<Computer> list = ComputerDB.INSTANCE.list();
 	
 	public String listComputer (int from, int to) {
 		String res = "";

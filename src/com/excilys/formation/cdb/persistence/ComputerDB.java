@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.persistence;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.formation.cdb.mapper.ComputerMP;
 import com.excilys.formation.cdb.model.Computer;
@@ -17,12 +18,11 @@ public enum ComputerDB {
 	private String updateRequest 	= "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 	private String deleteRequest 	= "DELETE FROM computer WHERE id=?;";
 	
-	public ArrayList<Computer> list () {
-		ArrayList<Computer> computerList = new ArrayList<>(); 
+	public List<Computer> list () {
+		List<Computer> computerList = new ArrayList<>(); 
 		try {
 			Statement s = conn.createStatement();
-			ResultSet res = s
-					.executeQuery(selectAllRequest + ";");
+			ResultSet res = s.executeQuery(selectAllRequest + ";");
 			while(res.next()) {
 			    computerList.add(ComputerMP.resToComputer(res));
 			}

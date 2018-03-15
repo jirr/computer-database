@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.persistence;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.formation.cdb.mapper.CompanyMP;
 import com.excilys.formation.cdb.model.Company;
@@ -14,8 +15,8 @@ public enum CompanyDB {
 	
 	private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
 	
-	public ArrayList<Company> list () {
-		ArrayList<Company> companyList = new ArrayList<>(); 
+	public List<Company> list () {
+		List<Company> companyList = new ArrayList<>(); 
 		try {
 			Statement s = conn.createStatement();
 			ResultSet res = s.executeQuery(selectAllRequest);
