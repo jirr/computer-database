@@ -130,9 +130,9 @@ public class Cli {
 				+ "Computer name ?");
 		String name = sc.next();
 		sc.nextLine();
-		System.out.println("Introduced date ? (Format: dd/MM/yyyy)");
+		System.out.println("Introduced date ? (Format: yyyy-MM-dd)");
 		String introduced = sc.nextLine();
-		System.out.println("Discontinued date ? (Format: dd/MM/yyyy)");
+		System.out.println("Discontinued date ? (Format: yyyy-MM-dd)");
 		String discontinued = sc.nextLine();
 		System.out.println("Company Id ?");
 		String companyId = sc.nextLine();
@@ -150,9 +150,9 @@ public class Cli {
 		System.out.println("Company name ?");
 		String name = sc.next();
 		sc.nextLine();
-		System.out.println("Introduced date ? (Format: dd/MM/yyyy)");
+		System.out.println("Introduced date ? (Format: yyyy-MM-dd)");
 		String introduced = sc.nextLine();
-		System.out.println("Discontinued date ? (Format: dd/MM/yyyy)");
+		System.out.println("Discontinued date ? (Format: yyyy-MM-dd)");
 		String discontinued = sc.nextLine();
 		System.out.println("Company Id ?");
 		String companyId = sc.nextLine();
