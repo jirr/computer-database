@@ -21,6 +21,7 @@
         <junit.version>4.12</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <!-- compile -->
+        <checkstyle.version>3.0.0</checkstyle.version>
         <!-- logs -->
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.19</slf4j.version>
@@ -69,4 +70,20 @@
             <version>${myqsl-jdbc.version}</version>
         </dependency>
     </dependencies>
+    
+    <reporting>
+	    <plugins>
+	    	<!-- checkstyle -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle.version}</version>
+				<configuration>
+					<configLocation>/config/checkstyle/checkstyle.xml</configLocation>
+					<suppressionsLocation>/config/checkstyle/suppressions.xml</suppressionsLocation>
+				</configuration>
+			</plugin>
+	    </plugins>
+	</reporting>
+    
 </project>

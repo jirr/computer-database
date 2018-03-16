@@ -3,6 +3,7 @@ package com.excilys.formation.cdb.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.excilys.formation.cdb.mapper.ComputerMP;
 import com.excilys.formation.cdb.model.Computer;
@@ -67,21 +68,19 @@ public enum ComputerDB {
 		}
 	}
 	
-	public Computer selectOne (int id) {
+	public Optional<Computer> selectOne (int id) {
 		Computer cres = null;
 		ResultSet res = null;
 		try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
 			PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");
 			ps.setInt(1, id);
 			res = ps.executeQuery();
-			if(!res.next()) {
-				return null;
-			} else {
+			if(res.next()) {
 				cres = ComputerMP.resToComputer(res);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return cres;
+		return Optional.ofNullable(cres);
 	}
 }

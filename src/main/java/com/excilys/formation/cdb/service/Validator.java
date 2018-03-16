@@ -1,7 +1,6 @@
 package com.excilys.formation.cdb.service;
 
 import java.time.LocalDate;
-
 import com.excilys.formation.cdb.persistence.*;
 
 public enum Validator {
@@ -23,13 +22,13 @@ public enum Validator {
 	}
 	
 	protected void computerIdValidation (int id) throws Exception {
-		if (ComputerDB.INSTANCE.selectOne(id) == null) {
+		if (ComputerDB.INSTANCE.selectOne(id).isPresent()) {
 			throw new Exception("Computer ID does not exist.");
 		}
 	}
 	
 	protected void manufactorValidation (int id) throws Exception {
-		if (CompanyDB.INSTANCE.selectOne(id) == null) {
+		if (CompanyDB.INSTANCE.selectOne(id).isPresent()) {
 			throw new Exception("Company ID does not exist.");
 		}
 	}
