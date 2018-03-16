@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import com.excilys.formation.cdb.model.Company;
 
-public class CompanyMP {
+public class CompanyMapper {
 	public static Company resToCompany(ResultSet res) throws SQLException {
 	    int idCompany = res.getInt( "caId" );
 	    String nameCompany = res.getString( "caName" );

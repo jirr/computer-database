@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.formation.cdb.mapper.ComputerMP;
+import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.model.Computer;
 
 public enum ComputerDB {
@@ -23,7 +23,7 @@ public enum ComputerDB {
 			Statement s = conn.createStatement();
 			ResultSet res = s.executeQuery(selectAllRequest + " ;");
 			while(res.next()) {
-			    computerList.add(ComputerMP.resToComputer(res));
+			    computerList.add(ComputerMapper.resToComputer(res));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public enum ComputerDB {
 			ps.setInt(1, id);
 			res = ps.executeQuery();
 			if(res.next()) {
-				cres = ComputerMP.resToComputer(res);
+				cres = ComputerMapper.resToComputer(res);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

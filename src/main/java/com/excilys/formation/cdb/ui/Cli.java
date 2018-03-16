@@ -36,27 +36,26 @@ public class Cli {
 					+ "\t5) Update a computer\n" 			+ "\t6) Delete a computer\n"
 					+ "\t7) Stop the application");
 			saisie = sc.next();
-			
-			switch(saisie) {
-				case "1":
+			switch(ChoiceCli.valueOf(saisie)) {
+				case LIST_COMPUTER:
 					listComputer(sc);
 				break;
-				case "2":
+				case LIST_COMPANY:
 					listCompany(sc);
 				break;
-				case "3":
-					selectOne(sc);
+				case COMPUTER_DETAIL:
+					computerDetail(sc);
 				break;
-				case "4":
+				case CREATE_COMPUTER:
 					createComputer(sc);
 				break;
-				case "5":
+				case UPDATE_COMPUTER:
 					updateComputer(sc);
 				break;
-				case "6":
+				case DELETE_COMPUTER:
 					deleteComputer(sc);
 				break;
-				case "7":
+				case STOP_APP:
 					return false;
 				default:
 					System.err.println("Invalid choice.");
@@ -115,7 +114,7 @@ public class Cli {
 		return true;
 	}
 	
-	public void selectOne (Scanner sc) {
+	public void computerDetail (Scanner sc) {
 		System.out.println("Computer Id to detail ?");
 		int id = sc.nextInt();
 		try {
