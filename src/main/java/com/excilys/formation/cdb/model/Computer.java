@@ -2,35 +2,37 @@ package com.excilys.formation.cdb.model;
 
 import java.time.LocalDate;
 
+/**
+ * @author jirr
+ *
+ */
 public class Computer {
 	private int id;
 	private String name;
 	private LocalDate dateIntroduced;
 	private LocalDate dateDiscontinued;
 	private Company manufactor;
-	
+
 	/**
 	 * @param id
 	 * @param name
 	 * @param dateIntroduced
 	 * @param dateDiscontinued
-	 * @param manufacturer
+	 * @param manufactor
 	 */
 	public Computer(int id, String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
 		this(name, dateIntroduced, dateDiscontinued, manufactor);
 		this.id = id;
 	}
-	
+
 	/**
-	 * Constructor without id for creation in BDD
+	 * Constructor without id for creation in BDD.
 	 * @param name
 	 * @param dateIntroduced
 	 * @param dateDiscontinued
 	 * @param manufactor
 	 */
 	public Computer(String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
-		super();
-		
 		this.name = name;
 		this.dateIntroduced = dateIntroduced;
 		this.dateDiscontinued = dateDiscontinued;
@@ -100,8 +102,9 @@ public class Computer {
 	public void setManufactor(Company manufactor) {
 		this.manufactor = manufactor;
 	}
-	
-	public String toString () {
+
+	@Override
+	public String toString() {
 		String result = "";
 		result += "id: " + this.id;
 		result += " {nom: " + this.name;
@@ -110,5 +113,4 @@ public class Computer {
 		result += ", manufactor: " + this.manufactor.getName() + "}";
 		return result;
 	}
-
 }

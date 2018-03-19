@@ -9,13 +9,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public enum ConnexionManager{
-	
 	INSTANCE;
-	
+
 	private Connection conn;
 	private Properties props;
 	private FileInputStream file;
-	
+
 	/**
 	 * @return the conn
 	 */
@@ -34,9 +33,9 @@ public enum ConnexionManager{
 			e1.printStackTrace();
 		}
 		try {
-			conn = DriverManager.getConnection(	props.getProperty ("jdbc.url"), 
-												props.getProperty ("jdbc.username"),
-												props.getProperty ("jdbc.password"));
+			conn = DriverManager.getConnection(props.getProperty("jdbc.url"), 
+												props.getProperty("jdbc.username"),
+												props.getProperty("jdbc.password"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

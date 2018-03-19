@@ -9,7 +9,6 @@ import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 
 public class Cli {
-	
 	private int from, to;
 	private static int nb_page = 50;
 
@@ -18,8 +17,8 @@ public class Cli {
 		Cli cli = new Cli();
 		cli.applicationLoop();
 	}
-	
-	private void applicationLoop () {
+
+	private void applicationLoop() {
 		boolean loop = true;
 		Scanner scanner = new Scanner(System.in);
 		while(loop) {
@@ -27,20 +26,19 @@ public class Cli {
 		}
 		scanner.close();
 	}
-	
-	private boolean listFeature (Scanner scanner) {
+
+	private boolean listFeature(Scanner scanner) {
 		String saisie;
 		boolean valid = false;
-		
-		while(!valid) {
+		while (!valid) {
 			valid = true;
 			System.out.println("Chose a function:\n"
-					+ "\t1) List computers\n" 				+ "\t2) List companies\n" 
-					+ "\t3) Show one computer details\n" 	+ "\t4) Create a computer\n" 
-					+ "\t5) Update a computer\n" 			+ "\t6) Delete a computer\n"
+					+ "\t1) List computers\n"				+ "\t2) List companies\n"
+					+ "\t3) Show one computer details\n"	+ "\t4) Create a computer\n"
+					+ "\t5) Update a computer\n"			+ "\t6) Delete a computer\n"
 					+ "\t7) Stop the application");
 			saisie = scanner.next();
-			switch(ChoiceCli.getById(saisie)) {
+			switch (ChoiceCli.getById(saisie)) {
 				case LIST_COMPUTER:
 					listComputer(scanner);
 				break;
@@ -73,8 +71,8 @@ public class Cli {
 		}
 		return true;
 	}
-	
-	private void listComputer (Scanner scanner) {
+
+	private void listComputer(Scanner scanner) {
 		String res = "Computers list: \n";
 		boolean nextPage = true;
 		from = 0;
@@ -85,8 +83,8 @@ public class Cli {
 			nextPage = paginationChoices(scanner);
 		}
 	}
-	
-	private void listCompany (Scanner scanner) {
+
+	private void listCompany(Scanner scanner) {
 		String res = "Companies list: \n";
 		boolean nextPage = true;
 		from = 0;
@@ -102,8 +100,8 @@ public class Cli {
 			nextPage = paginationChoices(scanner);
 		}
 	}
-	
-	private boolean paginationChoices (Scanner scanner) {
+
+	private boolean paginationChoices(Scanner scanner) {
 		System.out.println("Next(n) Previous(p) Quit(q) ?");
 		switch (ChoiceCli.getById(scanner.next())) {
 			case NEXT_PAGE :
@@ -124,8 +122,8 @@ public class Cli {
 		}
 		return true;
 	}
-	
-	public void computerDetail (Scanner scanner) {
+
+	public void computerDetail(Scanner scanner) {
 		System.out.println("Computer Id to detail ?");
 		int id = scanner.nextInt();
 		try {
@@ -134,8 +132,8 @@ public class Cli {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	private void createComputer (Scanner scanner) {
+
+	private void createComputer(Scanner scanner) {
 		System.out.println("Creating computer:\n"
 				+ "Computer name ?");
 		String name = scanner.next();
@@ -156,8 +154,8 @@ public class Cli {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	private void updateComputer (Scanner scanner) {
+
+	private void updateComputer(Scanner scanner) {
 		System.out.println("Update computer:\n"
 				+ "Computer ID ?");
 		String idStr = scanner.next();
@@ -181,15 +179,15 @@ public class Cli {
 			System.err.println(e.getMessage());
 		}
 	}
-	
-	private void deleteComputer (Scanner scanner) {
+
+	private void deleteComputer(Scanner scanner) {
 		String saisie;
 		System.out.println("Enter the computer id to delete:");
 		saisie = scanner.next();
 		try {
 			int id = Integer.parseInt(saisie);
 			System.out.println(ComputerService.INSTANCE.deleteComputer(id));
-		} catch (Exception e){
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 	}
