@@ -20,49 +20,51 @@ import com.excilys.formation.cdb.model.Company;
  *
  */
 public enum CompanyDB {
-	INSTANCE;
+    INSTANCE;
 
-	private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
+    private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
 
-	private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
+    private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
 
-	/**
-	 * @return List<Company>
-	 */
-	public List<Company> list() {
-		List<Company> companyList = new ArrayList<>(); 
-		try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(selectAllRequest + " ;");
-			while (result.next()) {
-				companyList.add(CompanyMapper.INSTANCE.resToCompany(result));;
-			} 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return companyList;
-	}
+    /**
+     * @return List<Company>
+     */
+    public List<Company> list() {
+        List<Company> companyList = new ArrayList<>();
+        try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(selectAllRequest + " ;");
+            while (result.next()) {
+                companyList.add(CompanyMapper.INSTANCE.resToCompany(result));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return companyList;
+    }
 
-	/**
-	 * @param id
-	 * @return
-	 */
-	public Optional<Company> selectOne(int id) {
-		Company company = null;
-		ResultSet result = null;
-		logger.info("Connection to database opening.");
-		try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
-			PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");
-			preparedStatement.setInt(1, id);
-			result = preparedStatement.executeQuery();
-			if (result.next()) {
-				company = CompanyMapper.INSTANCE.resToCompany(result);
-			}
-		} catch (SQLException e) {
-			logger.error("Unable to reach the database.");
-			e.printStackTrace();
-		}
-		logger.info("Connection to database closed.");
-		return Optional.ofNullable(company);
-	}
+    /**
+     * @param id
+     *            of Company that should be in the DB
+     * @return Optional<Company> contains the company, could be empty if the id does
+     *         not exist
+     */
+    public Optional<Company> selectOne(int id) {
+        Company company = null;
+        ResultSet result = null;
+        logger.info("Connection to database opening.");
+        try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");
+            preparedStatement.setInt(1, id);
+            result = preparedStatement.executeQuery();
+            if (result.next()) {
+                company = CompanyMapper.INSTANCE.resToCompany(result);
+            }
+        } catch (SQLException e) {
+            logger.error("Unable to reach the database.");
+            e.printStackTrace();
+        }
+        logger.info("Connection to database closed.");
+        return Optional.ofNullable(company);
+    }
 }
