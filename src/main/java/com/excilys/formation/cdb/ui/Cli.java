@@ -1,7 +1,10 @@
 package com.excilys.formation.cdb.ui;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 
@@ -17,14 +20,14 @@ public class Cli {
 	
 	private void applicationLoop () {
 		boolean loop = true;
-		Scanner sc = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		while(loop) {
-			loop = listFeature(sc);
+			loop = listFeature(scanner);
 		}
-		sc.close();
+		scanner.close();
 	}
 	
-	private boolean listFeature (Scanner sc) {
+	private boolean listFeature (Scanner scanner) {
 		String saisie;
 		boolean valid = false;
 		
@@ -35,29 +38,29 @@ public class Cli {
 					+ "\t3) Show one computer details\n" 	+ "\t4) Create a computer\n" 
 					+ "\t5) Update a computer\n" 			+ "\t6) Delete a computer\n"
 					+ "\t7) Stop the application");
-			saisie = sc.next();
-			switch(ChoiceCli.valueOf(saisie)) {
+			saisie = scanner.next();
+			switch(ChoiceCli.getById(saisie)) {
 				case LIST_COMPUTER:
-					listComputer(sc);
+					listComputer(scanner);
 				break;
 				case LIST_COMPANY:
-					listCompany(sc);
+					listCompany(scanner);
 				break;
 				case COMPUTER_DETAIL:
-					computerDetail(sc);
+					computerDetail(scanner);
 				break;
 				case CREATE_COMPUTER:
-					createComputer(sc);
+					createComputer(scanner);
 				break;
 				case UPDATE_COMPUTER:
-					updateComputer(sc);
+					updateComputer(scanner);
 				break;
 				case DELETE_COMPUTER:
-					deleteComputer(sc);
+					deleteComputer(scanner);
 				break;
 				case STOP_APP:
 					return false;
-				default:
+				case DEFAULT:
 					System.err.println("Invalid choice.");
 					valid = false;
 				break;
@@ -66,7 +69,7 @@ public class Cli {
 		return true;
 	}
 	
-	private void listComputer (Scanner sc) {
+	private void listComputer (Scanner scanner) {
 		String res = "Computers list: \n";
 		boolean nextPage = true;
 		from = 0;
@@ -74,11 +77,11 @@ public class Cli {
 		while (nextPage) {
 			res += ComputerService.INSTANCE.listComputer(from, to);
 			System.out.println(res);
-			nextPage = paginationChoices(sc);
+			nextPage = paginationChoices(scanner);
 		}
 	}
 	
-	private void listCompany (Scanner sc) {
+	private void listCompany (Scanner scanner) {
 		String res = "Companies list: \n";
 		boolean nextPage = true;
 		from = 0;
@@ -91,13 +94,13 @@ public class Cli {
 				return;
 			}
 			System.out.println(res);
-			nextPage = paginationChoices(sc);
+			nextPage = paginationChoices(scanner);
 		}
 	}
 	
-	private boolean paginationChoices (Scanner sc) {
+	private boolean paginationChoices (Scanner scanner) {
 		System.out.println("Next(n) Previous(p) Quit(q) ?");
-		switch (sc.next()) {
+		switch (scanner.next()) {
 			case "n" :
 				from = to;
 				to += 50;
@@ -114,9 +117,9 @@ public class Cli {
 		return true;
 	}
 	
-	public void computerDetail (Scanner sc) {
+	public void computerDetail (Scanner scanner) {
 		System.out.println("Computer Id to detail ?");
-		int id = sc.nextInt();
+		int id = scanner.nextInt();
 		try {
 			System.out.println(ComputerService.INSTANCE.selectOne(id));
 		} catch (Exception e) {
@@ -124,49 +127,58 @@ public class Cli {
 		}
 	}
 	
-	private void createComputer (Scanner sc) {
+	private void createComputer (Scanner scanner) {
 		System.out.println("Creating computer:\n"
 				+ "Computer name ?");
-		String name = sc.next();
-		sc.nextLine();
+		String name = scanner.next();
+		scanner.nextLine();
 		System.out.println("Introduced date ? (Format: yyyy-MM-dd)");
-		String introduced = sc.nextLine();
+		String introducedStr = scanner.nextLine();
 		System.out.println("Discontinued date ? (Format: yyyy-MM-dd)");
-		String discontinued = sc.nextLine();
+		String discontinuedStr = scanner.nextLine();
 		System.out.println("Company Id ?");
-		String companyId = sc.nextLine();
+		String companyIdStr = scanner.nextLine();
 		try {
-			System.out.println(ComputerService.INSTANCE.createComputer(name, introduced, discontinued, companyId));
+			int companyId = Integer.parseInt(companyIdStr);
+			LocalDate introduced = LocalDate.parse(introducedStr);
+			LocalDate discontinued = LocalDate.parse(discontinuedStr);
+			Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
+			System.out.println(ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor)));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 	}
 	
-	private void updateComputer (Scanner sc) {
+	private void updateComputer (Scanner scanner) {
 		System.out.println("Update computer:\n"
 				+ "Computer ID ?");
-		String id = sc.next();
+		String idStr = scanner.next();
 		System.out.println("Company name ?");
-		String name = sc.next();
-		sc.nextLine();
+		String name = scanner.next();
+		scanner.nextLine();
 		System.out.println("Introduced date ? (Format: yyyy-MM-dd)");
-		String introduced = sc.nextLine();
+		String introducedStr = scanner.nextLine();
 		System.out.println("Discontinued date ? (Format: yyyy-MM-dd)");
-		String discontinued = sc.nextLine();
+		String discontinuedStr = scanner.nextLine();
 		System.out.println("Company Id ?");
-		String companyId = sc.nextLine();
+		String companyIdStr = scanner.nextLine();
 		try {
-			System.out.println(ComputerService.INSTANCE.updateComputer(id, name, introduced, discontinued, companyId));
+			int id = Integer.parseInt(idStr);
+			int companyId = Integer.parseInt(companyIdStr);
+			LocalDate introduced = LocalDate.parse(introducedStr);
+			LocalDate discontinued = LocalDate.parse(discontinuedStr);
+			Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
+			System.out.println(ComputerService.INSTANCE.updateComputer(new Computer(id, name, introduced, discontinued, manufactor)));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
 	}
 	
-	private void deleteComputer (Scanner sc) {
+	private void deleteComputer (Scanner scanner) {
 		String saisie;
 		int id = -1;
 		System.out.println("Enter the computer id to delete:");
-		saisie = sc.next();
+		saisie = scanner.next();
 		try {
 			id = Integer.parseInt(saisie);
 		} catch (NumberFormatException e){

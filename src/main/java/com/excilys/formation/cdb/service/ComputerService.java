@@ -23,51 +23,36 @@ public enum ComputerService {
 	}
 	
 	public String selectOne (int id) throws Exception {
-		String details = "";
 		try {
-			Validator.INSTANCE.computerIdValidation(id);
-			details = ComputerDB.INSTANCE.selectOne(id).toString();
+			return Validator.INSTANCE.computerIdValidation(id).toString();
 		} catch (Exception e) {
 			throw e;
 		}
-		return details;
 	}
 	
-	public String createComputer (String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
+	public String createComputer (Computer computer) throws Exception {
 		try {
-			int companyId = Integer.parseInt(companyIdStr);
-			LocalDate introduced = LocalDate.parse(introducedStr);
-			LocalDate discontinued = LocalDate.parse(introducedStr);
-			Validator.INSTANCE.nameValidation(name);
-			Validator.INSTANCE.datesValidation(introduced, discontinued);
-			Validator.INSTANCE.manufactorValidation(companyId);
-			ComputerDB.INSTANCE.createComputer(new Computer(name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId).get()));
-		} catch (NumberFormatException e) {
-			throw new Exception("Wrong format company ID.");
+			Validator.INSTANCE.nameValidation(computer.getName());
+			Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
+			Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
+			ComputerDB.INSTANCE.createComputer(computer);
+			return "New computer added to database.";
 		} catch (Exception e) {
 			throw e;
 		}
-		return "New computer added to database.";
 	}
 	
-	public String updateComputer (String idStr, String name, String introducedStr, String discontinuedStr, String companyIdStr) throws Exception {
-		int id = -1;
+	public String updateComputer (Computer computer) throws Exception {
 		try {
-			id = Integer.parseInt(idStr);
-			int companyId = Integer.parseInt(companyIdStr);
-			LocalDate introduced = LocalDate.parse(introducedStr);
-			LocalDate discontinued = LocalDate.parse(discontinuedStr);
-			Validator.INSTANCE.computerIdValidation(id);
-			Validator.INSTANCE.nameValidation(name);
-			Validator.INSTANCE.datesValidation(introduced, discontinued);
-			Validator.INSTANCE.manufactorValidation(companyId);
-			ComputerDB.INSTANCE.updateComputer(new Computer(id, name, introduced, discontinued, CompanyDB.INSTANCE.selectOne(companyId).get()));
-		} catch (NumberFormatException e) {
-			throw new Exception("Wrong format company ID.");
+			Validator.INSTANCE.computerIdValidation(computer.getId());
+			Validator.INSTANCE.nameValidation(computer.getName());
+			Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
+			Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
+			ComputerDB.INSTANCE.updateComputer(computer);
 		} catch (Exception e) {
 			throw e;
 		}
-		return "Computer "+id+" updated.";
+		return "Computer "+computer.getId()+" updated.";
 	}
 	
 	public String deleteComputer (int id) throws Exception {

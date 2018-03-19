@@ -10,7 +10,8 @@ public enum ChoiceCli {
 	STOP_APP("7"),
 	NEXT_PAGE("n"),
 	PREVIOUS_PAGE("o"),
-	QUIT_PAGE("q");
+	QUIT_PAGE("q"),
+	DEFAULT("null");
 	
 	private String key;
 	
@@ -23,5 +24,12 @@ public enum ChoiceCli {
 	 */
 	public String getKey() {
 		return key;
+	}
+	
+	public static ChoiceCli getById(String key) {
+	    for(ChoiceCli e : values()) {
+	        if(e.key.equals(key)) return e;
+	    }
+	    return DEFAULT;
 	}
 }
