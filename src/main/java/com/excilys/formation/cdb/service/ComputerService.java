@@ -12,7 +12,7 @@ import com.excilys.formation.cdb.persistence.ComputerDB;
 public enum ComputerService {
     INSTANCE;
 
-    private List<Computer> list = ComputerDB.INSTANCE.list();
+    private List<Computer> list = ComputerDB.INSTANCE.listAll();
 
     /**
      * @param from index of the first computer to print

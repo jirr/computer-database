@@ -45,7 +45,7 @@
         </plugins>
     </build>
 
-<reporting>
+	<reporting>
 	    <plugins>
 	    	<!-- checkstyle -->
 			<plugin>

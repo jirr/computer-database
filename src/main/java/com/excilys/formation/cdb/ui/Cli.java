@@ -42,9 +42,14 @@ public class Cli {
         boolean valid = false;
         while (!valid) {
             valid = true;
-            System.out.println("Chose a function:\n" + "\t1) List computers\n" + "\t2) List companies\n"
-                    + "\t3) Show one computer details\n" + "\t4) Create a computer\n" + "\t5) Update a computer\n"
-                    + "\t6) Delete a computer\n" + "\t7) Stop the application");
+            System.out.println("Chose a function:\n"
+                    + "\t1) List computers\n"
+                    + "\t2) List companies\n"
+                    + "\t3) Show one computer details\n"
+                    + "\t4) Create a computer\n"
+                    + "\t5) Update a computer\n"
+                    + "\t6) Delete a computer\n"
+                    + "\t7) Stop the application");
             saisie = scanner.next();
             switch (ChoiceCli.getById(saisie)) {
             case LIST_COMPUTER:

@@ -24,11 +24,32 @@ public enum ComputerDB {
     /**
      * @return List<Computer> The list of all Computer object from the DB
      */
-    public List<Computer> list() {
+    public List<Computer> listAll() {
         List<Computer> computerList = new ArrayList<>();
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             Statement s = conn.createStatement();
             ResultSet res = s.executeQuery(selectAllRequest + " ;");
+            while (res.next()) {
+                computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return computerList;
+    }
+
+    /**
+     * @param limit index du dernier element
+     * @param offset index du premier element
+     * @return List<Computer> The sublist of Computer object from the DB
+     */
+    public List<Computer> subList(int limit, int offset) {
+        List<Computer> computerList = new ArrayList<>();
+        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
@@ -44,12 +65,12 @@ public enum ComputerDB {
      */
     public void createComputer(Computer computer) {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement ps = conn.prepareStatement(createRequest);
-            ps.setString(1, computer.getName());
-            ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
-            ps.setInt(4, computer.getManufactor().getId());
-            ps.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(createRequest);
+            preparedStatement.setString(1, computer.getName());
+            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
+            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
+            preparedStatement.setInt(4, computer.getManufactor().getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,13 +82,13 @@ public enum ComputerDB {
      */
     public void updateComputer(Computer computer) {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement ps = conn.prepareStatement(updateRequest);
-            ps.setString(1, computer.getName());
-            ps.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            ps.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
-            ps.setInt(4, computer.getManufactor().getId());
-            ps.setInt(5, computer.getId());
-            ps.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);
+            preparedStatement.setString(1, computer.getName());
+            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
+            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
+            preparedStatement.setInt(4, computer.getManufactor().getId());
+            preparedStatement.setInt(5, computer.getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,9 +100,9 @@ public enum ComputerDB {
      */
     public void deleteComputer(int id) {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement ps = conn.prepareStatement(deleteRequest);
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            PreparedStatement preparedStatement = conn.prepareStatement(deleteRequest);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
