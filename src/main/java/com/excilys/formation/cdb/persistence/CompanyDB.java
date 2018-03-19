@@ -44,6 +44,27 @@ public enum CompanyDB {
     }
 
     /**
+     * @param limit index du dernier element
+     * @param offset index du premier element
+     * @return List<Company> The sublist of Company object from the DB
+     */
+    public List<Company> subList(int limit, int offset) {
+        List<Company> computerList = new ArrayList<>();
+        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet res = preparedStatement.executeQuery();
+            while (res.next()) {
+                computerList.add(CompanyMapper.INSTANCE.resToCompany(res));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return computerList;
+    }
+
+    /**
      * @param id
      *            of Company that should be in the DB
      * @return Optional<Company> contains the company, could be empty if the id does
