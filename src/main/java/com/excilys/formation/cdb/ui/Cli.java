@@ -11,6 +11,7 @@ import com.excilys.formation.cdb.service.ComputerService;
 public class Cli {
 	
 	private int from, to;
+	private static int nb_page = 50;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -64,6 +65,10 @@ public class Cli {
 					System.err.println("Invalid choice.");
 					valid = false;
 				break;
+				default:
+					System.err.println("Invalid choice.");
+					valid = false;
+				break;
 			}
 		}
 		return true;
@@ -85,7 +90,7 @@ public class Cli {
 		String res = "Companies list: \n";
 		boolean nextPage = true;
 		from = 0;
-		to = 50;
+		to = nb_page;
 		while (nextPage) {
 			try {
 				res += CompanyService.INSTANCE.listCompany(from, to);
@@ -100,16 +105,19 @@ public class Cli {
 	
 	private boolean paginationChoices (Scanner scanner) {
 		System.out.println("Next(n) Previous(p) Quit(q) ?");
-		switch (scanner.next()) {
-			case "n" :
+		switch (ChoiceCli.getById(scanner.next())) {
+			case NEXT_PAGE :
 				from = to;
-				to += 50;
+				to += nb_page;
 			break;
-			case "p" :
+			case PREVIOUS_PAGE:
 				to = from;
-				from -= 50;
-			case "q" :
+				from -= nb_page;
+			case QUIT_PAGE:
 				return false;
+			case DEFAULT:
+				System.err.println("Invalid choice.");
+			break;
 			default:
 				System.err.println("Invalid choice.");
 			break;
@@ -176,17 +184,12 @@ public class Cli {
 	
 	private void deleteComputer (Scanner scanner) {
 		String saisie;
-		int id = -1;
 		System.out.println("Enter the computer id to delete:");
 		saisie = scanner.next();
 		try {
-			id = Integer.parseInt(saisie);
-		} catch (NumberFormatException e){
-			System.err.println(e.getMessage());
-		}
-		try {
+			int id = Integer.parseInt(saisie);
 			System.out.println(ComputerService.INSTANCE.deleteComputer(id));
-		} catch (Exception e) {
+		} catch (Exception e){
 			System.err.println(e.getMessage());
 		}
 	}

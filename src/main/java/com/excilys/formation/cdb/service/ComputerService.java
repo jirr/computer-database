@@ -1,10 +1,8 @@
 package com.excilys.formation.cdb.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 
 public enum ComputerService {

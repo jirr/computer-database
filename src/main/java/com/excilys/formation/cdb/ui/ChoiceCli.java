@@ -9,7 +9,7 @@ public enum ChoiceCli {
 	DELETE_COMPUTER("6"),
 	STOP_APP("7"),
 	NEXT_PAGE("n"),
-	PREVIOUS_PAGE("o"),
+	PREVIOUS_PAGE("p"),
 	QUIT_PAGE("q"),
 	DEFAULT("null");
 	
@@ -30,6 +30,6 @@ public enum ChoiceCli {
 	    for(ChoiceCli e : values()) {
 	        if(e.key.equals(key)) return e;
 	    }
-	    return DEFAULT;
+	    return DEFAULT ;
 	}
 }

@@ -34,12 +34,6 @@ public enum ConnexionManager{
 			e1.printStackTrace();
 		}
 		try {
-			Class.forName(props.getProperty("jdbc.driver"));
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			conn = DriverManager.getConnection(	props.getProperty ("jdbc.url"), 
 												props.getProperty ("jdbc.username"),
 												props.getProperty ("jdbc.password"));
