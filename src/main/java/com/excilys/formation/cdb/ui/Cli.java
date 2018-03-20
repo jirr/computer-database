@@ -53,7 +53,7 @@ public class Cli {
                     + "\t6) Delete a computer\n"
                     + "\t7) Stop the application");
             saisie = scanner.next();
-            switch (ChoiceCli.getById(saisie)) {
+            switch (ActionChoiceCli.getById(saisie)) {
             case LIST_COMPUTER:
                 listComputer(scanner);
                 break;
@@ -75,10 +75,6 @@ public class Cli {
             case STOP_APP:
                 return false;
             case DEFAULT:
-                System.err.println("Invalid choice.");
-                valid = false;
-                break;
-            default:
                 System.err.println("Invalid choice.");
                 valid = false;
                 break;
@@ -115,7 +111,7 @@ public class Cli {
         page.getContent().forEach(System.out::println);;
         while (nextPage) {
             System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
-            switch (ChoiceCli.getById(scanner.next())) {
+            switch (PageChoiceCli.getById(scanner.next())) {
             case NEXT_PAGE:
                 page.nextPage().forEach(System.out::println);;
                 break;
@@ -131,9 +127,6 @@ public class Cli {
                 nextPage = false;
                 break;
             case DEFAULT:
-                System.err.println("Invalid choice.");
-                break;
-            default:
                 System.err.println("Invalid choice.");
                 break;
             }

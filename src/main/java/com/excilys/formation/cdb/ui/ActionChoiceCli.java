@@ -1,6 +1,6 @@
 package com.excilys.formation.cdb.ui;
 
-public enum ChoiceCli {
+public enum ActionChoiceCli {
     LIST_COMPUTER("1"),
     LIST_COMPANY("2"),
     COMPUTER_DETAIL("3"),
@@ -8,11 +8,6 @@ public enum ChoiceCli {
     UPDATE_COMPUTER("5"),
     DELETE_COMPUTER("6"),
     STOP_APP("7"),
-    NEXT_PAGE("n"),
-    PREVIOUS_PAGE("p"),
-    FIRST_PAGE("f"),
-    LAST_PAGE("l"),
-    QUIT_PAGE("q"),
     DEFAULT("null");
 
     private String key;
@@ -20,7 +15,7 @@ public enum ChoiceCli {
     /**
      * @param key The key is a string that match an action
      */
-    ChoiceCli(String key) {
+    ActionChoiceCli(String key) {
         this.key = key;
     }
 
@@ -35,8 +30,8 @@ public enum ChoiceCli {
      * @param key the key to find
      * @return ChoiceCli the label corresponding to the key
      */
-    public static ChoiceCli getById(String key) {
-        for (ChoiceCli e : values()) {
+    public static ActionChoiceCli getById(String key) {
+        for (ActionChoiceCli e : values()) {
             if (e.key.equals(key)) {
                 return e;
             }
