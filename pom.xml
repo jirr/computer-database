@@ -24,7 +24,7 @@
         <checkstyle.version>3.0.0</checkstyle.version>
         <!-- logs -->
         <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.19</slf4j.version>
+        <slf4j.version>1.7.21</slf4j.version>
         <logback.version>1.1.6</logback.version>
         <!-- runtime -->
         <mysql.version>5.1.38</mysql.version>
@@ -76,7 +76,7 @@
         </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
         <dependency>

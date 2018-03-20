@@ -8,22 +8,19 @@ import com.excilys.formation.cdb.persistence.CompanyDB;
 public enum CompanyService {
     INSTANCE;
 
-    private List<Company> list = CompanyDB.INSTANCE.list();
-
     /**
-     * @param from index of the first computer to print
-     * @param to index of the last computer to print
+     * @param pageNumber index of the current page
+     * @param numberToDisplay number of object to display
      * @return String the String version of the sublist
      */
-    public String listCompany(int from, int to) {
-        String res = "";
-        if (to > list.size()) {
-            to = list.size();
+    public String subListCompany(int pageNumber, int numberToDisplay) {
+        String resultStr = "";
+        int limit = (pageNumber == 0) ? 1 : pageNumber*numberToDisplay;
+        List<Company> list = CompanyDB.INSTANCE.subList(numberToDisplay, limit);
+        for (Company company : list) {
+            resultStr += company.toString() + "\n";
         }
-        for (Company c : list.subList(from, to)) {
-            res += c.toString() + "\n";
-        }
-        return res;
+        return resultStr;
     }
 
     /**

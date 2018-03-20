@@ -12,22 +12,19 @@ import com.excilys.formation.cdb.persistence.ComputerDB;
 public enum ComputerService {
     INSTANCE;
 
-    private List<Computer> list = ComputerDB.INSTANCE.listAll();
-
     /**
-     * @param from index of the first computer to print
-     * @param to index of the last computer to print
+     * @param pageNumber index of the current page
+     * @param numberToDisplay number of object to display
      * @return String the String version of the sublist
      */
-    public String listComputer(int from, int to) {
-        String res = "";
-        if (to > list.size()) {
-            to = list.size();
+    public String subListComputer(int pageNumber, int numberToDisplay) {
+        String resultStr = "";
+        int limit = (pageNumber == 0) ? 1 : pageNumber*numberToDisplay;
+        List<Computer> list = ComputerDB.INSTANCE.subList(numberToDisplay, limit);
+        for (Computer computer : list) {
+            resultStr += computer.toString() + "\n";
         }
-        for (Computer p : list.subList(from, to)) {
-            res += p.toString() + "\n";
-        }
-        return res;
+        return resultStr;
     }
 
     /**

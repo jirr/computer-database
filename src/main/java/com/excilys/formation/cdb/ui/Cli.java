@@ -9,8 +9,8 @@ import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 
 public class Cli {
-    private int from, to;
-    private static int nbPage = 50;
+    private int pageNumber;
+    private static final int numberToDisplay = 50;
 
     /**
      * @param args the arguments
@@ -91,10 +91,9 @@ public class Cli {
     private void listComputer(Scanner scanner) {
         String res = "Computers list: \n";
         boolean nextPage = true;
-        from = 0;
-        to = 50;
+        pageNumber = 0;
         while (nextPage) {
-            res += ComputerService.INSTANCE.listComputer(from, to);
+            res += ComputerService.INSTANCE.subListComputer(pageNumber, numberToDisplay);
             System.out.println(res);
             nextPage = paginationChoices(scanner);
         }
@@ -106,11 +105,10 @@ public class Cli {
     private void listCompany(Scanner scanner) {
         String res = "Companies list: \n";
         boolean nextPage = true;
-        from = 0;
-        to = nbPage;
+        pageNumber = 0;
         while (nextPage) {
             try {
-                res += CompanyService.INSTANCE.listCompany(from, to);
+                res += CompanyService.INSTANCE.subListCompany(pageNumber, numberToDisplay);
             } catch (IllegalArgumentException e) {
                 System.err.println("No more entry.");
                 return;
@@ -128,12 +126,12 @@ public class Cli {
         System.out.println("Next(n) Previous(p) Quit(q) ?");
         switch (ChoiceCli.getById(scanner.next())) {
         case NEXT_PAGE:
-            from = to;
-            to += nbPage;
+            pageNumber ++;
             break;
         case PREVIOUS_PAGE:
-            to = from;
-            from -= nbPage;
+            if (pageNumber > 0) {
+                pageNumber++;
+            };
         case QUIT_PAGE:
             return false;
         case DEFAULT:
