@@ -38,7 +38,7 @@ public enum CompanyDB {
                 companyList.add(CompanyMapper.INSTANCE.resToCompany(result));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Unable to reach the database: " + e.getMessage());
         }
         return companyList;
     }
@@ -59,7 +59,7 @@ public enum CompanyDB {
                 computerList.add(CompanyMapper.INSTANCE.resToCompany(res));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Unable to reach the database: " + e.getMessage());
         }
         return computerList;
     }
@@ -82,8 +82,7 @@ public enum CompanyDB {
                 company = CompanyMapper.INSTANCE.resToCompany(result);
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database.");
-            e.printStackTrace();
+            logger.error("Unable to reach the database: " + e.getMessage());
         }
         logger.info("Connection to database closed.");
         return Optional.ofNullable(company);

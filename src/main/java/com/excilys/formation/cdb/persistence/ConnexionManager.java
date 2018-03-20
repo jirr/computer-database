@@ -8,9 +8,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public enum ConnexionManager {
     INSTANCE;
 
+    private final Logger logger = LoggerFactory.getLogger(ConnexionManager.class);
+    
     private Connection conn;
     private Properties props;
     private FileInputStream file;
@@ -24,6 +29,7 @@ public enum ConnexionManager {
             file = new FileInputStream("config/db/db.properties");
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block
+            logger.error("Unable find the file: " + e1.getMessage());
             e1.printStackTrace();
         }
         try {
@@ -31,13 +37,14 @@ public enum ConnexionManager {
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+            logger.error("Unable to load the file: " + e1.getMessage());
         }
         try {
             conn = DriverManager.getConnection(props.getProperty("jdbc.url"), props.getProperty("jdbc.username"),
                     props.getProperty("jdbc.password"));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Unable to connect to the database: " + e.getMessage());
         }
         return conn;
     }
