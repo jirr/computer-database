@@ -8,7 +8,7 @@ public enum ActionChoiceCli {
     UPDATE_COMPUTER("5"),
     DELETE_COMPUTER("6"),
     STOP_APP("7"),
-    DEFAULT("null");
+    DEFAULT("DefaultChoice");
 
     private String key;
 

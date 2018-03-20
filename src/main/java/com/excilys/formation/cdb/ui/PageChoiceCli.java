@@ -6,7 +6,7 @@ public enum PageChoiceCli {
     FIRST_PAGE("f"),
     LAST_PAGE("l"),
     QUIT_PAGE("q"),
-    DEFAULT("null");
+    DEFAULT("DefaultChoice");
 
     private String key;
 
