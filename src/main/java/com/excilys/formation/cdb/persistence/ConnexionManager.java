@@ -15,7 +15,7 @@ public enum ConnexionManager {
     INSTANCE;
 
     private final Logger logger = LoggerFactory.getLogger(ConnexionManager.class);
-    
+
     private Connection conn;
     private Properties props;
     private FileInputStream file;

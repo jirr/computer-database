@@ -18,7 +18,7 @@ import com.excilys.formation.cdb.model.Computer;
 
 public enum ComputerDB {
     INSTANCE;
-    
+
     private final Logger logger = LoggerFactory.getLogger(ComputerDB.class);
 
     private final String selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id";
