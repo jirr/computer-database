@@ -25,6 +25,22 @@ public enum CompanyDB {
     private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
 
     private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
+    private String countAllRequest = "SELECT count(id) FROM company;";
+
+    /**
+     * @return int number of companies
+     */
+    public int countAllCompany() {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(countAllRequest);
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException e) {
+            logger.error("Unable to reach the database: " + e.getMessage());
+        }
+        return -1;
+    }
 
     /**
      * @return List<Company>
@@ -48,7 +64,7 @@ public enum CompanyDB {
      * @param offset index du premier element
      * @return List<Company> The sublist of Company object from the DB
      */
-    public List<Company> subList(int limit, int offset) {
+    public List<Company> subList(int offset, int limit) {
         List<Company> computerList = new ArrayList<>();
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");

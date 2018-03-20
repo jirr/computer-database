@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.service.CompanyPage;
 import com.excilys.formation.cdb.service.CompanyService;
+import com.excilys.formation.cdb.service.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
+import com.excilys.formation.cdb.service.Page;
 
 public class Cli {
-    private int pageNumber;
-    private static final int numberToDisplay = 50;
+    private static final int PAGE_SIZE = 50;
 
     /**
      * @param args the arguments
@@ -89,59 +91,53 @@ public class Cli {
      * @param scanner The scanner of the CLI
      */
     private void listComputer(Scanner scanner) {
-        String res = "Computers list: \n";
-        boolean nextPage = true;
-        pageNumber = 0;
-        while (nextPage) {
-            res += ComputerService.INSTANCE.subListComputer(pageNumber, numberToDisplay);
-            System.out.println(res);
-            nextPage = paginationChoices(scanner);
-        }
+        System.out.println("Computers list: \n");
+        ComputerPage page = new ComputerPage(PAGE_SIZE);
+        paginationChoices(scanner, page);
     }
 
     /**
      * @param scanner The scanner of the CLI
      */
     private void listCompany(Scanner scanner) {
-        String res = "Companies list: \n";
-        boolean nextPage = true;
-        pageNumber = 0;
-        while (nextPage) {
-            try {
-                res += CompanyService.INSTANCE.subListCompany(pageNumber, numberToDisplay);
-            } catch (IllegalArgumentException e) {
-                System.err.println("No more entry.");
-                return;
-            }
-            System.out.println(res);
-            nextPage = paginationChoices(scanner);
-        }
+        System.out.println("Companies list: \n");
+        CompanyPage page = new CompanyPage(PAGE_SIZE);
+        paginationChoices(scanner, page);
     }
 
     /**
      * @param scanner The scanner of the CLI
-     * @return boolean false to stop the loop, true to continue
+     * @param page The computer or company Page
+     * @param <T> Computer or Company
      */
-    private boolean paginationChoices(Scanner scanner) {
-        System.out.println("Next(n) Previous(p) Quit(q) ?");
-        switch (ChoiceCli.getById(scanner.next())) {
-        case NEXT_PAGE:
-            pageNumber ++;
-            break;
-        case PREVIOUS_PAGE:
-            if (pageNumber > 0) {
-                pageNumber++;
-            };
-        case QUIT_PAGE:
-            return false;
-        case DEFAULT:
-            System.err.println("Invalid choice.");
-            break;
-        default:
-            System.err.println("Invalid choice.");
-            break;
+    private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) {
+        boolean nextPage = true;
+        page.getContent().forEach(System.out::println);;
+        while (nextPage) {
+            System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
+            switch (ChoiceCli.getById(scanner.next())) {
+            case NEXT_PAGE:
+                page.nextPage().forEach(System.out::println);;
+                break;
+            case PREVIOUS_PAGE:
+                page.previousPage().forEach(System.out::println);;
+            case FIRST_PAGE:
+                page.firstPage().forEach(System.out::println);;
+                break;
+            case LAST_PAGE:
+                page.lastPage().forEach(System.out::println);;
+                break;
+            case QUIT_PAGE:
+                nextPage = false;
+                break;
+            case DEFAULT:
+                System.err.println("Invalid choice.");
+                break;
+            default:
+                System.err.println("Invalid choice.");
+                break;
+            }
         }
-        return true;
     }
 
     /**

@@ -10,6 +10,8 @@ public enum ChoiceCli {
     STOP_APP("7"),
     NEXT_PAGE("n"),
     PREVIOUS_PAGE("p"),
+    FIRST_PAGE("f"),
+    LAST_PAGE("l"),
     QUIT_PAGE("q"),
     DEFAULT("null");
 

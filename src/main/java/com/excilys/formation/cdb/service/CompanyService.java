@@ -5,22 +5,27 @@ import java.util.List;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.persistence.CompanyDB;
 
+/**
+ * @author jirr
+ *
+ */
 public enum CompanyService {
     INSTANCE;
 
     /**
-     * @param pageNumber index of the current page
+     * @param offset index of the first element
      * @param numberToDisplay number of object to display
-     * @return String the String version of the sublist
+     * @return List<Company> the sublist (page) of computers
      */
-    public String subListCompany(int pageNumber, int numberToDisplay) {
-        String resultStr = "";
-        int limit = (pageNumber == 0) ? 1 : pageNumber*numberToDisplay;
-        List<Company> list = CompanyDB.INSTANCE.subList(numberToDisplay, limit);
-        for (Company company : list) {
-            resultStr += company.toString() + "\n";
-        }
-        return resultStr;
+    public List<Company> subListCompany(int offset, int numberToDisplay) {
+        return CompanyDB.INSTANCE.subList(offset, numberToDisplay);
+    }
+
+    /**
+     * @return int number of companies
+     */
+    public int countAllCompanies() {
+        return CompanyDB.INSTANCE.countAllCompany();
     }
 
     /**

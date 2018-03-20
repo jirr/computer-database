@@ -13,18 +13,19 @@ public enum ComputerService {
     INSTANCE;
 
     /**
-     * @param pageNumber index of the current page
+     * @param offset index of the first element
      * @param numberToDisplay number of object to display
-     * @return String the String version of the sublist
+     * @return List<Computer> the sublist (page) of computers
      */
-    public String subListComputer(int pageNumber, int numberToDisplay) {
-        String resultStr = "";
-        int limit = (pageNumber == 0) ? 1 : pageNumber*numberToDisplay;
-        List<Computer> list = ComputerDB.INSTANCE.subList(numberToDisplay, limit);
-        for (Computer computer : list) {
-            resultStr += computer.toString() + "\n";
-        }
-        return resultStr;
+    public List<Computer> subListComputer(int offset, int numberToDisplay) {
+        return ComputerDB.INSTANCE.subList(offset, numberToDisplay);
+    }
+
+    /**
+     * @return int number of companies
+     */
+    public int countAllComputers() {
+        return ComputerDB.INSTANCE.countAllComputer();
     }
 
     /**

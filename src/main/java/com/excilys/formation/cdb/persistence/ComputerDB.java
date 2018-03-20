@@ -25,6 +25,22 @@ public enum ComputerDB {
     private final String createRequest = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
     private final String updateRequest = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
     private final String deleteRequest = "DELETE FROM computer WHERE id=?;";
+    private final String countAllRequest = "SELECT count(id) FROM computer;";
+
+    /**
+     * @return int number of computers
+     */
+    public int countAllComputer() {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(countAllRequest);
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException e) {
+            logger.error("Unable to reach the database: " + e.getMessage());
+        }
+        return -1;
+    }
 
     /**
      * @return List<Computer> The list of all Computer object from the DB
@@ -48,7 +64,7 @@ public enum ComputerDB {
      * @param offset index du premier element
      * @return List<Computer> The sublist of Computer object from the DB
      */
-    public List<Computer> subList(int limit, int offset) {
+    public List<Computer> subList(int offset, int limit) {
         List<Computer> computerList = new ArrayList<>();
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
