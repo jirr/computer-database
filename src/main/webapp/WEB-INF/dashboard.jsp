@@ -23,7 +23,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+                <c:out value ="${nbComputers}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -101,7 +101,7 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="?previous" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
@@ -111,7 +111,7 @@
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
 				<li>
-                <a href="#" aria-label="Next">
+                <a href="?next" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             	</li>
