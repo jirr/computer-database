@@ -30,9 +30,9 @@ public class DashboardServlet extends HttpServlet {
         
         // On récupère une connection à la base :
         try {
-            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/dashboard.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/dashboard.jsp");
             request.setAttribute("computer_list", page.getContent());
-            rd.forward(request, response);
+            requestDispatcher.forward(request, response);
         } catch (Exception e) {
             throw new ServletException(e);
         }
