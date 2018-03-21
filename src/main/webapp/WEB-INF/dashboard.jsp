@@ -105,11 +105,20 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
+                <c:choose>
+			    	<c:when test = "${currentIndex < 3}" >
+              			<c:set var = "scale" scope = "session" value = "0"/>
+			    	</c:when>
+			    	<c:when test = "${currentIndex > maxIndex-4}" >
+              			<c:set var = "scale" scope = "session" value = "${maxIndex - 5}"/>
+			    	</c:when>
+				    <c:otherwise>
+		              	<c:set var = "scale" scope = "session" value = "${currentIndex - 3}"/>
+				    </c:otherwise>
+			    </c:choose>
+				<c:forEach var = "i" begin = "1" end = "5">
+                	<li><a href="?index=${i+scale}">${i+scale}</a></li>
+				</c:forEach>
 				<li>
                 <a href="?next" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
