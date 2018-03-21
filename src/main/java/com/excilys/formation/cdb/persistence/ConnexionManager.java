@@ -26,18 +26,22 @@ public enum ConnexionManager {
     public Connection getConn() {
         props = new Properties();
         try {
-            file = new FileInputStream("config/db/db.properties");
+            file = new FileInputStream("src/main/resources/db.properties");
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block
             logger.error("Unable find the file: " + e1.getMessage());
-            e1.printStackTrace();
         }
         try {
             props.load(file);
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
             logger.error("Unable to load the file: " + e1.getMessage());
+        }
+        try {
+            Class.forName(props.getProperty("jdbc.driver"));
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            logger.error("Unable to find the class: " + e1.getMessage());
         }
         try {
             conn = DriverManager.getConnection(props.getProperty("jdbc.url"), props.getProperty("jdbc.username"),
