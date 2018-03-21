@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.excilys.formation.cdb.service.ComputerPage;
 
-@WebServlet("/MovieListServlet")
+@WebServlet("/db")
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 2741128895945909738L;
