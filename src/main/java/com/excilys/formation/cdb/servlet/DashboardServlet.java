@@ -22,7 +22,7 @@ public class DashboardServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     
     private static final long serialVersionUID = 2741128895945909738L;
-    private ComputerPage page = new ComputerPage(20);
+    private ComputerPage page = new ComputerPage(10);
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +46,15 @@ public class DashboardServlet extends HttpServlet {
                 int index = Integer.parseInt(request.getParameter("index"));
                 page.goToPage(index-1);
             } catch (NumberFormatException e1) {
-                logger.error("Not a number:" + e1.getMessage());
+                logger.error("Not a number(index):" + e1.getMessage());
+            }
+        }
+        if (!(request.getParameter("size") == null)) {
+            try {
+                int size = Integer.parseInt(request.getParameter("size"));
+                page.setSize(size);
+            } catch (NumberFormatException e1) {
+                logger.error("Not a number(size):" + e1.getMessage());
             }
         }
         session.setAttribute("page", page);

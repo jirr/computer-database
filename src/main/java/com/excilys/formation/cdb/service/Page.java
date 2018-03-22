@@ -34,6 +34,7 @@ public abstract class Page<T> {
 
     public void setSize(int size) {
         this.size = size;
+        this.setContent(this.getOffset());
     }
 
     public int getOffset() {
