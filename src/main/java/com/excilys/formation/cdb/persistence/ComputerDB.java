@@ -88,8 +88,16 @@ public enum ComputerDB {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(createRequest);
             preparedStatement.setString(1, computer.getName());
-            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
-            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
+            if (computer.getDateIntroduced().isPresent()) {
+                preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.DATE);
+            }
+            if (computer.getDateDiscontinued().isPresent()) {
+                preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
+            } else {
+                preparedStatement.setNull(3, java.sql.Types.DATE);
+            }
             preparedStatement.setInt(4, computer.getManufactor().getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

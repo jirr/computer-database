@@ -1,6 +1,8 @@
 package com.excilys.formation.cdb.servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,8 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.cdb.dto.ComputerDTO;
-import com.excilys.formation.cdb.mapper.ComputerMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 
@@ -19,6 +24,8 @@ import com.excilys.formation.cdb.service.ComputerService;
 @WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,17 +42,29 @@ public class AddComputerServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+        String name = request.getParameter("computerName");
+        String introducedStr = request.getParameter("introduced");
+        String discontinuedStr = request.getParameter("discontinued");
+        String companyIdStr = request.getParameter("companyId");
+        LocalDate introduced = null;
+        LocalDate discontinued = null;
+        Company manufactor = null;
         try {
-            ComputerDTO computerDTO = new ComputerDTO(  request.getAttribute("computerName").toString(),
-                                                        request.getAttribute("introduced").toString(),
-                                                        request.getAttribute("discontinued").toString(),
-                                                        Integer.parseInt(request.getAttribute("companyId").toString()));
-            ComputerService.INSTANCE.createComputer(ComputerMapper.INSTANCE.dtoToComputer(computerDTO));
+            int companyId = Integer.parseInt(companyIdStr);
+            manufactor = CompanyService.INSTANCE.getCompany(companyId);
+            introduced = LocalDate.parse(introducedStr);
+            discontinued = LocalDate.parse(discontinuedStr);
+        } catch (Exception e) {
+            logger.error("Error in company checking: " + e.getMessage());
+        }
+        try {
+            ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor));
+            logger.info("The computer has been added to the database with success.");
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Error in computer adding: " + e.getMessage());
         }
+  
+        doGet(request, response);
 	}
 }
