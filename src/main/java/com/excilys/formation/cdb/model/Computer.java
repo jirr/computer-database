@@ -1,6 +1,7 @@
 package com.excilys.formation.cdb.model;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * @author jirr
@@ -55,16 +56,16 @@ public class Computer {
         this.name = name;
     }
 
-    public LocalDate getDateIntroduced() {
-        return dateIntroduced;
+    public Optional<LocalDate> getDateIntroduced() {
+        return Optional.ofNullable(dateIntroduced);
     }
 
     public void setDateIntroduced(LocalDate dateIntroduced) {
         this.dateIntroduced = dateIntroduced;
     }
 
-    public LocalDate getDateDiscontinued() {
-        return dateDiscontinued;
+    public Optional<LocalDate> getDateDiscontinued() {
+        return Optional.ofNullable(dateDiscontinued);
     }
 
     public void setDateDiscontinued(LocalDate dateDiscontinued) {

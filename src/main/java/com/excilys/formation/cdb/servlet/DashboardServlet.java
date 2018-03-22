@@ -1,6 +1,8 @@
 package com.excilys.formation.cdb.servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,11 +10,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.cdb.dto.ComputerDTO;
+import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.service.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
 
@@ -24,17 +27,9 @@ public class DashboardServlet extends HttpServlet {
     private static final long serialVersionUID = 2741128895945909738L;
     private ComputerPage page = new ComputerPage(10);
 
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         int nbComputer = ComputerService.INSTANCE.countAllComputers();
-
         if (!(request.getParameter("next") == null)) {
             page.nextPage();
         }
@@ -57,14 +52,21 @@ public class DashboardServlet extends HttpServlet {
                 logger.error("Not a number(size):" + e1.getMessage());
             }
         }
-        session.setAttribute("page", page);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/dashboard.jsp");
+        List<ComputerDTO> computersDTO = new ArrayList<>();
+        page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
+
         request.setAttribute("nbComputers", nbComputer);
-        request.setAttribute("computer_list", page.getContent());
+        request.setAttribute("computer_list", computersDTO);
         request.setAttribute("maxIndex", page.getLastPageIndex()+1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex()+1);
         request.setAttribute("size", page.getSize());
+        
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/dashboard.jsp");
         requestDispatcher.forward(request, response);
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }

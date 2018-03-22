@@ -44,7 +44,7 @@ public enum ComputerService {
      */
     public String createComputer(Computer computer) throws Exception {
         Validator.INSTANCE.nameValidation(computer.getName());
-        Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
+        Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
         Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
         ComputerDB.INSTANCE.createComputer(computer);
         return "New computer added to database.";
@@ -58,7 +58,7 @@ public enum ComputerService {
     public String updateComputer(Computer computer) throws Exception {
         Validator.INSTANCE.computerIdValidation(computer.getId());
         Validator.INSTANCE.nameValidation(computer.getName());
-        Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
+        Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
         Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
         ComputerDB.INSTANCE.updateComputer(computer);
         return "Computer " + computer.getId() + " updated.";

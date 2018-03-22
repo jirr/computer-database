@@ -88,8 +88,8 @@ public enum ComputerDB {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(createRequest);
             preparedStatement.setString(1, computer.getName());
-            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
+            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
             preparedStatement.setInt(4, computer.getManufactor().getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -105,8 +105,8 @@ public enum ComputerDB {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);
             preparedStatement.setString(1, computer.getName());
-            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
+            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
             preparedStatement.setInt(4, computer.getManufactor().getId());
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();

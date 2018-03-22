@@ -9,7 +9,8 @@ public class ComputerDTO {
     private String name;
     private String dateIntroduced;
     private String dateDiscontinued;
-    private String manufactor;
+    private int manufactorId;
+    private String manufactorName;
 
     /**
      * @param id unique identifier of Computer
@@ -18,9 +19,13 @@ public class ComputerDTO {
      * @param dateDiscontinued the date when the computer was discontinued
      * @param manufactor manufacturer of Computer
      */
-    public ComputerDTO(int id, String name, String dateIntroduced, String dateDiscontinued, String manufactor) {
-        this(name, dateIntroduced, dateDiscontinued, manufactor);
+    public ComputerDTO(int id, String name, String dateIntroduced, String dateDiscontinued, int manufactorId, String manufactorName) {
         this.id = id;
+        this.name = name;
+        this.dateIntroduced = dateIntroduced;
+        this.dateDiscontinued = dateDiscontinued;
+        this.manufactorId = manufactorId;
+        this.manufactorName = manufactorName;
     }
 
     /**
@@ -30,11 +35,11 @@ public class ComputerDTO {
      * @param dateDiscontinued the date when the computer was discontinued
      * @param manufactor manufacturer of Computer
      */
-    public ComputerDTO(String name, String dateIntroduced, String dateDiscontinued, String manufactor) {
+    public ComputerDTO(String name, String dateIntroduced, String dateDiscontinued, int manufactorId) {
         this.name = name;
         this.dateIntroduced = dateIntroduced;
         this.dateDiscontinued = dateDiscontinued;
-        this.manufactor = manufactor;
+        this.manufactorId = manufactorId;
     }
 
     public int getId() {
@@ -69,12 +74,20 @@ public class ComputerDTO {
         this.dateDiscontinued = dateDiscontinued;
     }
 
-    public String getManufactor() {
-        return manufactor;
+    public int getManufactorId() {
+        return manufactorId;
     }
 
-    public void setManufactor(String manufactor) {
-        this.manufactor = manufactor;
+    public void setManufactorId(int manufactorId) {
+        this.manufactorId = manufactorId;
+    }
+
+    public String getManufactorName() {
+        return manufactorName;
+    }
+
+    public void setManufactorName(String manufactorName) {
+        this.manufactorName = manufactorName;
     }
 
     @Override
@@ -84,7 +97,7 @@ public class ComputerDTO {
         result += " {nom: " + this.name;
         result += ", date1: " + this.dateIntroduced;
         result += ", date2: " + this.dateDiscontinued;
-        result += ", manufactor: " + this.manufactor + "}";
+        result += ", manufactor: " + this.manufactorName + "}";
         return result;
     }
 }
