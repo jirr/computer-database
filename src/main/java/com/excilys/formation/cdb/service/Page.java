@@ -35,6 +35,8 @@ public abstract class Page<T> {
     public void setSize(int size) {
         this.size = size;
         this.setContent(this.getOffset());
+        this.setLastPageIndex();
+        this.currentPageIndex = 0;
     }
 
     public int getOffset() {
@@ -55,7 +57,7 @@ public abstract class Page<T> {
     }
     
     public List<T> goToPage(int index) {
-        if (index >= 0 && index < this.lastPageIndex-1) {
+        if (index >= 0 && index < this.lastPageIndex+1) {
             this.currentPageIndex = index;
         }
         this.setContent(this.getOffset());

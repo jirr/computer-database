@@ -63,6 +63,7 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("computer_list", page.getContent());
         request.setAttribute("maxIndex", page.getLastPageIndex()+1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex()+1);
+        request.setAttribute("size", page.getSize());
         requestDispatcher.forward(request, response);
     }
 
