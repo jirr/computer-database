@@ -120,5 +120,5 @@ public class ComputerDTO {
         public ComputerDTO build() {
             return new ComputerDTO(this);
         }
-    }    
+    }
 }

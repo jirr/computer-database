@@ -23,7 +23,7 @@ import com.excilys.formation.cdb.service.ComputerService;
 public class DashboardServlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    
+
     private static final long serialVersionUID = 2741128895945909738L;
     private ComputerPage page = new ComputerPage(10);
 
@@ -39,7 +39,7 @@ public class DashboardServlet extends HttpServlet {
         if (!(request.getParameter("index") == null)) {
             try {
                 int index = Integer.parseInt(request.getParameter("index"));
-                page.goToPage(index-1);
+                page.goToPage(index - 1);
             } catch (NumberFormatException e1) {
                 logger.error("Not a number(index):" + e1.getMessage());
             }
@@ -57,10 +57,10 @@ public class DashboardServlet extends HttpServlet {
 
         request.setAttribute("nbComputers", nbComputer);
         request.setAttribute("computer_list", computersDTO);
-        request.setAttribute("maxIndex", page.getLastPageIndex()+1);
-        request.setAttribute("currentIndex", page.getCurrentPageIndex()+1);
+        request.setAttribute("maxIndex", page.getLastPageIndex() + 1);
+        request.setAttribute("currentIndex", page.getCurrentPageIndex() + 1);
         request.setAttribute("size", page.getSize());
-        
+
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/dashboard.jsp");
         requestDispatcher.forward(request, response);
     }

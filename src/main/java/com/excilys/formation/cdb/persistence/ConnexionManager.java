@@ -16,7 +16,7 @@ public enum ConnexionManager {
 
     private Connection conn;
     private Properties props;
-    
+
     /**
      * @return the conn
      */

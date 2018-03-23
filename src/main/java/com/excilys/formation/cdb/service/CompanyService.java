@@ -27,7 +27,7 @@ public enum CompanyService {
     public List<Company> listAllCompany() {
         return CompanyDB.INSTANCE.list();
     }
-    
+
     /**
      * @return int number of companies
      */

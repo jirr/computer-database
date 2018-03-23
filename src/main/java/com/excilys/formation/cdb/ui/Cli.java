@@ -108,20 +108,20 @@ public class Cli {
      */
     private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) {
         boolean nextPage = true;
-        page.getContent().forEach(System.out::println);;
+        page.getContent().forEach(System.out::println);
         while (nextPage) {
             System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
             switch (PageChoiceCli.getById(scanner.next())) {
             case NEXT_PAGE:
-                page.nextPage().forEach(System.out::println);;
+                page.nextPage().forEach(System.out::println);
                 break;
             case PREVIOUS_PAGE:
-                page.previousPage().forEach(System.out::println);;
+                page.previousPage().forEach(System.out::println);
             case FIRST_PAGE:
-                page.firstPage().forEach(System.out::println);;
+                page.firstPage().forEach(System.out::println);
                 break;
             case LAST_PAGE:
-                page.lastPage().forEach(System.out::println);;
+                page.lastPage().forEach(System.out::println);
                 break;
             case QUIT_PAGE:
                 nextPage = false;

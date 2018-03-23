@@ -51,22 +51,22 @@ public enum ComputerMapper {
     }
 
     /**
-     * @param Optional<LocalDate> The optional to check and convert to string
+     * @param date The Optional<LocateDate> to check and convert to string
      * @return String The string version of LocalDate
      */
-    private String optionalDateToString (Optional<LocalDate> date) {
+    private String optionalDateToString(Optional<LocalDate> date) {
         if (date.isPresent()) {
             return date.get().toString();
         } else {
             return "";
         }
     }
-    
+
     /**
-     * @param Optional<Company> The optional to check and convert to string
+     * @param company The Optional<Company> to check and convert to string
      * @return String The string version of LocalDate
      */
-    private String optionalCompanyToString (Optional<Company> company) {
+    private String optionalCompanyToString(Optional<Company> company) {
         if (company.isPresent()) {
             return company.get().getName();
         } else {

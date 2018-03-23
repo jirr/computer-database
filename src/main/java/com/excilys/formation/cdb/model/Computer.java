@@ -103,7 +103,7 @@ public class Computer {
             this.manufactor = manufactor;
             return this;
         }
-        
+
         public Computer build() {
             return new Computer(this);
         }

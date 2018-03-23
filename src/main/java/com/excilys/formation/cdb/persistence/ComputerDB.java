@@ -37,7 +37,7 @@ public enum ComputerDB {
             result.next();
             return result.getInt(1);
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return -1;
     }
@@ -54,7 +54,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return computerList;
     }
@@ -75,7 +75,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return computerList;
     }
@@ -105,7 +105,7 @@ public enum ComputerDB {
             }
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -135,7 +135,7 @@ public enum ComputerDB {
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -149,7 +149,7 @@ public enum ComputerDB {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -170,7 +170,7 @@ public enum ComputerDB {
                 cres = ComputerMapper.INSTANCE.resToComputer(res);
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: {}",e.getMessage(), e);
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return Optional.ofNullable(cres);
     }

@@ -13,7 +13,7 @@ import com.excilys.formation.cdb.model.Company;
 public enum CompanyMapper {
     INSTANCE;
     /**
-     * @param res ResultSet of a request
+     * @param resultSet ResultSet of a request
      * @return Company the DB object convert in java Object
      * @throws SQLException if res is null
      */
@@ -22,7 +22,7 @@ public enum CompanyMapper {
         String nameCompany = resultSet.getString("caName");
         return new Company(idCompany, nameCompany);
     }
-    
+
     /**
      * @param company The object to map
      * @return CompanyDTO The object mapped to DTO version
