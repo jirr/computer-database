@@ -106,9 +106,9 @@
         
 
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <button type="button" class="btn btn-default"><a href="?size=10">10</a></button>
-	            <button type="button" class="btn btn-default"><a href="?size=50">50</a></button>
-	            <button type="button" class="btn btn-default"><a href="?size=100">100</a></button>
+	            <button type="button" class="btn btn-default" onclick="location.href='?size=10'">10</button>
+	            <button type="button" class="btn btn-default" onclick="location.href='?size=50'">50</button>
+	            <button type="button" class="btn btn-default" onclick="location.href='?size=100'">100</button>
 	        </div>
         </div>
 
