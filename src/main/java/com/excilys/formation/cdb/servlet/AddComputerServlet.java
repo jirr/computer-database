@@ -54,10 +54,18 @@ public class AddComputerServlet extends HttpServlet {
         try {
             final int companyId = Integer.parseInt(companyIdStr);
             manufactor = CompanyService.INSTANCE.getCompany(companyId);
+        } catch (final Exception e) {
+            logger.info("No company selected.");
+        }
+        try {
             introduced = LocalDate.parse(introducedStr);
+        } catch (final Exception e) {
+            logger.info("Introduced date was left empty.");
+        }
+        try {
             discontinued = LocalDate.parse(discontinuedStr);
         } catch (final Exception e) {
-            logger.info("Fields were left empty: {}", e.getMessage(), e);
+            logger.info("Discontinued date was left empty.");
         }
         try {
             ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
