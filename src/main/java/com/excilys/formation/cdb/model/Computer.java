@@ -72,8 +72,8 @@ public class Computer {
         this.dateDiscontinued = dateDiscontinued;
     }
 
-    public Company getManufactor() {
-        return manufactor;
+    public Optional<Company> getManufactor() {
+        return Optional.ofNullable(manufactor);
     }
 
     public void setManufactor(Company manufactor) {

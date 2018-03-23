@@ -41,8 +41,7 @@ public enum ComputerMapper {
                                 computer.getName(),
                                 optionalDateToString(computer.getDateIntroduced()),
                                 optionalDateToString(computer.getDateDiscontinued()),
-                                computer.getManufactor().getId(),
-                                computer.getManufactor().getName());           
+                                optionalCompanyToString(computer.getManufactor()));           
     }
 
     /**
@@ -52,6 +51,18 @@ public enum ComputerMapper {
     private String optionalDateToString (Optional<LocalDate> date) {
         if (date.isPresent()) {
             return date.get().toString();
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * @param Optional<Company> The optional to check and convert to string
+     * @return String The string version of LocalDate
+     */
+    private String optionalCompanyToString (Optional<Company> company) {
+        if (company.isPresent()) {
+            return company.get().getName().toString();
         } else {
             return "";
         }

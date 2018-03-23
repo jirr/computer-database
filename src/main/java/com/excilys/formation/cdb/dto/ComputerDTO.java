@@ -19,12 +19,11 @@ public class ComputerDTO {
      * @param dateDiscontinued the date when the computer was discontinued
      * @param manufactor manufacturer of Computer
      */
-    public ComputerDTO(int id, String name, String dateIntroduced, String dateDiscontinued, int manufactorId, String manufactorName) {
+    public ComputerDTO(int id, String name, String dateIntroduced, String dateDiscontinued, String manufactorName) {
         this.id = id;
         this.name = name;
         this.dateIntroduced = dateIntroduced;
         this.dateDiscontinued = dateDiscontinued;
-        this.manufactorId = manufactorId;
         this.manufactorName = manufactorName;
     }
 

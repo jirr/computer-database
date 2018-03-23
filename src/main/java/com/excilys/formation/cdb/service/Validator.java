@@ -16,10 +16,8 @@ public enum Validator {
      * @throws Exception if the first date is after the second
      */
     protected void datesValidation(LocalDate d1, LocalDate d2) throws Exception {
-        if (!((d1 == null) && (d2 == null))) {
-            if (d1.compareTo(d2) > 0) {
-                throw new Exception("Incompatibility of dates.");
-            }
+        if (d1.compareTo(d2) > 0) {
+            throw new Exception("Incompatibility of dates.");
         }
     }
 

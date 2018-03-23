@@ -55,16 +55,15 @@ public class AddComputerServlet extends HttpServlet {
             introduced = LocalDate.parse(introducedStr);
             discontinued = LocalDate.parse(discontinuedStr);
         } catch (Exception e) {
-            logger.error("Error in company checking: " + e.getMessage());
+            logger.info("Fields were left empty: {}",e.getMessage(), e);
         }
         try {
             ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor));
             logger.info("The computer has been added to the database with success.");
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            logger.error("Error in computer adding: " + e.getMessage());
+            logger.error("Error in computer adding: {}",e.getMessage(), e);
         }
-  
         doGet(request, response);
 	}
 }
