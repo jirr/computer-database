@@ -36,6 +36,12 @@ public class DashboardServlet extends HttpServlet {
         if (!(request.getParameter("previous") == null)) {
             page.previousPage();
         }
+        if (!(request.getParameter("first") == null)) {
+            page.firstPage();
+        }
+        if (!(request.getParameter("last") == null)) {
+            page.lastPage();
+        }
         if (!(request.getParameter("index") == null)) {
             try {
                 int index = Integer.parseInt(request.getParameter("index"));

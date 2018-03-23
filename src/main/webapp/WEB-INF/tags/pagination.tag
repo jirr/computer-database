@@ -1,13 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 
-<li>
-	<c:if test = "${currentIndex > 1}">
-		<a href="?previous" aria-label="Previous">
+<c:if test = "${currentIndex > 1}">
+	<li>
+		<a href="?first" aria-label="First">
 			<span aria-hidden="true">&laquo;</span>
 		</a>
-	</c:if>
-</li>
+	</li>
+	<li>
+		<a href="?previous" aria-label="Previous">
+			<span aria-hidden="true">&lsaquo;</span>
+		</a>
+	</li>
+</c:if>
 <c:choose>
 	<c:when test = "${currentIndex < 3}" >
 		<c:set var = "scale" scope = "session" value = "0"/>
@@ -29,10 +34,15 @@
 		</c:otherwise>
 	</c:choose>
 </c:forEach>
-<li>
-	<c:if test = "${currentIndex < maxIndex}">
+<c:if test = "${currentIndex < maxIndex}">
+	<li>
 		<a href="?next" aria-label="Next">
+			<span aria-hidden="true">&rsaquo;</span>
+		</a>
+	</li>
+	<li>
+		<a href="?last" aria-label="Last">
 			<span aria-hidden="true">&raquo;</span>
 		</a>
-	</c:if>
-</li>
+	</li>
+</c:if>
