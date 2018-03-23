@@ -61,7 +61,7 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("currentIndex", page.getCurrentPageIndex()+1);
         request.setAttribute("size", page.getSize());
         
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/dashboard.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/dashboard.jsp");
         requestDispatcher.forward(request, response);
     }
 

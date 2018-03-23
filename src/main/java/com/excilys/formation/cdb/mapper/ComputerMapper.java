@@ -62,7 +62,7 @@ public enum ComputerMapper {
      */
     private String optionalCompanyToString (Optional<Company> company) {
         if (company.isPresent()) {
-            return company.get().getName().toString();
+            return company.get().getName();
         } else {
             return "";
         }
