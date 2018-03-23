@@ -164,8 +164,11 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(
-                    ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor)));
+            System.out.println(ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
+                                                                                    .dateIntroduced(introduced)
+                                                                                    .dateDiscontinued(discontinued)
+                                                                                    .manufactor(manufactor)
+                                                                                    .build()));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -192,8 +195,12 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(ComputerService.INSTANCE
-                    .updateComputer(new Computer(id, name, introduced, discontinued, manufactor)));
+            System.out.println(ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name)
+                                                                                    .id(companyId)
+                                                                                    .dateIntroduced(introduced)
+                                                                                    .dateDiscontinued(discontinued)
+                                                                                    .manufactor(manufactor)
+                                                                                    .build()));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

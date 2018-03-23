@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
+
 <li>
 	<c:if test = "${currentIndex > 1}">
 		<a href="?previous" aria-label="Previous">

@@ -58,7 +58,11 @@ public class AddComputerServlet extends HttpServlet {
             logger.info("Fields were left empty: {}",e.getMessage(), e);
         }
         try {
-            ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor));
+            ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
+                                                                .dateIntroduced(introduced)
+                                                                .dateDiscontinued(discontinued)
+                                                                .manufactor(manufactor)
+                                                                .build());
             logger.info("The computer has been added to the database with success.");
         } catch (Exception e) {
             // TODO Auto-generated catch block

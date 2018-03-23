@@ -29,7 +29,12 @@ public enum ComputerMapper {
         LocalDate introducedComputer = intro == null ? null : resultSet.getDate("introduced").toLocalDate();
         LocalDate discontinuedComputer = disco == null ? null : resultSet.getDate("discontinued").toLocalDate();
         Company manufactor = CompanyMapper.INSTANCE.resToCompany(resultSet);
-        return new Computer(idComputer, nameComputer, introducedComputer, discontinuedComputer, manufactor);
+        return new Computer.ComputerBuilder(nameComputer)
+                            .id(idComputer)
+                            .dateIntroduced(introducedComputer)
+                            .dateDiscontinued(discontinuedComputer)
+                            .manufactor(manufactor)
+                            .build();
     }
 
     /**
@@ -37,11 +42,12 @@ public enum ComputerMapper {
      * @return ComputerDTO The object mapped to DTO version
      */
     public ComputerDTO computerToDTO(Computer computer) {
-        return new ComputerDTO( computer.getId(),
-                                computer.getName(),
-                                optionalDateToString(computer.getDateIntroduced()),
-                                optionalDateToString(computer.getDateDiscontinued()),
-                                optionalCompanyToString(computer.getManufactor()));           
+        return new ComputerDTO.ComputerDTOBuilder(computer.getName())
+                                .id(computer.getId())
+                                .dateIntroduced(optionalDateToString(computer.getDateIntroduced()))
+                                .dateDiscontinued(optionalDateToString(computer.getDateDiscontinued()))
+                                .manufactorName(optionalCompanyToString(computer.getManufactor()))
+                                .build();
     }
 
     /**

@@ -12,33 +12,13 @@ public class ComputerDTO {
     private int manufactorId;
     private String manufactorName;
 
-    /**
-     * @param id unique identifier of Computer
-     * @param name name of computer
-     * @param dateIntroduced the date when the computer was introduced
-     * @param dateDiscontinued the date when the computer was discontinued
-     * @param manufactor manufacturer of Computer
-     */
-    public ComputerDTO(int id, String name, String dateIntroduced, String dateDiscontinued, String manufactorName) {
-        this.id = id;
-        this.name = name;
-        this.dateIntroduced = dateIntroduced;
-        this.dateDiscontinued = dateDiscontinued;
-        this.manufactorName = manufactorName;
-    }
-
-    /**
-     * Constructor without id for creation in BDD.
-     * @param name name of computer
-     * @param dateIntroduced the date when the computer was introduced
-     * @param dateDiscontinued the date when the computer was discontinued
-     * @param manufactor manufacturer of Computer
-     */
-    public ComputerDTO(String name, String dateIntroduced, String dateDiscontinued, int manufactorId) {
-        this.name = name;
-        this.dateIntroduced = dateIntroduced;
-        this.dateDiscontinued = dateDiscontinued;
-        this.manufactorId = manufactorId;
+    private ComputerDTO(ComputerDTOBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.dateIntroduced = builder.dateIntroduced;
+        this.dateDiscontinued = builder.dateDiscontinued;
+        this.manufactorId = builder.manufactorId;
+        this.manufactorName = builder.manufactorName;
     }
 
     public int getId() {
@@ -99,4 +79,46 @@ public class ComputerDTO {
         result += ", manufactor: " + this.manufactorName + "}";
         return result;
     }
+
+    public static class ComputerDTOBuilder {
+        private int id;
+        private final String name;
+        private String dateIntroduced;
+        private String dateDiscontinued;
+        private int manufactorId;
+        private String manufactorName;
+
+        public ComputerDTOBuilder(String name) {
+            this.name = name;
+        }
+
+        public ComputerDTOBuilder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public ComputerDTOBuilder dateIntroduced(String dateIntroduced) {
+            this.dateIntroduced = dateIntroduced;
+            return this;
+        }
+
+        public ComputerDTOBuilder dateDiscontinued(String dateDiscontinued) {
+            this.dateDiscontinued = dateDiscontinued;
+            return this;
+        }
+
+        public ComputerDTOBuilder manufactorId(int manufactorId) {
+            this.manufactorId = manufactorId;
+            return this;
+        }
+
+        public ComputerDTOBuilder manufactorName(String manufactorName) {
+            this.manufactorName = manufactorName;
+            return this;
+        }
+
+        public ComputerDTO build() {
+            return new ComputerDTO(this);
+        }
+    }    
 }
