@@ -15,10 +15,17 @@ public enum CompanyService {
     /**
      * @param offset index of the first element
      * @param numberToDisplay number of object to display
-     * @return List<Company> the sublist (page) of computers
+     * @return List<Company> the sublist (page) of companies
      */
     public List<Company> subListCompany(int offset, int numberToDisplay) {
         return CompanyDB.INSTANCE.subList(offset, numberToDisplay);
+    }
+
+    /**
+     * @return List<Company> the list of all companies
+     */
+    public List<Company> listAllCompany() {
+        return CompanyDB.INSTANCE.list();
     }
 
     /**

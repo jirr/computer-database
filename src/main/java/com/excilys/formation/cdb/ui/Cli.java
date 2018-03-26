@@ -53,7 +53,7 @@ public class Cli {
                     + "\t6) Delete a computer\n"
                     + "\t7) Stop the application");
             saisie = scanner.next();
-            switch (ChoiceCli.getById(saisie)) {
+            switch (ActionChoiceCli.getById(saisie)) {
             case LIST_COMPUTER:
                 listComputer(scanner);
                 break;
@@ -75,10 +75,6 @@ public class Cli {
             case STOP_APP:
                 return false;
             case DEFAULT:
-                System.err.println("Invalid choice.");
-                valid = false;
-                break;
-            default:
                 System.err.println("Invalid choice.");
                 valid = false;
                 break;
@@ -112,28 +108,25 @@ public class Cli {
      */
     private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) {
         boolean nextPage = true;
-        page.getContent().forEach(System.out::println);;
+        page.getContent().forEach(System.out::println);
         while (nextPage) {
             System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
-            switch (ChoiceCli.getById(scanner.next())) {
+            switch (PageChoiceCli.getById(scanner.next())) {
             case NEXT_PAGE:
-                page.nextPage().forEach(System.out::println);;
+                page.nextPage().forEach(System.out::println);
                 break;
             case PREVIOUS_PAGE:
-                page.previousPage().forEach(System.out::println);;
+                page.previousPage().forEach(System.out::println);
             case FIRST_PAGE:
-                page.firstPage().forEach(System.out::println);;
+                page.firstPage().forEach(System.out::println);
                 break;
             case LAST_PAGE:
-                page.lastPage().forEach(System.out::println);;
+                page.lastPage().forEach(System.out::println);
                 break;
             case QUIT_PAGE:
                 nextPage = false;
                 break;
             case DEFAULT:
-                System.err.println("Invalid choice.");
-                break;
-            default:
                 System.err.println("Invalid choice.");
                 break;
             }
@@ -171,8 +164,11 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(
-                    ComputerService.INSTANCE.createComputer(new Computer(name, introduced, discontinued, manufactor)));
+            System.out.println(ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
+                                                                                    .dateIntroduced(introduced)
+                                                                                    .dateDiscontinued(discontinued)
+                                                                                    .manufactor(manufactor)
+                                                                                    .build()));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -199,8 +195,12 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(ComputerService.INSTANCE
-                    .updateComputer(new Computer(id, name, introduced, discontinued, manufactor)));
+            System.out.println(ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name)
+                                                                                    .id(id)
+                                                                                    .dateIntroduced(introduced)
+                                                                                    .dateDiscontinued(discontinued)
+                                                                                    .manufactor(manufactor)
+                                                                                    .build()));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

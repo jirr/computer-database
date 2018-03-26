@@ -37,7 +37,7 @@ public enum ComputerDB {
             result.next();
             return result.getInt(1);
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return -1;
     }
@@ -54,7 +54,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return computerList;
     }
@@ -75,7 +75,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return computerList;
     }
@@ -88,12 +88,24 @@ public enum ComputerDB {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(createRequest);
             preparedStatement.setString(1, computer.getName());
-            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
-            preparedStatement.setInt(4, computer.getManufactor().getId());
+            if (computer.getDateIntroduced().isPresent()) {
+                preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.DATE);
+            }
+            if (computer.getDateDiscontinued().isPresent()) {
+                preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
+            } else {
+                preparedStatement.setNull(3, java.sql.Types.DATE);
+            }
+            if (computer.getManufactor().isPresent()) {
+                preparedStatement.setInt(4, computer.getManufactor().get().getId());
+            } else {
+                preparedStatement.setNull(4, java.sql.Types.INTEGER);
+            }
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -105,13 +117,25 @@ public enum ComputerDB {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);
             preparedStatement.setString(1, computer.getName());
-            preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced()));
-            preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued()));
-            preparedStatement.setInt(4, computer.getManufactor().getId());
+            if (computer.getDateIntroduced().isPresent()) {
+                preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.DATE);
+            }
+            if (computer.getDateDiscontinued().isPresent()) {
+                preparedStatement.setDate(3, Date.valueOf(computer.getDateDiscontinued().get()));
+            } else {
+                preparedStatement.setNull(3, java.sql.Types.DATE);
+            }
+            if (computer.getManufactor().isPresent()) {
+                preparedStatement.setInt(4, computer.getManufactor().get().getId());
+            } else {
+                preparedStatement.setNull(4, java.sql.Types.INTEGER);
+            }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -125,7 +149,7 @@ public enum ComputerDB {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
     }
 
@@ -146,7 +170,7 @@ public enum ComputerDB {
                 cres = ComputerMapper.INSTANCE.resToComputer(res);
             }
         } catch (SQLException e) {
-            logger.error("Unable to reach the database: " + e.getMessage());
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
         }
         return Optional.ofNullable(cres);
     }
