@@ -16,7 +16,7 @@ public class ComputerPage extends Page<Computer> {
     @Override
     public void setLastPageIndex() {
         // TODO Auto-generated method stub
-        this.lastPageIndex = (ComputerService.INSTANCE.countAllComputers() / this.getSize());
+        this.lastPageIndex = ComputerService.INSTANCE.countAllComputers() / this.getSize();
     }
 
     @Override

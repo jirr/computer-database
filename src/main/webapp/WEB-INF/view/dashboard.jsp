@@ -6,13 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<link href="<c:url value = "static/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
-<link href="<c:url value = "static/css/font-awesome.css"/>" rel="stylesheet" media="screen">
-<link href="<c:url value = "static/css/main.css"/>" rel="stylesheet" media="screen">
+	<title>Computer Database</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<!-- Bootstrap -->
+	<link href="<tag:link directory='css' target='bootstrap.min.css'/>" rel="stylesheet" media="screen">
+	<link href="<tag:link directory='css' target='font-awesome.css'/>" rel="stylesheet" media="screen">
+	<link href="<tag:link directory='css' target='main.css'/>" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -36,7 +36,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="<tag:link target='addComputer'/>">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -45,7 +45,7 @@
         <form id="deleteForm" action="#" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
-
+        
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -75,7 +75,6 @@
                         <th>
                             Company
                         </th>
-
                     </tr>
                 </thead>
                 <!-- Browse attribute computers -->
@@ -97,25 +96,26 @@
             </table>
         </div>
     </section>
-
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
             	<tag:pagination />
         	 </ul>
-        
-
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <button type="button" class="btn btn-default" onclick="location.href='?size=10'">10</button>
-	            <button type="button" class="btn btn-default" onclick="location.href='?size=50'">50</button>
-	            <button type="button" class="btn btn-default" onclick="location.href='?size=100'">100</button>
+	            <a href="<tag:link target='size' number='10'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">10</button>
+	            </a>
+	            <a href="<tag:link target='size' number='50'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">50</button>
+	            </a>
+	            <a href="<tag:link target='size' number='100'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">100</button>
+	            </a>
 	        </div>
         </div>
-
     </footer>
-<script src="<c:url value = "static/js/jquery.min.js"/>"></script>
-<script src="<c:url value = "static/js/bootstrap.min.js"/>"></script>
-<script src="<c:url value = "static/js/dashboard.js"/>"></script>
-
+	<script src="<tag:link directory='js' target='jquery.min.js'/>"></script>
+	<script src="<tag:link directory='js' target='bootstrap.min.js'/>"></script>
+	<script src="<tag:link directory='js' target='dashboard.js'/>"></script>
 </body>
 </html>

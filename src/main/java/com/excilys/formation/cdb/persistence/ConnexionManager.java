@@ -18,7 +18,10 @@ public enum ConnexionManager {
     private Properties props;
 
     /**
-     * @return the conn
+     * @return the conn connection to database
+     * @throws SQLException if the connection goes wrong
+     * @throws ClassNotFoundException if the forName can't reach the driver
+     * @throws IOException if the loading file fail
      */
     public Connection getConn() {
         props = new Properties();
