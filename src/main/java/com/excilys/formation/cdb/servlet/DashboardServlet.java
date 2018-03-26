@@ -16,8 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.service.ComputerPage;
+import com.excilys.formation.cdb.pagination.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
+import com.excilys.formation.cdb.service.ServiceException;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -29,7 +30,12 @@ public class DashboardServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int nbComputer = ComputerService.INSTANCE.countAllComputers();
+        int nbComputer = -1;
+        try {
+            nbComputer = ComputerService.INSTANCE.countAllComputers();
+        } catch (ServiceException e) {
+            logger.error("Can't get the computers number: {}", e.getMessage(), e);
+        }
         if (!(request.getParameter("next") == null)) {
             page.nextPage();
         }

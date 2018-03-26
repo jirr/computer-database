@@ -17,6 +17,7 @@ import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
+import com.excilys.formation.cdb.service.ServiceException;
 
 /**
  * Servlet implementation class AddComputer.
@@ -34,8 +35,11 @@ public class AddComputerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/addComputer.jsp");
-        request.setAttribute("companyList", CompanyService.INSTANCE.listAllCompany());
-
+        try {
+            request.setAttribute("companyList", CompanyService.INSTANCE.listAllCompany());
+        } catch (ServiceException e) {
+            logger.error("Can't get the company list: {}", e.getMessage(), e);
+        }
         requestDispatcher.forward(request, response);
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.ComputerDB;
+import com.excilys.formation.cdb.persistence.DBException;
 
 /**
  * @author jirr
@@ -16,16 +17,26 @@ public enum ComputerService {
      * @param offset index of the first element
      * @param numberToDisplay number of object to display
      * @return List<Computer> the sublist (page) of computers
+     * @throws ServiceException if failure in persistence execution
      */
-    public List<Computer> subListComputer(int offset, int numberToDisplay) {
-        return ComputerDB.INSTANCE.subList(offset, numberToDisplay);
+    public List<Computer> subListComputer(int offset, int numberToDisplay) throws ServiceException {
+        try {
+            return ComputerDB.INSTANCE.subList(offset, numberToDisplay);
+        } catch (DBException e) {
+            throw new ServiceException("Fail in persistence execution.");
+        }
     }
 
     /**
      * @return int number of companies
+     * @throws ServiceException if failure in persistence execution
      */
-    public int countAllComputers() {
-        return ComputerDB.INSTANCE.countAllComputer();
+    public int countAllComputers() throws ServiceException {
+        try {
+            return ComputerDB.INSTANCE.countAllComputer();
+        } catch (DBException e) {
+            throw new ServiceException("Fail in persistence execution.");
+        }
     }
 
     /**

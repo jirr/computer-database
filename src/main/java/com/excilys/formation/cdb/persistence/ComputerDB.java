@@ -29,64 +29,70 @@ public enum ComputerDB {
 
     /**
      * @return int number of computers
+     * @throws DBException if can't reach the database
      */
-    public int countAllComputer() {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn()) {
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(countAllRequest);
+    public int countAllComputer() throws DBException {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+                Statement statement = connection.createStatement();
+                ResultSet result = statement.executeQuery(countAllRequest)) {
             result.next();
             return result.getInt(1);
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
-        return -1;
     }
 
     /**
      * @return List<Computer> The list of all Computer object from the DB
+     * @throws DBException if can't reach the database
      */
-    public List<Computer> listAll() {
+    public List<Computer> listAll() throws DBException {
         List<Computer> computerList = new ArrayList<>();
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            Statement s = conn.createStatement();
-            ResultSet res = s.executeQuery(selectAllRequest + " ;");
-            while (res.next()) {
-                computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
+        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+                Statement statement = conn.createStatement();
+                ResultSet result = statement.executeQuery(selectAllRequest + " ;")) {
+            while (result.next()) {
+                computerList.add(ComputerMapper.INSTANCE.resToComputer(result));
             }
+            return computerList;
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
-        return computerList;
     }
 
     /**
      * @param limit index du dernier element
      * @param offset index du premier element
      * @return List<Computer> The sublist of Computer object from the DB
+     * @throws DBException if can't reach the database
      */
-    public List<Computer> subList(int offset, int limit) {
+    public List<Computer> subList(int offset, int limit) throws DBException {
         List<Computer> computerList = new ArrayList<>();
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
+        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+                PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
+                ) {
             preparedStatement.setInt(1, limit);
             preparedStatement.setInt(2, offset);
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
+            return computerList;
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
-        return computerList;
     }
 
     /**
-     * @param computer
-     *            the computer object to create in the DB
+     * @param computer the computer object to create in the DB
+     * @throws DBException if can't reach the database
      */
-    public void createComputer(Computer computer) {
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement preparedStatement = conn.prepareStatement(createRequest);
+    public void createComputer(Computer computer) throws DBException {
+        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+                PreparedStatement preparedStatement = conn.prepareStatement(createRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -106,16 +112,17 @@ public enum ComputerDB {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
     }
 
     /**
-     * @param computer
-     *            the computer object to update in the DB
+     * @param computer the computer object to update in the DB
+     * @throws DBException if can't reach the database
      */
-    public void updateComputer(Computer computer) {
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);
+    public void updateComputer(Computer computer) throws DBException {
+        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+                PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -136,42 +143,43 @@ public enum ComputerDB {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
     }
 
     /**
-     * @param id
-     *            the ID of computer to delete from the DB
+     * @param id the ID of computer to delete from the DB
+     * @throws DBException if can't reach the database
      */
-    public void deleteComputer(int id) {
+    public void deleteComputer(int id) throws DBException {
         try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
             PreparedStatement preparedStatement = conn.prepareStatement(deleteRequest);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
     }
 
     /**
-     * @param id
-     *            the ID of Computer that should exist
-     * @return Optional<Computer> contains the Computer, could be empty if the id
-     *         does not exist
+     * @param id the ID of Computer that should exist
+     * @return Optional<Computer> contains the Computer, could be empty if the id does not exist
+     * @throws DBException if can't reach the database
      */
-    public Optional<Computer> selectOne(int id) {
-        Computer cres = null;
-        ResultSet res = null;
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
-            PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");
+    public Optional<Computer> selectOne(int id) throws DBException {
+        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+                PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");) {
             ps.setInt(1, id);
-            res = ps.executeQuery();
+            ResultSet res = ps.executeQuery();
+            Computer computer = null;
             if (res.next()) {
-                cres = ComputerMapper.INSTANCE.resToComputer(res);
+                computer = ComputerMapper.INSTANCE.resToComputer(res);
             }
+            return Optional.ofNullable(computer);
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
         }
-        return Optional.ofNullable(cres);
     }
 }

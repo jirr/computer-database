@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.service;
+package com.excilys.formation.cdb.pagination;
 
 import java.util.List;
 

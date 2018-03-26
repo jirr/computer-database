@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.service.CompanyPage;
+import com.excilys.formation.cdb.pagination.CompanyPage;
+import com.excilys.formation.cdb.pagination.ComputerPage;
+import com.excilys.formation.cdb.pagination.Page;
 import com.excilys.formation.cdb.service.CompanyService;
-import com.excilys.formation.cdb.service.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
-import com.excilys.formation.cdb.service.Page;
 
 public class Cli {
     private static final int PAGE_SIZE = 50;
