@@ -1,7 +1,5 @@
 package com.excilys.formation.cdb.persistence;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,26 +16,26 @@ public enum ConnexionManager {
 
     private Connection conn;
     private Properties props;
-    private FileInputStream file;
 
     /**
-     * @return the conn
+     * @return the conn connection to database
+     * @throws SQLException if the connection goes wrong
+     * @throws ClassNotFoundException if the forName can't reach the driver
+     * @throws IOException if the loading file fail
      */
     public Connection getConn() {
         props = new Properties();
         try {
-            file = new FileInputStream("config/db/db.properties");
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            logger.error("Unable find the file: " + e1.getMessage());
-            e1.printStackTrace();
-        }
-        try {
-            props.load(file);
+            props.load(getClass().getClassLoader().getResourceAsStream("db.properties"));
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
             logger.error("Unable to load the file: " + e1.getMessage());
+        }
+        try {
+            Class.forName(props.getProperty("jdbc.driver"));
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            logger.error("Unable to find the class: " + e1.getMessage());
         }
         try {
             conn = DriverManager.getConnection(props.getProperty("jdbc.url"), props.getProperty("jdbc.username"),

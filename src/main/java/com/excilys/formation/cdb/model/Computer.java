@@ -1,6 +1,7 @@
 package com.excilys.formation.cdb.model;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * @author jirr
@@ -13,30 +14,12 @@ public class Computer {
     private LocalDate dateDiscontinued;
     private Company manufactor;
 
-    /**
-     * @param id unique identifier of Computer
-     * @param name name of computer
-     * @param dateIntroduced the date when the computer was introduced
-     * @param dateDiscontinued the date when the computer was discontinued
-     * @param manufactor manufacturer of Computer
-     */
-    public Computer(int id, String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
-        this(name, dateIntroduced, dateDiscontinued, manufactor);
-        this.id = id;
-    }
-
-    /**
-     * Constructor without id for creation in BDD.
-     * @param name name of computer
-     * @param dateIntroduced the date when the computer was introduced
-     * @param dateDiscontinued the date when the computer was discontinued
-     * @param manufactor manufacturer of Computer
-     */
-    public Computer(String name, LocalDate dateIntroduced, LocalDate dateDiscontinued, Company manufactor) {
-        this.name = name;
-        this.dateIntroduced = dateIntroduced;
-        this.dateDiscontinued = dateDiscontinued;
-        this.manufactor = manufactor;
+    private Computer(ComputerBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.dateIntroduced = builder.dateIntroduced;
+        this.dateDiscontinued = builder.dateDiscontinued;
+        this.manufactor = builder.manufactor;
     }
 
     public int getId() {
@@ -55,24 +38,24 @@ public class Computer {
         this.name = name;
     }
 
-    public LocalDate getDateIntroduced() {
-        return dateIntroduced;
+    public Optional<LocalDate> getDateIntroduced() {
+        return Optional.ofNullable(dateIntroduced);
     }
 
     public void setDateIntroduced(LocalDate dateIntroduced) {
         this.dateIntroduced = dateIntroduced;
     }
 
-    public LocalDate getDateDiscontinued() {
-        return dateDiscontinued;
+    public Optional<LocalDate> getDateDiscontinued() {
+        return Optional.ofNullable(dateDiscontinued);
     }
 
     public void setDateDiscontinued(LocalDate dateDiscontinued) {
         this.dateDiscontinued = dateDiscontinued;
     }
 
-    public Company getManufactor() {
-        return manufactor;
+    public Optional<Company> getManufactor() {
+        return Optional.ofNullable(manufactor);
     }
 
     public void setManufactor(Company manufactor) {
@@ -88,5 +71,41 @@ public class Computer {
         result += ", date2: " + this.dateDiscontinued;
         result += ", manufactor: " + this.manufactor.getName() + "}";
         return result;
+    }
+
+    public static class ComputerBuilder {
+        private int id;
+        private final String name;
+        private LocalDate dateIntroduced;
+        private LocalDate dateDiscontinued;
+        private Company manufactor;
+
+        public ComputerBuilder(String name) {
+            this.name = name;
+        }
+
+        public ComputerBuilder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public ComputerBuilder dateIntroduced(LocalDate dateIntroduced) {
+            this.dateIntroduced = dateIntroduced;
+            return this;
+        }
+
+        public ComputerBuilder dateDiscontinued(LocalDate dateDiscontinued) {
+            this.dateDiscontinued = dateDiscontinued;
+            return this;
+        }
+
+        public ComputerBuilder manufactor(Company manufactor) {
+            this.manufactor = manufactor;
+            return this;
+        }
+
+        public Computer build() {
+            return new Computer(this);
+        }
     }
 }

@@ -44,8 +44,12 @@ public enum ComputerService {
      */
     public String createComputer(Computer computer) throws Exception {
         Validator.INSTANCE.nameValidation(computer.getName());
-        Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
-        Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
+        if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
+            Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
+        }
+        if (computer.getManufactor().isPresent()) {
+            Validator.INSTANCE.manufactorValidation(computer.getManufactor().get().getId());
+        }
         ComputerDB.INSTANCE.createComputer(computer);
         return "New computer added to database.";
     }
@@ -58,8 +62,12 @@ public enum ComputerService {
     public String updateComputer(Computer computer) throws Exception {
         Validator.INSTANCE.computerIdValidation(computer.getId());
         Validator.INSTANCE.nameValidation(computer.getName());
-        Validator.INSTANCE.datesValidation(computer.getDateIntroduced(), computer.getDateDiscontinued());
-        Validator.INSTANCE.manufactorValidation(computer.getManufactor().getId());
+        if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
+            Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
+        }
+        if (computer.getManufactor().isPresent()) {
+            Validator.INSTANCE.manufactorValidation(computer.getManufactor().get().getId());
+        }
         ComputerDB.INSTANCE.updateComputer(computer);
         return "Computer " + computer.getId() + " updated.";
     }
