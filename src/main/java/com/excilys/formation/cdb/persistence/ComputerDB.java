@@ -1,5 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -37,7 +38,7 @@ public enum ComputerDB {
                 ResultSet result = statement.executeQuery(countAllRequest)) {
             result.next();
             return result.getInt(1);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -56,7 +57,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(result));
             }
             return computerList;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -80,7 +81,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
             return computerList;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -110,7 +111,7 @@ public enum ComputerDB {
                 preparedStatement.setNull(4, java.sql.Types.INTEGER);
             }
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -141,7 +142,7 @@ public enum ComputerDB {
             }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -156,7 +157,7 @@ public enum ComputerDB {
             PreparedStatement preparedStatement = conn.prepareStatement(deleteRequest);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -177,7 +178,7 @@ public enum ComputerDB {
                 computer = ComputerMapper.INSTANCE.resToComputer(res);
             }
             return Optional.ofNullable(computer);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }

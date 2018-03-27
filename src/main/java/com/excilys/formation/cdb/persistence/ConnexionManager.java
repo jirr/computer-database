@@ -18,24 +18,26 @@ public enum ConnexionManager {
     private Properties props;
 
     /**
-     * @return the conn connection to database
-     * @throws SQLException if the connection goes wrong
-     * @throws ClassNotFoundException if the forName can't reach the driver
-     * @throws IOException if the loading file fail
+     * @return conn the connection to database
+     * @throws IOException 
+     * @throws ClassNotFoundException 
+     * @throws SQLException 
      */
-    public Connection getConn() {
+    public Connection getConn() throws DBException, IOException, ClassNotFoundException, SQLException {
         props = new Properties();
         try {
             props.load(getClass().getClassLoader().getResourceAsStream("db.properties"));
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            logger.error("Unable to load the file: " + e1.getMessage());
+            logger.error("Unable to load the file: {}", e1.getMessage(), e1);
+            throw e1;
         }
         try {
             Class.forName(props.getProperty("jdbc.driver"));
         } catch (ClassNotFoundException e1) {
             // TODO Auto-generated catch block
             logger.error("Unable to find the class: " + e1.getMessage());
+            throw e1;
         }
         try {
             conn = DriverManager.getConnection(props.getProperty("jdbc.url"), props.getProperty("jdbc.username"),
@@ -43,6 +45,7 @@ public enum ConnexionManager {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             logger.error("Unable to connect to the database: " + e.getMessage());
+            throw e;
         }
         return conn;
     }

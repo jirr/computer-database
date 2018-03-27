@@ -1,5 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,7 +38,7 @@ public enum CompanyDB {
                 ResultSet result = statement.executeQuery(countAllRequest);) {
             result.next();
             return result.getInt(1);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -56,7 +57,7 @@ public enum CompanyDB {
                 companyList.add(CompanyMapper.INSTANCE.resToCompany(result));
             }
             return companyList;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -79,7 +80,7 @@ public enum CompanyDB {
                 computerList.add(CompanyMapper.INSTANCE.resToCompany(res));
             }
             return computerList;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -100,7 +101,7 @@ public enum CompanyDB {
             if (result.next()) {
                 company = CompanyMapper.INSTANCE.resToCompany(result);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
