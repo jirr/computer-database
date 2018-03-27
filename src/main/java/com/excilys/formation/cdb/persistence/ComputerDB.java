@@ -92,8 +92,10 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public void createComputer(Computer computer) throws DBException {
-        try (Connection conn = ConnexionManager.INSTANCE.getConn();
-                PreparedStatement preparedStatement = conn.prepareStatement(createRequest);) {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoRollback autoRollbackConnection = new AutoRollback(connection);
+                PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -111,6 +113,7 @@ public enum ComputerDB {
                 preparedStatement.setNull(4, java.sql.Types.INTEGER);
             }
             preparedStatement.executeUpdate();
+            autoRollbackConnection.commit();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
@@ -122,8 +125,10 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public void updateComputer(Computer computer) throws DBException {
-        try (Connection conn = ConnexionManager.INSTANCE.getConn();
-                PreparedStatement preparedStatement = conn.prepareStatement(updateRequest);) {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoRollback autoRollbackConnection = new AutoRollback(connection);
+                PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -142,6 +147,7 @@ public enum ComputerDB {
             }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
+            autoRollbackConnection.commit();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
