@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <!DOCTYPE html>
 <html>
@@ -17,13 +17,18 @@
             <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
         </div>
     </header>
-
+    
     <section id="main">
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <div class="label label-default pull-right">
+                        id: ${computerId}
+                    </div>
+                    <h1>Edit Computer</h1>
+
+                    <form action="editComputer" method="POST">
+                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>

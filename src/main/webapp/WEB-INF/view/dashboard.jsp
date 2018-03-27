@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -36,7 +35,7 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="<tag:link target='addComputer'/>">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Delete</a>
                 </div>
             </div>
         </div>
@@ -84,7 +83,7 @@
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick=""><c:out value="${computer.name}" /></a>
+                            <a href="<tag:link target='editComputer' computerId='${computer.id}'/>" onclick=""><c:out value="${computer.name}" /></a>
                         </td>
                         <td><c:out value="${computer.dateIntroduced}" /></td>
                         <td><c:out value="${computer.dateDiscontinued}" /></td>

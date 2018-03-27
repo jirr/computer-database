@@ -56,7 +56,7 @@ public enum CompanyService {
      * @return Company with the right id
      * @throws Exception if the id does not exist
      */
-    public Company getCompany(int id) throws Exception {
+    public Company getCompany(int id) throws ServiceException {
         return Validator.INSTANCE.manufactorValidation(id);
     }
 }
