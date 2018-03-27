@@ -2,6 +2,9 @@ package com.excilys.formation.cdb.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 import com.excilys.formation.cdb.persistence.DBException;
@@ -13,6 +16,8 @@ import com.excilys.formation.cdb.persistence.DBException;
 public enum ComputerService {
     INSTANCE;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
     /**
      * @param offset index of the first element
      * @param numberToDisplay number of object to display
@@ -23,6 +28,7 @@ public enum ComputerService {
         try {
             return ComputerDB.INSTANCE.subList(offset, numberToDisplay);
         } catch (DBException e) {
+            logger.error("Fail in persistence execution: {}", e.getMessage(), e);
             throw new ServiceException("Fail in persistence execution.");
         }
     }
@@ -35,6 +41,7 @@ public enum ComputerService {
         try {
             return ComputerDB.INSTANCE.countAllComputer();
         } catch (DBException e) {
+            logger.error("Fail in persistence execution: {}", e.getMessage(), e);
             throw new ServiceException("Fail in persistence execution.");
         }
     }
@@ -53,15 +60,26 @@ public enum ComputerService {
      * @return String validation text
      * @throws Exception if the creation becomes wild
      */
-    public String createComputer(Computer computer) throws Exception {
+    public String createComputer(Computer computer) throws ServiceException {
         Validator.INSTANCE.nameValidation(computer.getName());
         if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
             Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
         }
+        if (computer.getDateIntroduced().isPresent()) {
+            Validator.INSTANCE.dateValidation(computer.getDateIntroduced().get());
+        }
+        if (computer.getDateDiscontinued().isPresent()) {
+            Validator.INSTANCE.dateValidation(computer.getDateDiscontinued().get());
+        }
         if (computer.getManufactor().isPresent()) {
             Validator.INSTANCE.manufactorValidation(computer.getManufactor().get().getId());
         }
-        ComputerDB.INSTANCE.createComputer(computer);
+        try {
+            ComputerDB.INSTANCE.createComputer(computer);
+        } catch (DBException e) {
+            logger.error("Problem with database: {}", e.getMessage(), e);
+            throw new ServiceException("Problem encounter in database during creation.");
+        }
         return "New computer added to database.";
     }
 

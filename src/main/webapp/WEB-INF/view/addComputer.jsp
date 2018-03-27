@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <!DOCTYPE html>
 <html>
@@ -27,15 +26,15 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required>
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\* ]+$">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -57,5 +56,14 @@
             </div>
         </div>
     </section>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+	<script>
+	  	$.validate({
+	    	lang: 'es',
+	    	modules: 'html5'
+	  	});
+	</script>
 </body>
 </html>

@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.pagination.CompanyPage;
-import com.excilys.formation.cdb.pagination.ComputerPage;
-import com.excilys.formation.cdb.pagination.Page;
 import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
+import com.excilys.formation.cdb.service.ServiceException;
+import com.excilys.formation.cdb.service.pagination.CompanyPage;
+import com.excilys.formation.cdb.service.pagination.ComputerPage;
+import com.excilys.formation.cdb.service.pagination.Page;
 
 public class Cli {
     private static final int PAGE_SIZE = 50;
@@ -88,8 +89,12 @@ public class Cli {
      */
     private void listComputer(Scanner scanner) {
         System.out.println("Computers list: \n");
-        ComputerPage page = new ComputerPage(PAGE_SIZE);
-        paginationChoices(scanner, page);
+        try {
+            ComputerPage page = new ComputerPage(PAGE_SIZE);
+            paginationChoices(scanner, page);
+        } catch (ServiceException e){
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -97,16 +102,21 @@ public class Cli {
      */
     private void listCompany(Scanner scanner) {
         System.out.println("Companies list: \n");
-        CompanyPage page = new CompanyPage(PAGE_SIZE);
-        paginationChoices(scanner, page);
+        try {
+            CompanyPage page = new CompanyPage(PAGE_SIZE);
+            paginationChoices(scanner, page);
+        } catch (ServiceException e){
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
      * @param scanner The scanner of the CLI
      * @param page The computer or company Page
      * @param <T> Computer or Company
+     * @throws ServiceException if problem with pagination service
      */
-    private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) {
+    private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) throws ServiceException {
         boolean nextPage = true;
         page.getContent().forEach(System.out::println);
         while (nextPage) {

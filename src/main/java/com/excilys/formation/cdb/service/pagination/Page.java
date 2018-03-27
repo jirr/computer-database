@@ -1,6 +1,8 @@
-package com.excilys.formation.cdb.pagination;
+package com.excilys.formation.cdb.service.pagination;
 
 import java.util.List;
+
+import com.excilys.formation.cdb.service.ServiceException;
 
 /**
  * @author jirr
@@ -16,8 +18,9 @@ public abstract class Page<T> {
 
     /**
      * @param size Size of the page
+     * @throws ServiceException 
      */
-    public Page(int size) {
+    public Page(int size) throws ServiceException {
         this.currentPageIndex = 0;
         this.size = size;
         this.setLastPageIndex();
@@ -32,7 +35,7 @@ public abstract class Page<T> {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(int size) throws ServiceException {
         this.size = size;
         this.setContent(this.getOffset());
         this.setLastPageIndex();
@@ -44,19 +47,19 @@ public abstract class Page<T> {
         return offset;
     }
 
-    public abstract void setLastPageIndex();
+    public abstract void setLastPageIndex() throws ServiceException;
 
     public int getLastPageIndex() {
         return this.lastPageIndex;
     }
 
-    public abstract void setContent(int offset);
+    public abstract void setContent(int offset) throws ServiceException;
 
     public List<T> getContent() {
         return this.content;
     }
 
-    public List<T> goToPage(int index) {
+    public List<T> goToPage(int index) throws ServiceException {
         if (index >= 0 && index < this.lastPageIndex + 1) {
             this.currentPageIndex = index;
         }
@@ -64,7 +67,7 @@ public abstract class Page<T> {
         return this.content;
     }
 
-    public List<T> previousPage() {
+    public List<T> previousPage() throws ServiceException {
         if (this.currentPageIndex > 0) {
             this.currentPageIndex--;
         }
@@ -72,7 +75,7 @@ public abstract class Page<T> {
         return this.content;
     }
 
-    public List<T> nextPage() {
+    public List<T> nextPage() throws ServiceException {
         if (this.currentPageIndex < this.lastPageIndex) {
             this.currentPageIndex++;
         }
@@ -80,13 +83,13 @@ public abstract class Page<T> {
         return this.content;
     }
 
-    public List<T> firstPage() {
+    public List<T> firstPage() throws ServiceException {
         this.currentPageIndex = 0;
         this.setContent(this.getOffset());
         return this.content;
     }
 
-    public List<T> lastPage() {
+    public List<T> lastPage() throws ServiceException {
         this.currentPageIndex = this.lastPageIndex;
         this.setContent(this.getOffset());
         return this.content;

@@ -3,7 +3,7 @@
 
 <%@ attribute name="target" required="true" %>
 <%@ attribute name="directory" required="false" %>
-<%@ attribute name="number" required="false" %>
+<%@ attribute name="size" required="false" %>
 <%@ attribute name="index" required="false" %>
 <%@ attribute name="computerId" required="false" %>
 
@@ -18,22 +18,22 @@
 		<c:url value="/dashboard"/>
 	</c:when>
     <c:when test="${target == 'dashboardPrev'}">
-    	<c:url value="/dashboard?prev"/>
+    	<c:url value="/dashboard?prev&size=${size}"/>
     </c:when>
     <c:when test="${target == 'dashboardNext'}">
-    	<c:url value="/dashboard?next"/>
+    	<c:url value="/dashboard?next&size=${size}"/>
     </c:when>
     <c:when test="${target == 'dashboardFirst'}">
-    	<c:url value="/dashboard?first"/>
+    	<c:url value="/dashboard?first&size=${size}"/>
     </c:when>
     <c:when test="${target == 'dashboardLast'}">
-    	<c:url value="/dashboard?last"/>
+    	<c:url value="/dashboard?last&size=${size}"/>
     </c:when>
     <c:when test="${target == 'dashboardIndex'}">
-    	<c:url value="/dashboard?index=${index}"/>
+    	<c:url value="/dashboard?index=${index}&size=${size}"/>
     </c:when>
     <c:when test="${target == 'size'}">
-    	<c:url value="/dashboard?size=${number}"/>
+    	<c:url value="/dashboard?size=${size}"/>
     </c:when>
     <c:when test="${target == 'editComputer'}">
     	<c:url value="/editComputer?computerId="/>${computerId}

@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.pagination.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
 import com.excilys.formation.cdb.service.ServiceException;
+import com.excilys.formation.cdb.service.pagination.ComputerPage;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -26,44 +26,50 @@ public class DashboardServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     private static final long serialVersionUID = 2741128895945909738L;
-    private ComputerPage page = new ComputerPage(10);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int nbComputer = -1;
+        ComputerPage page = null;
         try {
-            nbComputer = ComputerService.INSTANCE.countAllComputers();
-        } catch (ServiceException e) {
-            logger.error("Can't get the computers number: {}", e.getMessage(), e);
-        }
-        if (!(request.getParameter("next") == null)) {
-            page.nextPage();
-        }
-        if (!(request.getParameter("previous") == null)) {
-            page.previousPage();
-        }
-        if (!(request.getParameter("first") == null)) {
-            page.firstPage();
-        }
-        if (!(request.getParameter("last") == null)) {
-            page.lastPage();
-        }
-        if (!(request.getParameter("index") == null)) {
-            try {
-                int index = Integer.parseInt(request.getParameter("index"));
-                page.goToPage(index - 1);
-            } catch (NumberFormatException e1) {
-                logger.error("Not a number(index):" + e1.getMessage());
+            page = new ComputerPage(10);
+            if (!(request.getParameter("size") == null)) {
+                try {
+                    int size = Integer.parseInt(request.getParameter("size"));
+                    page.setSize(size);
+                } catch (NumberFormatException e1) {
+                    logger.error("Not a number(size): {}", e1.getMessage());
+                }
             }
-        }
-        if (!(request.getParameter("size") == null)) {
             try {
-                int size = Integer.parseInt(request.getParameter("size"));
-                page.setSize(size);
-            } catch (NumberFormatException e1) {
-                logger.error("Not a number(size):" + e1.getMessage());
+                nbComputer = ComputerService.INSTANCE.countAllComputers();
+            } catch (ServiceException e) {
+                logger.error("Can't get the computers number: {}", e.getMessage(), e);
             }
+            if (!(request.getParameter("next") == null)) {
+                page.nextPage();
+            }
+            if (!(request.getParameter("previous") == null)) {
+                page.previousPage();
+            }
+            if (!(request.getParameter("first") == null)) {
+                page.firstPage();
+            }
+            if (!(request.getParameter("last") == null)) {
+                page.lastPage();
+            }
+            if (!(request.getParameter("index") == null)) {
+                try {
+                    int index = Integer.parseInt(request.getParameter("index"));
+                    page.goToPage(index - 1);
+                } catch (NumberFormatException e1) {
+                    logger.error("Not a number(index): {}", e1.getMessage());
+                }
+            }
+        } catch (ServiceException e3) {
+            logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }
+        
         List<ComputerDTO> computersDTO = new ArrayList<>();
         page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
 
