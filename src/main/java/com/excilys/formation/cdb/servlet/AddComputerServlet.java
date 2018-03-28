@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.servlet;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -58,17 +59,19 @@ public class AddComputerServlet extends HttpServlet {
         try {
             final int companyId = Integer.parseInt(companyIdStr);
             manufactor = CompanyService.INSTANCE.getCompany(companyId);
-        } catch (final Exception e) {
+        } catch (final NumberFormatException e1) {
             logger.info("No company selected.");
+        } catch (final ServiceException e2) {
+            logger.error("Error in service that get the company.");
         }
         try {
             introduced = LocalDate.parse(introducedStr);
-        } catch (final Exception e) {
+        } catch (final DateTimeParseException e) {
             logger.info("Introduced date was left empty.");
         }
         try {
             discontinued = LocalDate.parse(discontinuedStr);
-        } catch (final Exception e) {
+        } catch (final DateTimeParseException e) {
             logger.info("Discontinued date was left empty.");
         }
         try {

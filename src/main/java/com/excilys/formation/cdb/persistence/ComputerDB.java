@@ -131,7 +131,9 @@ public enum ComputerDB {
                 PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
+                logger.info("DB localdate : {}", computer.getDateIntroduced().get().toString());
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
+                logger.info("DB Date : {}", Date.valueOf(computer.getDateIntroduced().get()));
             } else {
                 preparedStatement.setNull(2, java.sql.Types.DATE);
             }

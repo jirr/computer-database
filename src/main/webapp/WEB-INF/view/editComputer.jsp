@@ -23,37 +23,39 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: ${computerId}
+                        id: ${computer.id}
                     </div>
                     <h1>Edit Computer</h1>
 
                     <form action="editComputer" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                        <input type="hidden" value="${computer.id}" id="id" name="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\.\* ]+$">
+                                <input type="text" class="form-control" id="computerName" placeholder="Computer name" name="computerName" placeholder="" value="<c:out value="${computer.name}" />" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\.\* ]+$">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" data-validation="date" data-validation-format="yyyy-mm-dd">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="<c:out value="${computer.dateIntroduced}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" data-validation="date" data-validation-format="yyyy-mm-dd">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="<c:out value="${computer.dateDiscontinued}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId">
                                 <option value="">--</option>
                                     <c:forEach var="company" items="${companyList}">
-                                    	<option value="${company.id}">${company.name}</option>
+                                    	<option value="${company.id}" <c:if test="${computer.manufactorId == company.id}">selected</c:if>>
+                                    		${company.name}
+                                    	</option>
                                     </c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" value="Valid" class="btn btn-primary">
                             or
                             <a href="<tag:link target='dashboard'/>" class="btn btn-default">Cancel</a>
                         </div>

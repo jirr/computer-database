@@ -83,7 +83,7 @@ public enum Validator {
             if (CompanyDB.INSTANCE.selectOne(id).isPresent()) {
                 return CompanyDB.INSTANCE.selectOne(id).get();
             } else {
-                logger.error("Company ID does not exist.");
+                logger.error("Company ID does not exist: {}", id);
                 throw new ServiceException("Company ID does not exist.");
             }
         } catch (DBException e) {

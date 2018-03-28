@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.cdb.dto.ComputerDTO;
+import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
@@ -42,7 +44,13 @@ public class EditComputerServlet extends HttpServlet {
         } catch (ServiceException e) {
             logger.error("Can't get the company list: {}", e.getMessage(), e);
         }
-        request.setAttribute("computerId", request.getParameter("id"));
+        try {
+            final int computerId = Integer.parseInt(request.getParameter("id"));
+            ComputerDTO computerDTO = ComputerMapper.INSTANCE.computerToDTO(ComputerService.INSTANCE.selectOne(computerId));
+            request.setAttribute("computer", computerDTO);
+        } catch (final NumberFormatException | ServiceException e1) {
+            logger.info("No company selected.");
+        }
         requestDispatcher.forward(request, response);
     }
 
@@ -51,7 +59,7 @@ public class EditComputerServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final String id = request.getParameter("id");
+        final String idStr = request.getParameter("id");
         final String name = request.getParameter("computerName");
         final String introducedStr = request.getParameter("introduced");
         final String discontinuedStr = request.getParameter("discontinued");
@@ -63,12 +71,14 @@ public class EditComputerServlet extends HttpServlet {
             final int companyId = Integer.parseInt(companyIdStr);
             manufactor = CompanyService.INSTANCE.getCompany(companyId);
         } catch (final NumberFormatException e1) {
-            logger.info("No company selected.");
+            logger.error("No company selected.", e1);
         } catch (final ServiceException e2) {
             logger.error("Error in service that get the company.");
         }
         try {
+            logger.info("1. introducedStr: {}", introducedStr);
             introduced = LocalDate.parse(introducedStr);
+            logger.info("2. introduced: {}", introduced.toString());
         } catch (final DateTimeParseException e) {
             logger.info("Introduced date was left empty.");
         }
@@ -79,12 +89,12 @@ public class EditComputerServlet extends HttpServlet {
         }
         try {
             ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name)
-                    .id(Integer.parseInt(id))
+                    .id(Integer.parseInt(idStr))
                     .dateIntroduced(introduced)
                     .dateDiscontinued(discontinued)
                     .manufactor(manufactor)
                     .build());
-            logger.info("The computer has been added to the database with success.");
+            logger.info("The computer has been updated to the database with success.");
         } catch (final Exception e) {
             // TODO Auto-generated catch block
             logger.error("Error in computer adding: {}", e.getMessage(), e);

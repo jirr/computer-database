@@ -51,8 +51,8 @@ public enum ComputerService {
      * @return Computer with the right id
      * @throws Exception if the id does not exist
      */
-    public String selectOne(int id) throws Exception {
-        return Validator.INSTANCE.computerIdValidation(id).toString();
+    public Computer selectOne(int id) throws ServiceException {
+        return Validator.INSTANCE.computerIdValidation(id);
     }
 
     /**
@@ -88,7 +88,7 @@ public enum ComputerService {
      * @return String validation text
      * @throws Exception if the updating becomes wild
      */
-    public String updateComputer(Computer computer) throws Exception {
+    public String updateComputer(Computer computer) throws ServiceException {
         Validator.INSTANCE.computerIdValidation(computer.getId());
         Validator.INSTANCE.nameValidation(computer.getName());
         if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
@@ -97,7 +97,12 @@ public enum ComputerService {
         if (computer.getManufactor().isPresent()) {
             Validator.INSTANCE.manufactorValidation(computer.getManufactor().get().getId());
         }
-        ComputerDB.INSTANCE.updateComputer(computer);
+        try {
+            ComputerDB.INSTANCE.updateComputer(computer);
+        } catch (DBException e) {
+            logger.error("Problem with database: {}", e.getMessage(), e);
+            throw new ServiceException("Problem encounter in database during update.");
+        }
         return "Computer " + computer.getId() + " updated.";
     }
 
@@ -106,9 +111,14 @@ public enum ComputerService {
      * @return String validation test
      * @throws Exception if the deleting becomes wild
      */
-    public String deleteComputer(int id) throws Exception {
+    public String deleteComputer(int id) throws ServiceException {
         Validator.INSTANCE.computerIdValidation(id);
-        ComputerDB.INSTANCE.deleteComputer(id);
+        try {
+            ComputerDB.INSTANCE.deleteComputer(id);
+        } catch (DBException e) {
+            logger.error("Problem with database: {}", e.getMessage(), e);
+            throw new ServiceException("Problem encounter in database during deletion.");
+        }
         return "Computer " + id + " removed from database.";
     }
 }

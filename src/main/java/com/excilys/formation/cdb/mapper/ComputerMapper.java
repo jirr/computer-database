@@ -6,9 +6,13 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.persistence.ComputerDB;
 
 /**
  * @author jirr
@@ -16,6 +20,8 @@ import com.excilys.formation.cdb.model.Computer;
  */
 public enum ComputerMapper {
     INSTANCE;
+    private final Logger logger = LoggerFactory.getLogger(ComputerDB.class);
+
     /**
      * @param resultSet ResultSet of a request
      * @return Computer the BD object convert in java object
@@ -26,7 +32,9 @@ public enum ComputerMapper {
         String nameComputer = resultSet.getString("cuName");
         Date intro = resultSet.getDate("introduced");
         Date disco = resultSet.getDate("discontinued");
+        logger.info("1. resultSet.getDate : {}", intro);
         LocalDate introducedComputer = intro == null ? null : resultSet.getDate("introduced").toLocalDate();
+        logger.info("2. introducedComputer : {}", introducedComputer);
         LocalDate discontinuedComputer = disco == null ? null : resultSet.getDate("discontinued").toLocalDate();
         Company manufactor = CompanyMapper.INSTANCE.resToCompany(resultSet);
         return new Computer.ComputerBuilder(nameComputer)
@@ -46,7 +54,8 @@ public enum ComputerMapper {
                                 .id(computer.getId())
                                 .dateIntroduced(optionalDateToString(computer.getDateIntroduced()))
                                 .dateDiscontinued(optionalDateToString(computer.getDateDiscontinued()))
-                                .manufactorName(optionalCompanyToString(computer.getManufactor()))
+                                .manufactorId(optionalCompanyToId(computer.getManufactor()))
+                                .manufactorName(optionalCompanyToName(computer.getManufactor()))
                                 .build();
     }
 
@@ -66,11 +75,23 @@ public enum ComputerMapper {
      * @param company The Optional<Company> to check and convert to string
      * @return String The string version of LocalDate
      */
-    private String optionalCompanyToString(Optional<Company> company) {
+    private String optionalCompanyToName(Optional<Company> company) {
         if (company.isPresent()) {
             return company.get().getName();
         } else {
             return "";
+        }
+    }
+
+    /**
+     * @param company The Optional<Company> to check and convert to string
+     * @return String The string version of LocalDate
+     */
+    private int optionalCompanyToId(Optional<Company> company) {
+        if (company.isPresent()) {
+            return company.get().getId();
+        } else {
+            return -1;
         }
     }
 }
