@@ -63,7 +63,7 @@ public enum ComputerService {
     public String createComputer(Computer computer) throws ServiceException {
         Validator.INSTANCE.nameValidation(computer.getName());
         if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
-            Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
+            Validator.INSTANCE.datesCompatibilityValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
         }
         if (computer.getDateIntroduced().isPresent()) {
             Validator.INSTANCE.dateValidation(computer.getDateIntroduced().get());
@@ -92,7 +92,7 @@ public enum ComputerService {
         Validator.INSTANCE.computerIdValidation(computer.getId());
         Validator.INSTANCE.nameValidation(computer.getName());
         if (computer.getDateIntroduced().isPresent() && computer.getDateDiscontinued().isPresent()) {
-            Validator.INSTANCE.datesValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
+            Validator.INSTANCE.datesCompatibilityValidation(computer.getDateIntroduced().get(), computer.getDateDiscontinued().get());
         }
         if (computer.getManufactor().isPresent()) {
             Validator.INSTANCE.manufactorValidation(computer.getManufactor().get().getId());

@@ -21,8 +21,8 @@ public enum Validator {
      * @param d2 second date to compare
      * @throws Exception if the first date is after the second
      */
-    protected void datesValidation(LocalDate date1, LocalDate date2) throws ServiceException {
-        if (date1.isBefore(date2)) {
+    protected void datesCompatibilityValidation(LocalDate date1, LocalDate date2) throws ServiceException {
+        if (date2.isBefore(date1)) {
             logger.error("Date introduced > date discontinued");
             throw new ServiceException("Incompatibility of dates.");
         }
@@ -33,7 +33,7 @@ public enum Validator {
      * @throws Exception if the date is after today or before the Altair 8800
      */
     protected void dateValidation(LocalDate date) throws ServiceException {
-        if (date.isBefore(LocalDate.now())) {
+        if (date.isAfter(LocalDate.now())) {
             logger.error("The date ({}) must not be greater than today.", date.toString());
             throw new ServiceException("The date must not be greater than today.");
         } 
