@@ -85,6 +85,19 @@ public class DashboardServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String delete = request.getParameter("selection");
+        String deleteList[] = delete.split(",");
+        for (String id : deleteList) {
+            try {
+                int computerId = Integer.parseInt(id);
+                ComputerService.INSTANCE.deleteComputer(computerId);
+                logger.info("Computer id:{} has been deleted.", computerId);
+            } catch (NumberFormatException e) {
+                logger.info("Don't try to put wrong id please.");
+            } catch (ServiceException e) {
+                logger.error("Error in service execution.");
+            }
+        }
         doGet(request, response);
     }
 }

@@ -6,13 +6,9 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.ComputerDB;
 
 /**
  * @author jirr
@@ -20,7 +16,6 @@ import com.excilys.formation.cdb.persistence.ComputerDB;
  */
 public enum ComputerMapper {
     INSTANCE;
-    private final Logger logger = LoggerFactory.getLogger(ComputerDB.class);
 
     /**
      * @param resultSet ResultSet of a request

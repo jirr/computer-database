@@ -33,20 +33,23 @@ public class EditComputerServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         // TODO Auto-generated method stub
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/editComputer.jsp");
         try {
             request.setAttribute("companyList", CompanyService.INSTANCE.listAllCompany());
-        } catch (ServiceException e) {
+        } catch (final ServiceException e) {
             logger.error("Can't get the company list: {}", e.getMessage(), e);
         }
         try {
             final int computerId = Integer.parseInt(request.getParameter("id"));
-            ComputerDTO computerDTO = ComputerMapper.INSTANCE.computerToDTO(ComputerService.INSTANCE.selectOne(computerId));
+            final ComputerDTO computerDTO = ComputerMapper.INSTANCE
+                    .computerToDTO(ComputerService.INSTANCE.selectOne(computerId));
             request.setAttribute("computer", computerDTO);
         } catch (final NumberFormatException | ServiceException e1) {
             logger.info("No company selected.");
@@ -55,10 +58,12 @@ public class EditComputerServlet extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         final String idStr = request.getParameter("id");
         final String name = request.getParameter("computerName");
         final String introducedStr = request.getParameter("introduced");
@@ -86,12 +91,8 @@ public class EditComputerServlet extends HttpServlet {
             logger.info("Discontinued date was left empty.");
         }
         try {
-            ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name)
-                    .id(Integer.parseInt(idStr))
-                    .dateIntroduced(introduced)
-                    .dateDiscontinued(discontinued)
-                    .manufactor(manufactor)
-                    .build());
+            ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name).id(Integer.parseInt(idStr))
+                    .dateIntroduced(introduced).dateDiscontinued(discontinued).manufactor(manufactor).build());
             logger.info("The computer has been updated to the database with success.");
         } catch (final Exception e) {
             // TODO Auto-generated catch block
