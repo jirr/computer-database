@@ -76,9 +76,7 @@ public class EditComputerServlet extends HttpServlet {
             logger.error("Error in service that get the company.");
         }
         try {
-            logger.info("1. introducedStr: {}", introducedStr);
             introduced = LocalDate.parse(introducedStr);
-            logger.info("2. introduced: {}", introduced.toString());
         } catch (final DateTimeParseException e) {
             logger.info("Introduced date was left empty.");
         }

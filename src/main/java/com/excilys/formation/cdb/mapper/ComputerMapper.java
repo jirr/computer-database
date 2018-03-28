@@ -32,9 +32,7 @@ public enum ComputerMapper {
         String nameComputer = resultSet.getString("cuName");
         Date intro = resultSet.getDate("introduced");
         Date disco = resultSet.getDate("discontinued");
-        logger.info("1. resultSet.getDate : {}", intro);
         LocalDate introducedComputer = intro == null ? null : resultSet.getDate("introduced").toLocalDate();
-        logger.info("2. introducedComputer : {}", introducedComputer);
         LocalDate discontinuedComputer = disco == null ? null : resultSet.getDate("discontinued").toLocalDate();
         Company manufactor = CompanyMapper.INSTANCE.resToCompany(resultSet);
         return new Computer.ComputerBuilder(nameComputer)
