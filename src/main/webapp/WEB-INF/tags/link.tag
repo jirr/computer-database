@@ -5,6 +5,7 @@
 <%@ attribute name="directory" required="false" %>
 <%@ attribute name="size" required="false" %>
 <%@ attribute name="index" required="false" %>
+<%@ attribute name="search" required="false" %>
 <%@ attribute name="computerId" required="false" %>
 
 <c:choose>
@@ -34,6 +35,9 @@
     </c:when>
     <c:when test="${target == 'size'}">
     	<c:url value="/dashboard?size=${size}"/>
+    </c:when>
+    <c:when test="${target == 'search'}">
+    	<c:url value="/dashboard?search=${search}"/>
     </c:when>
     <c:when test="${target == 'editComputer'}">
     	<c:url value="/editComputer?id=${computerId}"/>

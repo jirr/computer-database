@@ -12,9 +12,10 @@ import com.excilys.formation.cdb.service.ServiceException;
 public abstract class Page<T> {
 
     private int size;
-    private int currentPageIndex;
+    protected int currentPageIndex;
     protected int lastPageIndex;
     protected List<T> content = null;
+    protected String keywords = "";
 
     /**
      * @param size Size of the page

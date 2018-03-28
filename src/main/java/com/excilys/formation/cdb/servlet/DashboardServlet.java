@@ -33,6 +33,10 @@ public class DashboardServlet extends HttpServlet {
         ComputerPage page = null;
         try {
             page = new ComputerPage(10);
+            if (!(request.getParameter("search") == null)) {
+                page.setKeywords(request.getParameter("search"));
+                logger.info("Keywords : {}", page.getKeywords());
+            }
             if (!(request.getParameter("size") == null)) {
                 try {
                     int size = Integer.parseInt(request.getParameter("size"));

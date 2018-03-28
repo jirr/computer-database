@@ -69,13 +69,21 @@ public enum ComputerDB {
      * @return List<Computer> The sublist of Computer object from the DB
      * @throws DBException if can't reach the database
      */
-    public List<Computer> subList(int offset, int limit) throws DBException {
+    public List<Computer> subList(int offset, int limit, String keywords) throws DBException {
         List<Computer> computerList = new ArrayList<>();
+        int indiceStatement = (keywords.length() > 0) ? 0 : 2;
+        String like = (keywords.length() > 0) ? " WHERE (cu.Name LIKE '?' or ca.Name LIKE '?')" : "";
+        String request = selectAllRequest + like + " LIMIT ? OFFSET ?;";
         try (Connection conn = ConnexionManager.INSTANCE.getConn();
-                PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
-                ) {
-            preparedStatement.setInt(1, limit);
-            preparedStatement.setInt(2, offset);
+                PreparedStatement preparedStatement = conn.prepareStatement(request);) {
+            if (keywords.length() > 0) {
+                logger.info("Keywords : {}", keywords);
+                logger.info("Requête: {}", request);
+                preparedStatement.setString(1 - indiceStatement, keywords);
+                preparedStatement.setString(2 - indiceStatement, keywords);
+            }
+            preparedStatement.setInt(3 - indiceStatement, limit);
+            preparedStatement.setInt(4 - indiceStatement, offset);
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));

@@ -17,7 +17,6 @@ public class ComputerPage extends Page<Computer> {
 
     public ComputerPage(int size) throws ServiceException {
         super(size);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -34,6 +33,17 @@ public class ComputerPage extends Page<Computer> {
     @Override
     public void setContent(int offset) throws ServiceException {
         // TODO Auto-generated method stub
-        this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize());
+        this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize(), this.getKeywords());
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) throws ServiceException {
+        this.keywords = keywords;
+        this.setContent(this.getOffset());
+        this.setLastPageIndex();
+        super.currentPageIndex = 0;
     }
 }
