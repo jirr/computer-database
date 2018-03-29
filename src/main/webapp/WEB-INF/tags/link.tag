@@ -37,7 +37,7 @@
     	<c:url value="/dashboard?size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'search'}">
-    	<c:url value="/dashboard?search=${search}"/>
+    	<c:url value="/dashboard?size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'editComputer'}">
     	<c:url value="/editComputer?id=${computerId}"/>

@@ -35,7 +35,6 @@ public class DashboardServlet extends HttpServlet {
             page = new ComputerPage(10);
             if (!(request.getParameter("search") == null)) {
                 page.setKeywords(request.getParameter("search"));
-                logger.info("Keywords : {}", page.getKeywords());
             }
             if (!(request.getParameter("size") == null)) {
                 try {
@@ -75,17 +74,14 @@ public class DashboardServlet extends HttpServlet {
         } catch (ServiceException e3) {
             logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }
-        logger.info("NbElement in page.content : {}", page.getContent().size() );
         List<ComputerDTO> computersDTO = new ArrayList<>();
         page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
-        logger.info("NbElement in computerDTO list : {}", computersDTO.size() );
         request.setAttribute("nbComputers", nbComputer);
         request.setAttribute("computer_list", computersDTO);
         request.setAttribute("keywords", page.getKeywords());
         request.setAttribute("maxIndex", page.getLastPageIndex() + 1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex() + 1);
         request.setAttribute("size", page.getSize());
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/dashboard.jsp");
         requestDispatcher.forward(request, response);
     }
