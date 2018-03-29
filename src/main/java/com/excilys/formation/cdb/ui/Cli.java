@@ -52,7 +52,8 @@ public class Cli {
                     + "\t4) Create a computer\n"
                     + "\t5) Update a computer\n"
                     + "\t6) Delete a computer\n"
-                    + "\t7) Stop the application");
+                    + "\t7) Delete a company\n"
+                    + "\t8) Stop the application");
             saisie = scanner.next();
             switch (ActionChoiceCli.getById(saisie)) {
             case LIST_COMPUTER:
@@ -72,6 +73,9 @@ public class Cli {
                 break;
             case DELETE_COMPUTER:
                 deleteComputer(scanner);
+                break;
+            case DELETE_COMPANY:
+                deleteCompany(scanner);
                 break;
             case STOP_APP:
                 return false;
@@ -226,6 +230,21 @@ public class Cli {
         try {
             int id = Integer.parseInt(saisie);
             System.out.println(ComputerService.INSTANCE.deleteComputer(id));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
+     * @param scanner The scanner of the CLI
+     */
+    private void deleteCompany(Scanner scanner) {
+        String saisie;
+        System.out.println("Enter the company id to delete:");
+        saisie = scanner.next();
+        try {
+            int id = Integer.parseInt(saisie);
+            System.out.println(CompanyService.INSTANCE.deleteCompany(id));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

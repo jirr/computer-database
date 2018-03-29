@@ -40,7 +40,6 @@ public enum ComputerDB {
                 PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             ResultSet result = preparedStatement.executeQuery(request);
             result.next();
-            logger.info("Taille : {}", result.getInt(1));
             return result.getInt(1);
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
@@ -171,17 +170,25 @@ public enum ComputerDB {
      */
     public void deleteComputer(int... ids) throws DBException {
         try (Connection connection = ConnexionManager.INSTANCE.getConn();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
-                AutoRollback autoRollbackConnection = new AutoRollback(connection);
-                PreparedStatement preparedStatement = connection.prepareStatement(deleteRequest);) {
-            for (int id : ids) {
-                preparedStatement.setInt(1, id);
-                preparedStatement.executeUpdate();
-            }
+            AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+            AutoRollback autoRollbackConnection = new AutoRollback(connection);) {
+            deleteComputerWithConnection(connection, ids);
             autoRollbackConnection.commit();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
+        }
+    }
+    
+    public void deleteComputerWithConnection(Connection connection, int... ids) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteRequest);) {
+            for (int id : ids) {
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            logger.error("Errors in computers suppresions: {}", e.getMessage(), e);
+            throw e;
         }
     }
 

@@ -27,6 +27,8 @@ public enum CompanyDB {
 
     private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
     private String countAllRequest = "SELECT count(id) FROM company;";
+    private final String deleteCompanyRequest = "DELETE FROM computer WHERE id=?;";
+    private String getLinkedComputersRequest = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
 
     /**
      * @return int number of companies
@@ -75,9 +77,9 @@ public enum CompanyDB {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
             preparedStatement.setInt(1, limit);
             preparedStatement.setInt(2, offset);
-            ResultSet res = preparedStatement.executeQuery();
-            while (res.next()) {
-                computerList.add(CompanyMapper.INSTANCE.resToCompany(res));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                computerList.add(CompanyMapper.INSTANCE.resToCompany(resultSet));
             }
             return computerList;
         } catch (SQLException | ClassNotFoundException | IOException e) {
@@ -97,9 +99,9 @@ public enum CompanyDB {
         try (Connection connection = ConnexionManager.INSTANCE.getConn();
                 PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");) {
             preparedStatement.setInt(1, id);
-            ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                company = CompanyMapper.INSTANCE.resToCompany(result);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                company = CompanyMapper.INSTANCE.resToCompany(resultSet);
             }
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
@@ -107,5 +109,47 @@ public enum CompanyDB {
         }
         logger.info("Connection to database closed.");
         return Optional.ofNullable(company);
+    }
+
+    
+
+    /**
+     * @param id the ID of computer to delete from the DB
+     * @throws DBException if can't reach the database
+     */
+    public void deleteCompany(int id) throws DBException {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoRollback autoRollbackConnection = new AutoRollback(connection);
+                PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ComputerDB.INSTANCE.deleteComputerWithConnection(connection, resultSet.getInt(1));
+            }
+            deleteTheCompany(id);
+            autoRollbackConnection.commit();
+        } catch (SQLException | ClassNotFoundException | IOException e) {
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
+        }
+    }
+
+    /**
+     * @param id the ID of computer to delete from the DB
+     * @throws DBException if can't reach the database
+     */
+    public void deleteTheCompany(int id) throws DBException {
+        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoRollback autoRollbackConnection = new AutoRollback(connection);
+                PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            autoRollbackConnection.commit();
+        } catch (SQLException | ClassNotFoundException | IOException e) {
+            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            throw new DBException("Unable to reach the database.");
+        }
     }
 }

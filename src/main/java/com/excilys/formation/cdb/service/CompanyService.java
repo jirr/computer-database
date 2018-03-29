@@ -59,4 +59,19 @@ public enum CompanyService {
     public Company getCompany(int id) throws ServiceException {
         return Validator.INSTANCE.manufactorValidation(id);
     }
+
+    /**
+     * @param id The id of the computer to delete from the DB
+     * @return String validation test
+     * @throws Exception if the deleting becomes wild
+     */
+    public String deleteCompany(int id) throws ServiceException {
+        Validator.INSTANCE.manufactorValidation(id);
+        try {
+            CompanyDB.INSTANCE.deleteCompany(id);
+        } catch (DBException e) {
+            throw new ServiceException("Problem encounter in database during deletion.");
+        }
+        return "Companny " + id + " removed from database.";
+    }
 }
