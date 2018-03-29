@@ -23,7 +23,7 @@ public class ComputerPage extends Page<Computer> {
     public void setLastPageIndex() throws ServiceException {
         // TODO Auto-generated method stub
         try {
-            this.lastPageIndex = ComputerService.INSTANCE.countAllComputers() / this.getSize();
+            this.lastPageIndex = ComputerService.INSTANCE.countAllComputers(this.getKeywords()) / this.getSize();
         } catch (ServiceException e) {
             logger.error("Can't reach the database {}:", e.getMessage(), e);
             throw new ServiceException("Problem encounter in database.");
@@ -41,7 +41,7 @@ public class ComputerPage extends Page<Computer> {
     }
 
     public void setKeywords(String keywords) throws ServiceException {
-        this.keywords = keywords;
+        super.keywords = keywords;
         this.setContent(this.getOffset());
         this.setLastPageIndex();
         super.currentPageIndex = 0;

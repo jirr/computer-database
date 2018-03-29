@@ -37,9 +37,9 @@ public enum ComputerService {
      * @return int number of companies
      * @throws ServiceException if failure in persistence execution
      */
-    public int countAllComputers() throws ServiceException {
+    public int countAllComputers(String keywords) throws ServiceException {
         try {
-            return ComputerDB.INSTANCE.countAllComputer();
+            return ComputerDB.INSTANCE.countAllComputer(keywords);
         } catch (DBException e) {
             logger.error("Fail in persistence execution: {}", e.getMessage(), e);
             throw new ServiceException("Fail in persistence execution.");

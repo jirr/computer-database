@@ -26,17 +26,21 @@ public enum ComputerDB {
     private final String createRequest = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
     private final String updateRequest = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? ";
     private final String deleteRequest = "DELETE FROM computer WHERE id=?;";
-    private final String countAllRequest = "SELECT count(id) FROM computer;";
+    private final String countAllRequest = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company ON company.id = computer.company_id";
 
     /**
+     * @param keywords The keywords of the search, can be empty
      * @return int number of computers
      * @throws DBException if can't reach the database
      */
-    public int countAllComputer() throws DBException {
+    public int countAllComputer(String keywords) throws DBException {
+        String like = (keywords.length() > 0) ? " WHERE computer.name LIKE '%" + keywords + "%' OR company.name LIKE '%" + keywords + "%'" : "";
+        String request = countAllRequest + like + ";";
         try (Connection connection = ConnexionManager.INSTANCE.getConn();
-                Statement statement = connection.createStatement();
-                ResultSet result = statement.executeQuery(countAllRequest)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(request)) {
+            ResultSet result = preparedStatement.executeQuery(request);
             result.next();
+            logger.info("Taille : {}", result.getInt(1));
             return result.getInt(1);
         } catch (SQLException | ClassNotFoundException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
@@ -66,21 +70,20 @@ public enum ComputerDB {
     /**
      * @param limit index du dernier element
      * @param offset index du premier element
+     * @param keywords The keywords of the search, can be empty
      * @return List<Computer> The sublist of Computer object from the DB
      * @throws DBException if can't reach the database
      */
     public List<Computer> subList(int offset, int limit, String keywords) throws DBException {
         List<Computer> computerList = new ArrayList<>();
         int indiceStatement = (keywords.length() > 0) ? 0 : 2;
-        String like = (keywords.length() > 0) ? " WHERE (cu.Name LIKE '?' or ca.Name LIKE '?')" : "";
+        String like = (keywords.length() > 0) ? " WHERE (cu.name LIKE ? or ca.name LIKE ?)" : "";
         String request = selectAllRequest + like + " LIMIT ? OFFSET ?;";
         try (Connection conn = ConnexionManager.INSTANCE.getConn();
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {
-                logger.info("Keywords : {}", keywords);
-                logger.info("Requête: {}", request);
-                preparedStatement.setString(1 - indiceStatement, keywords);
-                preparedStatement.setString(2 - indiceStatement, keywords);
+                preparedStatement.setString(1 - indiceStatement, "%" + keywords + "%");
+                preparedStatement.setString(2 - indiceStatement, "%" + keywords + "%");
             }
             preparedStatement.setInt(3 - indiceStatement, limit);
             preparedStatement.setInt(4 - indiceStatement, offset);

@@ -45,11 +45,7 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(size): {}", e1.getMessage());
                 }
             }
-            try {
-                nbComputer = ComputerService.INSTANCE.countAllComputers();
-            } catch (ServiceException e) {
-                logger.error("Can't get the computers number: {}", e.getMessage(), e);
-            }
+
             if (!(request.getParameter("next") == null)) {
                 page.nextPage();
             }
@@ -70,15 +66,22 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(index): {}", e1.getMessage());
                 }
             }
+            try {
+                nbComputer = ComputerService.INSTANCE.countAllComputers(page.getKeywords());
+            } catch (ServiceException e) {
+                // TODO Auto-generated catch block
+                logger.error("Problem in service when count: {}", e.getMessage(), e);
+            }
         } catch (ServiceException e3) {
             logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }
-        
+        logger.info("NbElement in page.content : {}", page.getContent().size() );
         List<ComputerDTO> computersDTO = new ArrayList<>();
         page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
-
+        logger.info("NbElement in computerDTO list : {}", computersDTO.size() );
         request.setAttribute("nbComputers", nbComputer);
         request.setAttribute("computer_list", computersDTO);
+        request.setAttribute("keywords", page.getKeywords());
         request.setAttribute("maxIndex", page.getLastPageIndex() + 1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex() + 1);
         request.setAttribute("size", page.getSize());

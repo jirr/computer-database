@@ -99,11 +99,11 @@
             	<tag:pagination />
         	 </ul>
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <a href="<tag:link target='size' size='10'/>" aria-label="Next">
+	            <a href="<tag:link target='size' size='10' search='${keywords}'/>" aria-label="Next">
 	            	<button type="button" class="btn btn-default">10</button></a>
-	            <a href="<tag:link target='size' size='50'/>" aria-label="Next">
+	            <a href="<tag:link target='size' size='50' search='${keywords}'/>" aria-label="Next">
 	            	<button type="button" class="btn btn-default">50</button></a>
-	            <a href="<tag:link target='size' size='100'/>" aria-label="Next">
+	            <a href="<tag:link target='size' size='100' search='${keywords}'/>" aria-label="Next">
 	            	<button type="button" class="btn btn-default">100</button></a>
 	        </div>
         </div>

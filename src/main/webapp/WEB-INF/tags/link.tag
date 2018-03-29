@@ -19,22 +19,22 @@
 		<c:url value="/dashboard"/>
 	</c:when>
     <c:when test="${target == 'dashboardPrev'}">
-    	<c:url value="/dashboard?prev&size=${size}"/>
+    	<c:url value="/dashboard?prev&size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'dashboardNext'}">
-    	<c:url value="/dashboard?next&size=${size}"/>
+    	<c:url value="/dashboard?next&size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'dashboardFirst'}">
-    	<c:url value="/dashboard?first&size=${size}"/>
+    	<c:url value="/dashboard?first&size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'dashboardLast'}">
-    	<c:url value="/dashboard?last&size=${size}"/>
+    	<c:url value="/dashboard?last&size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'dashboardIndex'}">
-    	<c:url value="/dashboard?index=${index}&size=${size}"/>
+    	<c:url value="/dashboard?index=${index}&size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'size'}">
-    	<c:url value="/dashboard?size=${size}"/>
+    	<c:url value="/dashboard?size=${size}&search=${search}"/>
     </c:when>
     <c:when test="${target == 'search'}">
     	<c:url value="/dashboard?search=${search}"/>

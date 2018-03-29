@@ -15,7 +15,7 @@ public abstract class Page<T> {
     protected int currentPageIndex;
     protected int lastPageIndex;
     protected List<T> content = null;
-    protected String keywords = "";
+    protected String keywords;
 
     /**
      * @param size Size of the page
@@ -23,9 +23,10 @@ public abstract class Page<T> {
      */
     public Page(int size) throws ServiceException {
         this.currentPageIndex = 0;
+        this.keywords = "";
         this.size = size;
-        this.setLastPageIndex();
         this.setContent(this.getOffset());
+        this.setLastPageIndex();
     }
 
     public int getCurrentPageIndex() {
@@ -44,7 +45,7 @@ public abstract class Page<T> {
     }
 
     public int getOffset() {
-        int offset = (this.currentPageIndex == 0) ? 1 : this.currentPageIndex * this.size;
+        int offset = (this.currentPageIndex == 0) ? 0 : this.currentPageIndex * this.size;
         return offset;
     }
 
