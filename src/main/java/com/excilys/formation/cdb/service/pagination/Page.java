@@ -69,22 +69,6 @@ public abstract class Page<T> {
         return this.content;
     }
 
-    public List<T> previousPage() throws ServiceException {
-        if (this.currentPageIndex > 0) {
-            this.currentPageIndex--;
-        }
-        this.setContent(this.getOffset());
-        return this.content;
-    }
-
-    public List<T> nextPage() throws ServiceException {
-        if (this.currentPageIndex < this.lastPageIndex) {
-            this.currentPageIndex++;
-        }
-        this.setContent(this.getOffset());
-        return this.content;
-    }
-
     public List<T> firstPage() throws ServiceException {
         this.currentPageIndex = 0;
         this.setContent(this.getOffset());

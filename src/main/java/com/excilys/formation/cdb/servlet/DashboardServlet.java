@@ -44,12 +44,11 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(size): {}", e1.getMessage());
                 }
             }
-
             if (!(request.getParameter("next") == null)) {
-                page.nextPage();
+                page.goToPage(page.getCurrentPageIndex() + 1);
             }
             if (!(request.getParameter("previous") == null)) {
-                page.previousPage();
+                page.goToPage(page.getCurrentPageIndex() - 1);
             }
             if (!(request.getParameter("first") == null)) {
                 page.firstPage();

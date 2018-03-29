@@ -127,10 +127,10 @@ public class Cli {
             System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
             switch (PageChoiceCli.getById(scanner.next())) {
             case NEXT_PAGE:
-                page.nextPage().forEach(System.out::println);
+                page.goToPage(page.getCurrentPageIndex() + 1).forEach(System.out::println);
                 break;
             case PREVIOUS_PAGE:
-                page.previousPage().forEach(System.out::println);
+                page.goToPage(page.getCurrentPageIndex() - 1).forEach(System.out::println);
             case FIRST_PAGE:
                 page.firstPage().forEach(System.out::println);
                 break;
