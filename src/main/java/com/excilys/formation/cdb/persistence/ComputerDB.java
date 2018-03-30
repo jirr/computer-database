@@ -36,12 +36,12 @@ public enum ComputerDB {
     public int countAllComputer(String keywords) throws DBException {
         String like = (keywords.length() > 0) ? " WHERE computer.name LIKE '%" + keywords + "%' OR company.name LIKE '%" + keywords + "%'" : "";
         String request = countAllRequest + like + ";";
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             ResultSet result = preparedStatement.executeQuery(request);
             result.next();
             return result.getInt(1);
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -53,14 +53,14 @@ public enum ComputerDB {
      */
     public List<Computer> listAll() throws DBException {
         List<Computer> computerList = new ArrayList<>();
-        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+        try (Connection conn = DataSource.INSTANCE.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;")) {
             while (result.next()) {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(result));
             }
             return computerList;
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -78,7 +78,7 @@ public enum ComputerDB {
         int indiceStatement = (keywords.length() > 0) ? 0 : 2;
         String like = (keywords.length() > 0) ? " WHERE (cu.name LIKE ? or ca.name LIKE ?)" : "";
         String request = selectAllRequest + like + " LIMIT ? OFFSET ?;";
-        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+        try (Connection conn = DataSource.INSTANCE.getConnection();
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {
                 preparedStatement.setString(1 - indiceStatement, "%" + keywords + "%");
@@ -91,7 +91,7 @@ public enum ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
             return computerList;
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -102,7 +102,7 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public void createComputer(Computer computer) throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
@@ -124,7 +124,7 @@ public enum ComputerDB {
             }
             preparedStatement.executeUpdate();
             autoRollbackConnection.commit();
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -135,7 +135,7 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public void updateComputer(Computer computer) throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
@@ -158,7 +158,7 @@ public enum ComputerDB {
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
             autoRollbackConnection.commit();
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -169,12 +169,12 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public void deleteComputer(int... ids) throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
             AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
             AutoRollback autoRollbackConnection = new AutoRollback(connection);) {
             deleteComputerWithConnection(connection, ids);
             autoRollbackConnection.commit();
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -198,7 +198,7 @@ public enum ComputerDB {
      * @throws DBException if can't reach the database
      */
     public Optional<Computer> selectOne(int id) throws DBException {
-        try (Connection conn = ConnexionManager.INSTANCE.getConn();
+        try (Connection conn = DataSource.INSTANCE.getConnection();
                 PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");) {
             ps.setInt(1, id);
             ResultSet res = ps.executeQuery();
@@ -207,7 +207,7 @@ public enum ComputerDB {
                 computer = ComputerMapper.INSTANCE.resToComputer(res);
             }
             return Optional.ofNullable(computer);
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }

@@ -36,11 +36,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="<c:out value="${computer.dateIntroduced}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced Date" value="<c:out value="${computer.dateIntroduced}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="<c:out value="${computer.dateDiscontinued}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued Date" value="<c:out value="${computer.dateDiscontinued}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>

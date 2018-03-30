@@ -35,12 +35,12 @@ public enum CompanyDB {
      * @throws DBException if can't reach the database
      */
     public int countAllCompany() throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(countAllRequest);) {
             result.next();
             return result.getInt(1);
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -52,14 +52,14 @@ public enum CompanyDB {
      */
     public List<Company> list() throws DBException {
         List<Company> companyList = new ArrayList<>();
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;");) {
             while (result.next()) {
                 companyList.add(CompanyMapper.INSTANCE.resToCompany(result));
             }
             return companyList;
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -73,7 +73,7 @@ public enum CompanyDB {
      */
     public List<Company> subList(int offset, int limit) throws DBException {
         List<Company> computerList = new ArrayList<>();
-        try (Connection conn = ConnexionManager.INSTANCE.getConn()) {
+        try (Connection conn = DataSource.INSTANCE.getConnection();) {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
             preparedStatement.setInt(1, limit);
             preparedStatement.setInt(2, offset);
@@ -82,7 +82,7 @@ public enum CompanyDB {
                 computerList.add(CompanyMapper.INSTANCE.resToCompany(resultSet));
             }
             return computerList;
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -96,14 +96,14 @@ public enum CompanyDB {
     public Optional<Company> selectOne(int id) throws DBException {
         Company company = null;
         logger.info("Connection to database opening.");
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 company = CompanyMapper.INSTANCE.resToCompany(resultSet);
             }
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -111,14 +111,12 @@ public enum CompanyDB {
         return Optional.ofNullable(company);
     }
 
-    
-
     /**
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
     public void deleteCompany(int id) throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
@@ -129,7 +127,7 @@ public enum CompanyDB {
             }
             deleteTheCompany(id);
             autoRollbackConnection.commit();
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -140,14 +138,14 @@ public enum CompanyDB {
      * @throws DBException if can't reach the database
      */
     public void deleteTheCompany(int id) throws DBException {
-        try (Connection connection = ConnexionManager.INSTANCE.getConn();
+        try (Connection connection = DataSource.INSTANCE.getConnection();
                 AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             autoRollbackConnection.commit();
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
