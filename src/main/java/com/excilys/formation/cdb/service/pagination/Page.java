@@ -19,7 +19,7 @@ public abstract class Page<T> {
 
     /**
      * @param size Size of the page
-     * @throws ServiceException 
+     * @throws ServiceException propagation of the exception
      */
     public Page(int size) throws ServiceException {
         this.currentPageIndex = 0;

@@ -19,14 +19,10 @@ public class Cli {
      * @param args the arguments
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         Cli cli = new Cli();
         cli.applicationLoop();
     }
 
-    /**
-     *
-     */
     private void applicationLoop() {
         boolean loop = true;
         Scanner scanner = new Scanner(System.in);
@@ -96,7 +92,7 @@ public class Cli {
         try {
             ComputerPage page = new ComputerPage(PAGE_SIZE);
             paginationChoices(scanner, page);
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
@@ -109,7 +105,7 @@ public class Cli {
         try {
             CompanyPage page = new CompanyPage(PAGE_SIZE);
             paginationChoices(scanner, page);
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }

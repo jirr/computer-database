@@ -103,7 +103,7 @@ public enum ComputerDB {
      */
     public void createComputer(Computer computer) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
             preparedStatement.setString(1, computer.getName());
@@ -136,7 +136,7 @@ public enum ComputerDB {
      */
     public void updateComputer(Computer computer) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
@@ -165,12 +165,12 @@ public enum ComputerDB {
     }
 
     /**
-     * @param id the ID of computer to delete from the DB
+     * @param ids the IDs of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
     public void deleteComputer(int... ids) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-            AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+            AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
             AutoRollback autoRollbackConnection = new AutoRollback(connection);) {
             deleteComputerWithConnection(connection, ids);
             autoRollbackConnection.commit();
@@ -179,7 +179,12 @@ public enum ComputerDB {
             throw new DBException("Unable to reach the database.");
         }
     }
-    
+
+    /**
+     * @param connection the connection
+     * @param ids IDs of computers to delete
+     * @throws SQLException if problem in database.
+     */
     public void deleteComputerWithConnection(Connection connection, int... ids) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteRequest);) {
             for (int id : ids) {

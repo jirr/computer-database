@@ -9,7 +9,7 @@ public class AutoRollback implements AutoCloseable {
     private boolean committed;
 
     public AutoRollback(Connection connection) throws SQLException {
-        this.connection = connection;        
+        this.connection = connection;
     }
 
     public void commit() throws SQLException {
@@ -19,7 +19,7 @@ public class AutoRollback implements AutoCloseable {
 
     @Override
     public void close() throws SQLException {
-        if(!committed) {
+        if (!committed) {
             connection.rollback();
         }
     }

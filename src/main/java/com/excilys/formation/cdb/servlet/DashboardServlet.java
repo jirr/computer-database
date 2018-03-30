@@ -85,10 +85,9 @@ public class DashboardServlet extends HttpServlet {
         requestDispatcher.forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String delete = request.getParameter("selection");
-        String deleteList[] = delete.split(",");
+        String[] deleteList = delete.split(",");
         for (String id : deleteList) {
             try {
                 int computerId = Integer.parseInt(id);

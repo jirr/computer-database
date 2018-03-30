@@ -12,7 +12,7 @@ import com.excilys.formation.cdb.service.ServiceException;
  *
  */
 public class ComputerPage extends Page<Computer> {
-    
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     public ComputerPage(int size) throws ServiceException {
@@ -21,7 +21,6 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setLastPageIndex() throws ServiceException {
-        // TODO Auto-generated method stub
         try {
             this.lastPageIndex = ComputerService.INSTANCE.countAllComputers(this.getKeywords()) / this.getSize();
         } catch (ServiceException e) {
@@ -32,7 +31,6 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setContent(int offset) throws ServiceException {
-        // TODO Auto-generated method stub
         this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize(), this.getKeywords());
     }
 

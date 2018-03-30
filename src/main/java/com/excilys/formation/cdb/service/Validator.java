@@ -17,9 +17,9 @@ public enum Validator {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     /**
-     * @param d1 first date to compare
-     * @param d2 second date to compare
-     * @throws Exception if the first date is after the second
+     * @param date1 first date to compare
+     * @param date2 second date to compare
+     * @throws ServiceException if the first date is after the second
      */
     protected void datesCompatibilityValidation(LocalDate date1, LocalDate date2) throws ServiceException {
         if (date2.isBefore(date1)) {
@@ -30,13 +30,13 @@ public enum Validator {
 
     /**
      * @param date date to check
-     * @throws Exception if the date is after today or before the Altair 8800
+     * @throws ServiceException if the date is after today or before the Altair 8800
      */
     protected void dateValidation(LocalDate date) throws ServiceException {
         if (date.isAfter(LocalDate.now())) {
             logger.error("The date ({}) must not be greater than today.", date.toString());
             throw new ServiceException("The date must not be greater than today.");
-        } 
+        }
         if (date.isBefore(LocalDate.of(1975, 01, 01))) {
             logger.error("The date ({}) must not be before 01/01/1975.", date.toString());
             throw new ServiceException("The computer can't be a Turing machine!");
@@ -45,7 +45,7 @@ public enum Validator {
 
     /**
      * @param name String to check
-     * @throws Exception if there is not a least one char
+     * @throws ServiceException if there is not a least one char
      */
     protected void nameValidation(String name) throws ServiceException {
         if (name.compareTo("") == 0) {
@@ -57,7 +57,7 @@ public enum Validator {
     /**
      * @param id The id to check
      * @return Computer The computer object with the id
-     * @throws Exception if the id does not exist
+     * @throws ServiceException if the id does not exist
      */
     protected Computer computerIdValidation(int id) throws ServiceException {
         try {
@@ -76,7 +76,7 @@ public enum Validator {
     /**
      * @param id The id to check
      * @return Company The company object with the id
-     * @throws Exception if the id does no exist
+     * @throws ServiceException if the id does no exist
      */
     protected Company manufactorValidation(int id) throws ServiceException {
         try {

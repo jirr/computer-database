@@ -117,7 +117,7 @@ public enum CompanyDB {
      */
     public void deleteCompany(int id) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
             preparedStatement.setInt(1, id);
@@ -139,7 +139,7 @@ public enum CompanyDB {
      */
     public void deleteTheCompany(int id) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection,false);
+                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
                 AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
             preparedStatement.setInt(1, id);

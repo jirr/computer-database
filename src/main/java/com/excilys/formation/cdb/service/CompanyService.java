@@ -54,7 +54,7 @@ public enum CompanyService {
     /**
      * @param id The id of company
      * @return Company with the right id
-     * @throws Exception if the id does not exist
+     * @throws ServiceException if the id does not exist
      */
     public Company getCompany(int id) throws ServiceException {
         return Validator.INSTANCE.manufactorValidation(id);
@@ -63,7 +63,7 @@ public enum CompanyService {
     /**
      * @param id The id of the computer to delete from the DB
      * @return String validation test
-     * @throws Exception if the deleting becomes wild
+     * @throws ServiceException if the deleting becomes wild
      */
     public String deleteCompany(int id) throws ServiceException {
         Validator.INSTANCE.manufactorValidation(id);
