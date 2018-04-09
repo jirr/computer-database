@@ -16,6 +16,8 @@ public abstract class Page<T> {
     protected int lastPageIndex;
     protected List<T> content = null;
     protected String keywords;
+    protected String sortBy;
+    protected boolean asc = true;
 
     /**
      * @param size Size of the page
@@ -24,6 +26,7 @@ public abstract class Page<T> {
     public Page(int size) throws ServiceException {
         this.currentPageIndex = 0;
         this.keywords = "";
+        this.sortBy = "";
         this.size = size;
         this.setContent(this.getOffset());
         this.setLastPageIndex();
@@ -42,6 +45,24 @@ public abstract class Page<T> {
         this.setContent(this.getOffset());
         this.setLastPageIndex();
         this.currentPageIndex = 0;
+    }
+    
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) throws ServiceException {
+        this.sortBy = sortBy;
+        this.setContent(this.getOffset());
+        this.setLastPageIndex();
+    }
+
+    public boolean isAsc() {
+        return asc;
+    }
+
+    public void setAsc(boolean asc) {
+        this.asc = asc;
     }
 
     public int getOffset() {

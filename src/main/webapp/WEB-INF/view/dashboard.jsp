@@ -58,18 +58,26 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                        	<a href="<tag:link target='sortBy' colum_name='cuName' asc="${sortBy == 'cuName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Computer name
+                            </a>
                         </th>
                         <th>
-                            Introduced date
+                            <a href="<tag:link target='sortBy' colum_name='introduced' asc="${sortBy == 'introduced' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Introduced date
+                            </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <a href="<tag:link target='sortBy' colum_name='discontinued' asc="${sortBy == 'discontinued' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Discontinued date
+                            </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                        	<a href="<tag:link target='sortBy' colum_name='caName' asc="${sortBy == 'caName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Company
+                            </a>
                         </th>
                     </tr>
                 </thead>

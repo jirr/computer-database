@@ -44,6 +44,12 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(size): {}", e1.getMessage());
                 }
             }
+            if (!(request.getParameter("colum_name") == null)) {
+                page.setSortBy(request.getParameter("colum_name"));
+            }
+            if (!(request.getParameter("asc") == null)) {
+                page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
+            }
             if (!(request.getParameter("next") == null)) {
                 page.goToPage(page.getCurrentPageIndex() + 1);
             }
@@ -64,6 +70,13 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(index): {}", e1.getMessage());
                 }
             }
+            if (!(request.getParameter("sort") == null)) {
+                page.setSortBy(request.getParameter("sort"));
+                logger.error("Page get sort: {}", page.getSortBy());
+            }
+            if (!(request.getParameter("asc") == null)) {
+                page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
+            }
             try {
                 nbComputer = ComputerService.INSTANCE.countAllComputers(page.getKeywords());
             } catch (ServiceException e) {
@@ -80,6 +93,8 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("keywords", page.getKeywords());
         request.setAttribute("maxIndex", page.getLastPageIndex() + 1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex() + 1);
+        request.setAttribute("sortBy", page.getSortBy());
+        request.setAttribute("asc", page.isAsc());
         request.setAttribute("size", page.getSize());
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/dashboard.jsp");
         requestDispatcher.forward(request, response);

@@ -24,9 +24,9 @@ public enum ComputerService {
      * @return List<Computer> the sublist (page) of computers
      * @throws ServiceException if failure in persistence execution
      */
-    public List<Computer> subListComputer(int offset, int numberToDisplay, String keywords) throws ServiceException {
+    public List<Computer> subListComputer(int offset, int numberToDisplay, String keywords, String sortBy, boolean asc) throws ServiceException {
         try {
-            return ComputerDB.INSTANCE.subList(offset, numberToDisplay, keywords);
+            return ComputerDB.INSTANCE.subList(offset, numberToDisplay, keywords, sortBy, asc);
         } catch (DBException e) {
             logger.error("Fail in persistence execution: {}", e.getMessage(), e);
             throw new ServiceException("Fail in persistence execution.");

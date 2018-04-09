@@ -6,6 +6,8 @@
 <%@ attribute name="size" required="false" %>
 <%@ attribute name="index" required="false" %>
 <%@ attribute name="search" required="false" %>
+<%@ attribute name="colum_name" required="false" %>
+<%@ attribute name="asc" required="false" %>
 <%@ attribute name="computerId" required="false" %>
 
 <c:choose>
@@ -19,25 +21,28 @@
 		<c:url value="/dashboard"/>
 	</c:when>
     <c:when test="${target == 'dashboardPrev'}">
-    	<c:url value="/dashboard?prev&size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?prev&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardNext'}">
-    	<c:url value="/dashboard?next&size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?next&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardFirst'}">
-    	<c:url value="/dashboard?first&size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?first&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardLast'}">
-    	<c:url value="/dashboard?last&size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?last&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardIndex'}">
-    	<c:url value="/dashboard?index=${index}&size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?index=${index}&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'size'}">
-    	<c:url value="/dashboard?size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    </c:when>
+    <c:when test="${target == 'sortBy'}">
+    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'search'}">
-    	<c:url value="/dashboard?size=${size}&search=${search}"/>
+    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'editComputer'}">
     	<c:url value="/editComputer?id=${computerId}"/>

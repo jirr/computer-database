@@ -73,11 +73,18 @@ public enum ComputerDB {
      * @return List<Computer> The sublist of Computer object from the DB
      * @throws DBException if can't reach the database
      */
-    public List<Computer> subList(int offset, int limit, String keywords) throws DBException {
+    public List<Computer> subList(int offset, int limit, String keywords, String sortBy, boolean asc) throws DBException {
         List<Computer> computerList = new ArrayList<>();
         int indiceStatement = (keywords.length() > 0) ? 0 : 2;
         String like = (keywords.length() > 0) ? " WHERE (cu.name LIKE ? or ca.name LIKE ?)" : "";
-        String request = selectAllRequest + like + " LIMIT ? OFFSET ?;";
+        String sort = "";
+        if (sortBy.length() > 0) {
+            sort += " ORDER BY " + sortBy;
+            sort += asc ? " ASC" : " DESC";
+            logger.error("Sort: {}", sort);
+        }
+        String request = selectAllRequest + like + sort + " LIMIT ? OFFSET ?;";
+        logger.error("Request : {}", request);
         try (Connection conn = DataSource.INSTANCE.getConnection();
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {

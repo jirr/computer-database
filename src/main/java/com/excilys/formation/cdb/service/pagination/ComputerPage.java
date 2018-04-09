@@ -31,7 +31,7 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setContent(int offset) throws ServiceException {
-        this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize(), this.getKeywords());
+        this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize(), this.getKeywords(), this.getSortBy(), this.isAsc());
     }
 
     public String getKeywords() {
