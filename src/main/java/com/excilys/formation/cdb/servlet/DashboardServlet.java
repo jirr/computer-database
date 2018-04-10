@@ -44,23 +44,8 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(size): {}", e1.getMessage());
                 }
             }
-            if (!(request.getParameter("colum_name") == null)) {
-                page.setSortBy(request.getParameter("colum_name"));
-            }
             if (!(request.getParameter("asc") == null)) {
                 page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
-            }
-            if (!(request.getParameter("next") == null)) {
-                page.goToPage(page.getCurrentPageIndex() + 1);
-            }
-            if (!(request.getParameter("previous") == null)) {
-                page.goToPage(page.getCurrentPageIndex() - 1);
-            }
-            if (!(request.getParameter("first") == null)) {
-                page.firstPage();
-            }
-            if (!(request.getParameter("last") == null)) {
-                page.lastPage();
             }
             if (!(request.getParameter("index") == null)) {
                 try {
