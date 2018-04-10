@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.service.CompanyPage;
 import com.excilys.formation.cdb.service.CompanyService;
-import com.excilys.formation.cdb.service.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
-import com.excilys.formation.cdb.service.Page;
+import com.excilys.formation.cdb.service.ServiceException;
+import com.excilys.formation.cdb.service.pagination.CompanyPage;
+import com.excilys.formation.cdb.service.pagination.ComputerPage;
+import com.excilys.formation.cdb.service.pagination.Page;
 
 public class Cli {
     private static final int PAGE_SIZE = 50;
@@ -18,14 +19,10 @@ public class Cli {
      * @param args the arguments
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         Cli cli = new Cli();
         cli.applicationLoop();
     }
 
-    /**
-     *
-     */
     private void applicationLoop() {
         boolean loop = true;
         Scanner scanner = new Scanner(System.in);
@@ -51,7 +48,8 @@ public class Cli {
                     + "\t4) Create a computer\n"
                     + "\t5) Update a computer\n"
                     + "\t6) Delete a computer\n"
-                    + "\t7) Stop the application");
+                    + "\t7) Delete a company\n"
+                    + "\t8) Stop the application");
             saisie = scanner.next();
             switch (ActionChoiceCli.getById(saisie)) {
             case LIST_COMPUTER:
@@ -72,6 +70,9 @@ public class Cli {
             case DELETE_COMPUTER:
                 deleteComputer(scanner);
                 break;
+            case DELETE_COMPANY:
+                deleteCompany(scanner);
+                break;
             case STOP_APP:
                 return false;
             case DEFAULT:
@@ -88,8 +89,12 @@ public class Cli {
      */
     private void listComputer(Scanner scanner) {
         System.out.println("Computers list: \n");
-        ComputerPage page = new ComputerPage(PAGE_SIZE);
-        paginationChoices(scanner, page);
+        try {
+            ComputerPage page = new ComputerPage(PAGE_SIZE);
+            paginationChoices(scanner, page);
+        } catch (ServiceException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -97,26 +102,31 @@ public class Cli {
      */
     private void listCompany(Scanner scanner) {
         System.out.println("Companies list: \n");
-        CompanyPage page = new CompanyPage(PAGE_SIZE);
-        paginationChoices(scanner, page);
+        try {
+            CompanyPage page = new CompanyPage(PAGE_SIZE);
+            paginationChoices(scanner, page);
+        } catch (ServiceException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     /**
      * @param scanner The scanner of the CLI
      * @param page The computer or company Page
      * @param <T> Computer or Company
+     * @throws ServiceException if problem with pagination service
      */
-    private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) {
+    private <T extends Page<?>> void paginationChoices(Scanner scanner, final T page) throws ServiceException {
         boolean nextPage = true;
         page.getContent().forEach(System.out::println);
         while (nextPage) {
             System.out.println("First(f) Next(n) Previous(p) Last(l) Quit(q) ?");
             switch (PageChoiceCli.getById(scanner.next())) {
             case NEXT_PAGE:
-                page.nextPage().forEach(System.out::println);
+                page.goToPage(page.getCurrentPageIndex() + 1).forEach(System.out::println);
                 break;
             case PREVIOUS_PAGE:
-                page.previousPage().forEach(System.out::println);
+                page.goToPage(page.getCurrentPageIndex() - 1).forEach(System.out::println);
             case FIRST_PAGE:
                 page.firstPage().forEach(System.out::println);
                 break;
@@ -216,6 +226,21 @@ public class Cli {
         try {
             int id = Integer.parseInt(saisie);
             System.out.println(ComputerService.INSTANCE.deleteComputer(id));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
+     * @param scanner The scanner of the CLI
+     */
+    private void deleteCompany(Scanner scanner) {
+        String saisie;
+        System.out.println("Enter the company id to delete:");
+        saisie = scanner.next();
+        try {
+            int id = Integer.parseInt(saisie);
+            System.out.println(CompanyService.INSTANCE.deleteCompany(id));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

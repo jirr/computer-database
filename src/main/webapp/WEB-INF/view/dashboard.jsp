@@ -1,8 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -28,16 +26,14 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
-                        class="btn btn-primary" />
+                    <form id="searchForm" action="" method="GET" class="form-inline">
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value='<c:out value="${search}"/>' />
+                        <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="<tag:link target='addComputer'/>">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Delete</a>
                 </div>
             </div>
         </div>
@@ -62,18 +58,26 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                        	<a href="<tag:link target='sortBy' colum_name='cuName' asc="${sortBy == 'cuName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Computer name
+                            </a>
                         </th>
                         <th>
-                            Introduced date
+                            <a href="<tag:link target='sortBy' colum_name='introduced' asc="${sortBy == 'introduced' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Introduced date
+                            </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <a href="<tag:link target='sortBy' colum_name='discontinued' asc="${sortBy == 'discontinued' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Discontinued date
+                            </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                        	<a href="<tag:link target='sortBy' colum_name='caName' asc="${sortBy == 'caName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            	Company
+                            </a>
                         </th>
                     </tr>
                 </thead>
@@ -82,10 +86,10 @@
                 <c:forEach var="computer" items="${computer_list}">
                     <tr>
                         <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
+                            <input type="checkbox" name="cb" class="cb" value="${computer.id}">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick=""><c:out value="${computer.name}" /></a>
+                            <a href="<tag:link target='editComputer' computerId='${computer.id}'/>" onclick=""><c:out value="${computer.name}" /></a>
                         </td>
                         <td><c:out value="${computer.dateIntroduced}" /></td>
                         <td><c:out value="${computer.dateDiscontinued}" /></td>
@@ -102,15 +106,12 @@
             	<tag:pagination />
         	 </ul>
 	        <div class="btn-group btn-group-sm pull-right" role="group" >
-	            <a href="<tag:link target='size' number='10'/>" aria-label="Next">
-	            	<button type="button" class="btn btn-default">10</button>
-	            </a>
-	            <a href="<tag:link target='size' number='50'/>" aria-label="Next">
-	            	<button type="button" class="btn btn-default">50</button>
-	            </a>
-	            <a href="<tag:link target='size' number='100'/>" aria-label="Next">
-	            	<button type="button" class="btn btn-default">100</button>
-	            </a>
+	            <a href="<tag:link target='size' size='10' search='${keywords}'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">10</button></a>
+	            <a href="<tag:link target='size' size='50' search='${keywords}'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">50</button></a>
+	            <a href="<tag:link target='size' size='100' search='${keywords}'/>" aria-label="Next">
+	            	<button type="button" class="btn btn-default">100</button></a>
 	        </div>
         </div>
     </footer>

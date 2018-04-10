@@ -16,8 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.service.ComputerPage;
 import com.excilys.formation.cdb.service.ComputerService;
+import com.excilys.formation.cdb.service.ServiceException;
+import com.excilys.formation.cdb.service.pagination.ComputerPage;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -25,54 +26,94 @@ public class DashboardServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     private static final long serialVersionUID = 2741128895945909738L;
-    private ComputerPage page = new ComputerPage(10);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int nbComputer = ComputerService.INSTANCE.countAllComputers();
-        if (!(request.getParameter("next") == null)) {
-            page.nextPage();
-        }
-        if (!(request.getParameter("previous") == null)) {
-            page.previousPage();
-        }
-        if (!(request.getParameter("first") == null)) {
-            page.firstPage();
-        }
-        if (!(request.getParameter("last") == null)) {
-            page.lastPage();
-        }
-        if (!(request.getParameter("index") == null)) {
-            try {
-                int index = Integer.parseInt(request.getParameter("index"));
-                page.goToPage(index - 1);
-            } catch (NumberFormatException e1) {
-                logger.error("Not a number(index):" + e1.getMessage());
+        int nbComputer = -1;
+        ComputerPage page = null;
+        try {
+            page = new ComputerPage(10);
+            if (!(request.getParameter("search") == null)) {
+                page.setKeywords(request.getParameter("search"));
             }
-        }
-        if (!(request.getParameter("size") == null)) {
-            try {
-                int size = Integer.parseInt(request.getParameter("size"));
-                page.setSize(size);
-            } catch (NumberFormatException e1) {
-                logger.error("Not a number(size):" + e1.getMessage());
+            if (!(request.getParameter("size") == null)) {
+                try {
+                    int size = Integer.parseInt(request.getParameter("size"));
+                    page.setSize(size);
+                } catch (NumberFormatException e1) {
+                    logger.error("Not a number(size): {}", e1.getMessage());
+                }
             }
+            if (!(request.getParameter("colum_name") == null)) {
+                page.setSortBy(request.getParameter("colum_name"));
+            }
+            if (!(request.getParameter("asc") == null)) {
+                page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
+            }
+            if (!(request.getParameter("next") == null)) {
+                page.goToPage(page.getCurrentPageIndex() + 1);
+            }
+            if (!(request.getParameter("previous") == null)) {
+                page.goToPage(page.getCurrentPageIndex() - 1);
+            }
+            if (!(request.getParameter("first") == null)) {
+                page.firstPage();
+            }
+            if (!(request.getParameter("last") == null)) {
+                page.lastPage();
+            }
+            if (!(request.getParameter("index") == null)) {
+                try {
+                    int index = Integer.parseInt(request.getParameter("index"));
+                    page.goToPage(index - 1);
+                } catch (NumberFormatException e1) {
+                    logger.error("Not a number(index): {}", e1.getMessage());
+                }
+            }
+            if (!(request.getParameter("sort") == null)) {
+                page.setSortBy(request.getParameter("sort"));
+                logger.error("Page get sort: {}", page.getSortBy());
+            }
+            if (!(request.getParameter("asc") == null)) {
+                page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
+            }
+            try {
+                nbComputer = ComputerService.INSTANCE.countAllComputers(page.getKeywords());
+            } catch (ServiceException e) {
+                // TODO Auto-generated catch block
+                logger.error("Problem in service when count: {}", e.getMessage(), e);
+            }
+        } catch (ServiceException e3) {
+            logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }
         List<ComputerDTO> computersDTO = new ArrayList<>();
         page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
-
         request.setAttribute("nbComputers", nbComputer);
         request.setAttribute("computer_list", computersDTO);
+        request.setAttribute("keywords", page.getKeywords());
         request.setAttribute("maxIndex", page.getLastPageIndex() + 1);
         request.setAttribute("currentIndex", page.getCurrentPageIndex() + 1);
+        request.setAttribute("sortBy", page.getSortBy());
+        request.setAttribute("asc", page.isAsc());
         request.setAttribute("size", page.getSize());
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/dashboard.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String delete = request.getParameter("selection");
+        String[] deleteList = delete.split(",");
+        for (String id : deleteList) {
+            try {
+                int computerId = Integer.parseInt(id);
+                ComputerService.INSTANCE.deleteComputer(computerId);
+                logger.info("Computer id:{} has been deleted.", computerId);
+            } catch (NumberFormatException e) {
+                logger.info("Don't try to put wrong id please.");
+            } catch (ServiceException e) {
+                logger.error("Error in service execution.");
+            }
+        }
         doGet(request, response);
     }
 }

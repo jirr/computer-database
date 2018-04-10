@@ -1,6 +1,8 @@
-package com.excilys.formation.cdb.service;
+package com.excilys.formation.cdb.service.pagination;
 
 import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.service.CompanyService;
+import com.excilys.formation.cdb.service.ServiceException;
 
 /**
  * @author jirr
@@ -8,20 +10,17 @@ import com.excilys.formation.cdb.model.Company;
  */
 public class CompanyPage extends Page<Company> {
 
-    public CompanyPage(int size) {
+    public CompanyPage(int size) throws ServiceException {
         super(size);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void setLastPageIndex() {
-        // TODO Auto-generated method stub
+    public void setLastPageIndex() throws ServiceException {
         this.lastPageIndex = (CompanyService.INSTANCE.countAllCompanies() / this.getSize());
     }
 
     @Override
-    public void setContent(int offset) {
-        // TODO Auto-generated method stub
+    public void setContent(int offset) throws ServiceException {
         this.content = CompanyService.INSTANCE.subListCompany(this.getOffset(), this.getSize());
     }
 }

@@ -16,6 +16,7 @@ import com.excilys.formation.cdb.model.Computer;
  */
 public enum ComputerMapper {
     INSTANCE;
+
     /**
      * @param resultSet ResultSet of a request
      * @return Computer the BD object convert in java object
@@ -46,7 +47,8 @@ public enum ComputerMapper {
                                 .id(computer.getId())
                                 .dateIntroduced(optionalDateToString(computer.getDateIntroduced()))
                                 .dateDiscontinued(optionalDateToString(computer.getDateDiscontinued()))
-                                .manufactorName(optionalCompanyToString(computer.getManufactor()))
+                                .manufactorId(optionalCompanyToId(computer.getManufactor()))
+                                .manufactorName(optionalCompanyToName(computer.getManufactor()))
                                 .build();
     }
 
@@ -66,11 +68,23 @@ public enum ComputerMapper {
      * @param company The Optional<Company> to check and convert to string
      * @return String The string version of LocalDate
      */
-    private String optionalCompanyToString(Optional<Company> company) {
+    private String optionalCompanyToName(Optional<Company> company) {
         if (company.isPresent()) {
             return company.get().getName();
         } else {
             return "";
+        }
+    }
+
+    /**
+     * @param company The Optional<Company> to check and convert to string
+     * @return String The string version of LocalDate
+     */
+    private int optionalCompanyToId(Optional<Company> company) {
+        if (company.isPresent()) {
+            return company.get().getId();
+        } else {
+            return -1;
         }
     }
 }
