@@ -4,5 +4,6 @@
   <welcome-file-list>
     <welcome-file>dashboard.jsp</welcome-file>
     <welcome-file>addComputer.jsp</welcome-file>
+    <welcome-file>editComputer.jsp</welcome-file>
   </welcome-file-list>
 </web-app>
