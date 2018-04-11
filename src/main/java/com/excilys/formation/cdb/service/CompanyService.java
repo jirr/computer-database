@@ -2,6 +2,9 @@ package com.excilys.formation.cdb.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.DBException;
@@ -10,8 +13,14 @@ import com.excilys.formation.cdb.persistence.DBException;
  * @author jirr
  *
  */
-public enum CompanyService {
-    INSTANCE;
+@Service
+public class CompanyService {
+    
+    @Autowired
+    private CompanyDB companyDB;
+
+    @Autowired
+    private Validator validator;
 
     /**
      * @param offset index of the first element
@@ -21,7 +30,7 @@ public enum CompanyService {
      */
     public List<Company> subListCompany(int offset, int numberToDisplay) throws ServiceException {
         try {
-            return CompanyDB.INSTANCE.subList(offset, numberToDisplay);
+            return companyDB.subList(offset, numberToDisplay);
         } catch (DBException e) {
             throw new ServiceException("Fail in persistence execution.");
         }
@@ -33,7 +42,7 @@ public enum CompanyService {
      */
     public List<Company> listAllCompany() throws ServiceException {
         try {
-            return CompanyDB.INSTANCE.list();
+            return companyDB.list();
         } catch (DBException e) {
             throw new ServiceException("Fail in persistence execution.");
         }
@@ -45,7 +54,7 @@ public enum CompanyService {
      */
     public int countAllCompanies() throws ServiceException {
         try {
-            return CompanyDB.INSTANCE.countAllCompany();
+            return companyDB.countAllCompany();
         } catch (DBException e) {
             throw new ServiceException("Fail in persistence execution.");
         }
@@ -57,7 +66,7 @@ public enum CompanyService {
      * @throws ServiceException if the id does not exist
      */
     public Company getCompany(int id) throws ServiceException {
-        return Validator.INSTANCE.manufactorValidation(id);
+        return validator.manufactorValidation(id);
     }
 
     /**
@@ -66,9 +75,9 @@ public enum CompanyService {
      * @throws ServiceException if the deleting becomes wild
      */
     public String deleteCompany(int id) throws ServiceException {
-        Validator.INSTANCE.manufactorValidation(id);
+        validator.manufactorValidation(id);
         try {
-            CompanyDB.INSTANCE.deleteCompany(id);
+            companyDB.deleteCompany(id);
         } catch (DBException e) {
             throw new ServiceException("Problem encounter in database during deletion.");
         }

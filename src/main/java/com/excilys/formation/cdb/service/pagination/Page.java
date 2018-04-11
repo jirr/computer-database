@@ -28,8 +28,6 @@ public abstract class Page<T> {
         this.keywords = "";
         this.sortBy = "";
         this.size = size;
-        this.setContent(this.getOffset());
-        this.setLastPageIndex();
     }
 
     public int getCurrentPageIndex() {

@@ -12,6 +12,9 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.CompanyMapper;
 import com.excilys.formation.cdb.model.Company;
@@ -20,8 +23,11 @@ import com.excilys.formation.cdb.model.Company;
  * @author jirr
  *
  */
-public enum CompanyDB {
-    INSTANCE;
+@Repository
+public class CompanyDB {
+
+    @Autowired
+    private ComputerDB computerDB;
 
     private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
 
@@ -115,18 +121,16 @@ public enum CompanyDB {
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
+    @Transactional
     public void deleteCompany(int id) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
-                AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                ComputerDB.INSTANCE.deleteComputerWithConnection(connection, resultSet.getInt(1));
+                computerDB.deleteComputerWithConnection(connection, resultSet.getInt(1));
             }
-            deleteTheCompany(id);
-            autoRollbackConnection.commit();
+            deleteTheCompany(id, connection);
         } catch (SQLException | IOException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
@@ -137,15 +141,12 @@ public enum CompanyDB {
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
-    public void deleteTheCompany(int id) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
-                AutoRollback autoRollbackConnection = new AutoRollback(connection);
-                PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
+    @Transactional
+    public void deleteTheCompany(int id, Connection connection) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            autoRollbackConnection.commit();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }

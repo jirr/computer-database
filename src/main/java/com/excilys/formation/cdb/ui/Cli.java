@@ -3,6 +3,8 @@ package com.excilys.formation.cdb.ui;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
@@ -13,6 +15,13 @@ import com.excilys.formation.cdb.service.pagination.ComputerPage;
 import com.excilys.formation.cdb.service.pagination.Page;
 
 public class Cli {
+    
+    @Autowired
+    private ComputerService computerService;
+
+    @Autowired
+    private CompanyService companyService;
+
     private static final int PAGE_SIZE = 50;
 
     /**
@@ -90,7 +99,7 @@ public class Cli {
     private void listComputer(Scanner scanner) {
         System.out.println("Computers list: \n");
         try {
-            ComputerPage page = new ComputerPage(PAGE_SIZE);
+            ComputerPage page = new ComputerPage(PAGE_SIZE, computerService);
             paginationChoices(scanner, page);
         } catch (ServiceException e) {
             System.err.println("Error: " + e.getMessage());
@@ -150,7 +159,7 @@ public class Cli {
         System.out.println("Computer Id to detail ?");
         int id = scanner.nextInt();
         try {
-            System.out.println(ComputerService.INSTANCE.selectOne(id));
+            System.out.println(computerService.selectOne(id));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -173,8 +182,8 @@ public class Cli {
             int companyId = Integer.parseInt(companyIdStr);
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
-            Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
+            Company manufactor = companyService.getCompany(companyId);
+            System.out.println(computerService.createComputer(new Computer.ComputerBuilder(name)
                                                                                     .dateIntroduced(introduced)
                                                                                     .dateDiscontinued(discontinued)
                                                                                     .manufactor(manufactor)
@@ -204,8 +213,8 @@ public class Cli {
             int companyId = Integer.parseInt(companyIdStr);
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
-            Company manufactor = CompanyService.INSTANCE.getCompany(companyId);
-            System.out.println(ComputerService.INSTANCE.updateComputer(new Computer.ComputerBuilder(name)
+            Company manufactor = companyService.getCompany(companyId);
+            System.out.println(computerService.updateComputer(new Computer.ComputerBuilder(name)
                                                                                     .id(id)
                                                                                     .dateIntroduced(introduced)
                                                                                     .dateDiscontinued(discontinued)
@@ -225,7 +234,7 @@ public class Cli {
         saisie = scanner.next();
         try {
             int id = Integer.parseInt(saisie);
-            System.out.println(ComputerService.INSTANCE.deleteComputer(id));
+            System.out.println(computerService.deleteComputer(id));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -240,7 +249,7 @@ public class Cli {
         saisie = scanner.next();
         try {
             int id = Integer.parseInt(saisie);
-            System.out.println(CompanyService.INSTANCE.deleteCompany(id));
+            System.out.println(companyService.deleteCompany(id));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

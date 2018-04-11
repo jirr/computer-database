@@ -14,15 +14,23 @@ import com.excilys.formation.cdb.service.ServiceException;
 public class ComputerPage extends Page<Computer> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private ComputerService computerService;
 
-    public ComputerPage(int size) throws ServiceException {
+    public ComputerPage(int size, ComputerService computerService) throws ServiceException {
         super(size);
+        this.computerService = computerService;
+        this.setLastPageIndex();
+        this.setContent(this.getOffset());
+    }
+
+    public void setComputerService(ComputerService computerService) {
+        this.computerService = computerService;
     }
 
     @Override
     public void setLastPageIndex() throws ServiceException {
         try {
-            this.lastPageIndex = ComputerService.INSTANCE.countAllComputers(this.getKeywords()) / this.getSize();
+            this.lastPageIndex = computerService.countAllComputers(this.getKeywords()) / this.getSize();
         } catch (ServiceException e) {
             logger.error("Can't reach the database {}:", e.getMessage(), e);
             throw new ServiceException("Problem encounter in database.");
@@ -31,7 +39,7 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setContent(int offset) throws ServiceException {
-        this.content = ComputerService.INSTANCE.subListComputer(this.getOffset(), this.getSize(), this.getKeywords(), this.getSortBy(), this.isAsc());
+        this.content = computerService.subListComputer(this.getOffset(), this.getSize(), this.getKeywords(), this.getSortBy(), this.isAsc());
     }
 
     public String getKeywords() {

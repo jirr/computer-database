@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
@@ -24,10 +28,23 @@ import com.excilys.formation.cdb.service.ServiceException;
  * Servlet implementation class AddComputer.
  */
 @WebServlet("/addComputer")
+@Controller
 public class AddComputerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Autowired
+    private ComputerService computerService;
+    
+    @Autowired
+    private CompanyService companyService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,7 +54,7 @@ public class AddComputerServlet extends HttpServlet {
         // TODO Auto-generated method stub
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/addComputer.jsp");
         try {
-            request.setAttribute("companyList", CompanyService.INSTANCE.listAllCompany());
+            request.setAttribute("companyList", companyService.listAllCompany());
         } catch (ServiceException e) {
             logger.error("Can't get the company list: {}", e.getMessage(), e);
         }
@@ -58,7 +75,7 @@ public class AddComputerServlet extends HttpServlet {
         Company manufactor = null;
         try {
             final int companyId = Integer.parseInt(companyIdStr);
-            manufactor = CompanyService.INSTANCE.getCompany(companyId);
+            manufactor = companyService.getCompany(companyId);
         } catch (final NumberFormatException e1) {
             logger.info("No company selected.");
         } catch (final ServiceException e2) {
@@ -75,7 +92,7 @@ public class AddComputerServlet extends HttpServlet {
             logger.info("Discontinued date was left empty.");
         }
         try {
-            ComputerService.INSTANCE.createComputer(new Computer.ComputerBuilder(name)
+            computerService.createComputer(new Computer.ComputerBuilder(name)
                     .dateIntroduced(introduced)
                     .dateDiscontinued(discontinued)
                     .manufactor(manufactor)

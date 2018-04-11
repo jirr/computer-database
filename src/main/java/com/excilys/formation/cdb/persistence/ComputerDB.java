@@ -13,14 +13,16 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.model.Computer;
 
-public enum ComputerDB {
-    INSTANCE;
+@Repository
+public class ComputerDB {
 
-    private final Logger logger = LoggerFactory.getLogger(ComputerDB.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerDB.class);
 
     private final String selectAllRequest = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id";
     private final String createRequest = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
@@ -42,7 +44,7 @@ public enum ComputerDB {
             result.next();
             return result.getInt(1);
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -61,7 +63,7 @@ public enum ComputerDB {
             }
             return computerList;
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -81,10 +83,10 @@ public enum ComputerDB {
         if (sortBy.length() > 0) {
             sort += " ORDER BY " + sortBy;
             sort += asc ? " ASC" : " DESC";
-            logger.error("Sort: {}", sort);
+            LOGGER.error("Sort: {}", sort);
         }
         String request = selectAllRequest + like + sort + " LIMIT ? OFFSET ?;";
-        logger.error("Request : {}", request);
+        LOGGER.error("Request : {}", request);
         try (Connection conn = DataSource.INSTANCE.getConnection();
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {
@@ -99,7 +101,7 @@ public enum ComputerDB {
             }
             return computerList;
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -108,10 +110,9 @@ public enum ComputerDB {
      * @param computer the computer object to create in the DB
      * @throws DBException if can't reach the database
      */
+    @Transactional
     public void createComputer(Computer computer) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
-                AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
@@ -130,9 +131,8 @@ public enum ComputerDB {
                 preparedStatement.setNull(4, java.sql.Types.INTEGER);
             }
             preparedStatement.executeUpdate();
-            autoRollbackConnection.commit();
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -141,10 +141,9 @@ public enum ComputerDB {
      * @param computer the computer object to update in the DB
      * @throws DBException if can't reach the database
      */
+    @Transactional
     public void updateComputer(Computer computer) throws DBException {
         try (Connection connection = DataSource.INSTANCE.getConnection();
-                AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
-                AutoRollback autoRollbackConnection = new AutoRollback(connection);
                 PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
@@ -164,9 +163,8 @@ public enum ComputerDB {
             }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
-            autoRollbackConnection.commit();
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -175,14 +173,12 @@ public enum ComputerDB {
      * @param ids the IDs of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
+    @Transactional
     public void deleteComputer(int... ids) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
-            AutoSetAutoCommit autoCommit = new AutoSetAutoCommit(connection, false);
-            AutoRollback autoRollbackConnection = new AutoRollback(connection);) {
+        try (Connection connection = DataSource.INSTANCE.getConnection()) {
             deleteComputerWithConnection(connection, ids);
-            autoRollbackConnection.commit();
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }
@@ -199,7 +195,7 @@ public enum ComputerDB {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Errors in computers suppresions: {}", e.getMessage(), e);
+            LOGGER.error("Errors in computers suppresions: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -220,7 +216,7 @@ public enum ComputerDB {
             }
             return Optional.ofNullable(computer);
         } catch (SQLException | IOException e) {
-            logger.error("Unable to reach the database: {}", e.getMessage(), e);
+            LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
     }

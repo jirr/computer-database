@@ -28,7 +28,7 @@ public enum DataSource {
         config.setDriverClassName(properties.getProperty("driverClassName"));
         config.setUsername(properties.getProperty("dataSource.user"));
         config.setPassword(properties.getProperty("dataSource.password"));
-        config.setMaximumPoolSize(2);
+        config.setMaximumPoolSize(5);
         dataSource = new HikariDataSource(config);
         return dataSource.getConnection();
     }

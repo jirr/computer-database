@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
@@ -21,18 +25,28 @@ import com.excilys.formation.cdb.service.ServiceException;
 import com.excilys.formation.cdb.service.pagination.ComputerPage;
 
 @WebServlet("/dashboard")
+@Controller
 public class DashboardServlet extends HttpServlet {
+
+    @Autowired
+    private ComputerService computerService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     private static final long serialVersionUID = 2741128895945909738L;
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int nbComputer = -1;
         ComputerPage page = null;
         try {
-            page = new ComputerPage(10);
+            page = new ComputerPage(10, computerService);
             if (!(request.getParameter("search") == null)) {
                 page.setKeywords(request.getParameter("search"));
             }
@@ -60,7 +74,7 @@ public class DashboardServlet extends HttpServlet {
                 page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
             }
             try {
-                nbComputer = ComputerService.INSTANCE.countAllComputers(page.getKeywords());
+                nbComputer = computerService.countAllComputers(page.getKeywords());
             } catch (ServiceException e) {
                 // TODO Auto-generated catch block
                 logger.error("Problem in service when count: {}", e.getMessage(), e);
@@ -88,7 +102,7 @@ public class DashboardServlet extends HttpServlet {
         for (String id : deleteList) {
             try {
                 int computerId = Integer.parseInt(id);
-                ComputerService.INSTANCE.deleteComputer(computerId);
+                computerService.deleteComputer(computerId);
                 logger.info("Computer id:{} has been deleted.", computerId);
             } catch (NumberFormatException e) {
                 logger.info("Don't try to put wrong id please.");

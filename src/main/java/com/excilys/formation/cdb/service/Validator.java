@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
@@ -11,8 +13,14 @@ import com.excilys.formation.cdb.persistence.CompanyDB;
 import com.excilys.formation.cdb.persistence.ComputerDB;
 import com.excilys.formation.cdb.persistence.DBException;
 
-public enum Validator {
-    INSTANCE;
+@Service
+public class Validator {
+    
+    @Autowired
+    private CompanyDB companyDB;
+    
+    @Autowired
+    private ComputerDB computerDB;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -61,8 +69,8 @@ public enum Validator {
      */
     protected Computer computerIdValidation(int id) throws ServiceException {
         try {
-            if (ComputerDB.INSTANCE.selectOne(id).isPresent()) {
-                return ComputerDB.INSTANCE.selectOne(id).get();
+            if (computerDB.selectOne(id).isPresent()) {
+                return computerDB.selectOne(id).get();
             } else {
                 logger.error("Computer ID does not exist.");
                 throw new ServiceException("Computer ID does not exist.");
@@ -80,8 +88,8 @@ public enum Validator {
      */
     protected Company manufactorValidation(int id) throws ServiceException {
         try {
-            if (CompanyDB.INSTANCE.selectOne(id).isPresent()) {
-                return CompanyDB.INSTANCE.selectOne(id).get();
+            if (companyDB.selectOne(id).isPresent()) {
+                return companyDB.selectOne(id).get();
             } else {
                 logger.error("Company ID does not exist: {}", id);
                 throw new ServiceException("Company ID does not exist.");
