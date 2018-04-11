@@ -44,9 +44,6 @@ public class DashboardServlet extends HttpServlet {
                     logger.error("Not a number(size): {}", e1.getMessage());
                 }
             }
-            if (!(request.getParameter("asc") == null)) {
-                page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
-            }
             if (!(request.getParameter("index") == null)) {
                 try {
                     int index = Integer.parseInt(request.getParameter("index"));
