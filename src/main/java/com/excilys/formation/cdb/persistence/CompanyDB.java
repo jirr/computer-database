@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,10 @@ import com.excilys.formation.cdb.model.Company;
 public class CompanyDB {
 
     @Autowired
+    private DataSource dataSource;
+    @Autowired
     private ComputerDB computerDB;
+    
 
     private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
 
@@ -41,12 +46,12 @@ public class CompanyDB {
      * @throws DBException if can't reach the database
      */
     public int countAllCompany() throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(countAllRequest);) {
             result.next();
             return result.getInt(1);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -58,14 +63,14 @@ public class CompanyDB {
      */
     public List<Company> list() throws DBException {
         List<Company> companyList = new ArrayList<>();
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;");) {
             while (result.next()) {
                 companyList.add(CompanyMapper.INSTANCE.resToCompany(result));
             }
             return companyList;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -79,7 +84,7 @@ public class CompanyDB {
      */
     public List<Company> subList(int offset, int limit) throws DBException {
         List<Company> computerList = new ArrayList<>();
-        try (Connection conn = DataSource.INSTANCE.getConnection();) {
+        try (Connection conn = dataSource.getConnection();) {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
             preparedStatement.setInt(1, limit);
             preparedStatement.setInt(2, offset);
@@ -88,7 +93,7 @@ public class CompanyDB {
                 computerList.add(CompanyMapper.INSTANCE.resToCompany(resultSet));
             }
             return computerList;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -102,14 +107,14 @@ public class CompanyDB {
     public Optional<Company> selectOne(int id) throws DBException {
         Company company = null;
         logger.info("Connection to database opening.");
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 company = CompanyMapper.INSTANCE.resToCompany(resultSet);
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: " + e.getMessage());
             throw new DBException("Unable to reach the database.");
         }
@@ -123,7 +128,7 @@ public class CompanyDB {
      */
     @Transactional
     public void deleteCompany(int id) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -131,7 +136,7 @@ public class CompanyDB {
                 computerDB.deleteComputerWithConnection(connection, resultSet.getInt(1));
             }
             deleteTheCompany(id, connection);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }

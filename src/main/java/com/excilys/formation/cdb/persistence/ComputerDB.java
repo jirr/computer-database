@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,9 @@ import com.excilys.formation.cdb.model.Computer;
 
 @Repository
 public class ComputerDB {
+    
+    @Autowired
+    private DataSource dataSource;
 
     private final Logger LOGGER = LoggerFactory.getLogger(ComputerDB.class);
 
@@ -38,12 +44,12 @@ public class ComputerDB {
     public int countAllComputer(String keywords) throws DBException {
         String like = (keywords.length() > 0) ? " WHERE computer.name LIKE '%" + keywords + "%' OR company.name LIKE '%" + keywords + "%'" : "";
         String request = countAllRequest + like + ";";
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             ResultSet result = preparedStatement.executeQuery(request);
             result.next();
             return result.getInt(1);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -55,14 +61,14 @@ public class ComputerDB {
      */
     public List<Computer> listAll() throws DBException {
         List<Computer> computerList = new ArrayList<>();
-        try (Connection conn = DataSource.INSTANCE.getConnection();
+        try (Connection conn = dataSource.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;")) {
             while (result.next()) {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(result));
             }
             return computerList;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -87,7 +93,7 @@ public class ComputerDB {
         }
         String request = selectAllRequest + like + sort + " LIMIT ? OFFSET ?;";
         LOGGER.error("Request : {}", request);
-        try (Connection conn = DataSource.INSTANCE.getConnection();
+        try (Connection conn = dataSource.getConnection();
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {
                 preparedStatement.setString(1 - indiceStatement, "%" + keywords + "%");
@@ -100,7 +106,7 @@ public class ComputerDB {
                 computerList.add(ComputerMapper.INSTANCE.resToComputer(res));
             }
             return computerList;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -112,7 +118,7 @@ public class ComputerDB {
      */
     @Transactional
     public void createComputer(Computer computer) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
@@ -131,7 +137,7 @@ public class ComputerDB {
                 preparedStatement.setNull(4, java.sql.Types.INTEGER);
             }
             preparedStatement.executeUpdate();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -143,7 +149,7 @@ public class ComputerDB {
      */
     @Transactional
     public void updateComputer(Computer computer) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
@@ -163,7 +169,7 @@ public class ComputerDB {
             }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -175,9 +181,9 @@ public class ComputerDB {
      */
     @Transactional
     public void deleteComputer(int... ids) throws DBException {
-        try (Connection connection = DataSource.INSTANCE.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             deleteComputerWithConnection(connection, ids);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }
@@ -206,7 +212,7 @@ public class ComputerDB {
      * @throws DBException if can't reach the database
      */
     public Optional<Computer> selectOne(int id) throws DBException {
-        try (Connection conn = DataSource.INSTANCE.getConnection();
+        try (Connection conn = dataSource.getConnection();
                 PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");) {
             ps.setInt(1, id);
             ResultSet res = ps.executeQuery();
@@ -215,7 +221,7 @@ public class ComputerDB {
                 computer = ComputerMapper.INSTANCE.resToComputer(res);
             }
             return Optional.ofNullable(computer);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
         }

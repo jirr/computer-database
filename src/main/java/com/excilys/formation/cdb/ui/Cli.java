@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
@@ -14,6 +16,7 @@ import com.excilys.formation.cdb.service.pagination.CompanyPage;
 import com.excilys.formation.cdb.service.pagination.ComputerPage;
 import com.excilys.formation.cdb.service.pagination.Page;
 
+@Controller
 public class Cli {
     
     @Autowired
@@ -28,8 +31,11 @@ public class Cli {
      * @param args the arguments
      */
     public static void main(String[] args) {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         Cli cli = new Cli();
+        cli = context.getBean(Cli.class);
         cli.applicationLoop();
+        context.close();
     }
 
     private void applicationLoop() {
