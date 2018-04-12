@@ -1,6 +1,5 @@
 package com.excilys.formation.cdb.persistence;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,9 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.CompanyMapper;
@@ -26,6 +27,7 @@ import com.excilys.formation.cdb.model.Company;
  *
  */
 @Repository
+@EnableTransactionManagement
 public class CompanyDB {
 
     @Autowired
@@ -36,17 +38,17 @@ public class CompanyDB {
 
     private final Logger logger = LoggerFactory.getLogger(CompanyDB.class);
 
-    private String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
-    private String countAllRequest = "SELECT count(id) FROM company;";
+    private final String selectAllRequest = "SELECT ca.id as caId, ca.name as caName FROM company ca";
+    private final String countAllRequest = "SELECT count(id) FROM company;";
     private final String deleteCompanyRequest = "DELETE FROM computer WHERE id=?;";
-    private String getLinkedComputersRequest = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
+    private final String getLinkedComputersRequest = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
 
     /**
      * @return int number of companies
      * @throws DBException if can't reach the database
      */
     public int countAllCompany() throws DBException {
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(countAllRequest);) {
             result.next();
@@ -63,7 +65,7 @@ public class CompanyDB {
      */
     public List<Company> list() throws DBException {
         List<Company> companyList = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;");) {
             while (result.next()) {
@@ -84,7 +86,7 @@ public class CompanyDB {
      */
     public List<Company> subList(int offset, int limit) throws DBException {
         List<Company> computerList = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();) {
+        try (Connection conn = DataSourceUtils.getConnection(dataSource);) {
             PreparedStatement preparedStatement = conn.prepareStatement(selectAllRequest + " LIMIT ? OFFSET ?;");
             preparedStatement.setInt(1, limit);
             preparedStatement.setInt(2, offset);
@@ -107,7 +109,7 @@ public class CompanyDB {
     public Optional<Company> selectOne(int id) throws DBException {
         Company company = null;
         logger.info("Connection to database opening.");
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 PreparedStatement preparedStatement = connection.prepareStatement(selectAllRequest + " WHERE ca.id = ?;");) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -126,15 +128,17 @@ public class CompanyDB {
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int id) throws DBException {
-        try (Connection connection = dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);) {
+        try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
+            PreparedStatement preparedStatement = connection.prepareStatement(getLinkedComputersRequest);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 computerDB.deleteComputerWithConnection(connection, resultSet.getInt(1));
             }
+            preparedStatement.close();
             deleteTheCompany(id, connection);
         } catch (SQLException e) {
             logger.error("Unable to reach the database: {}", e.getMessage(), e);
@@ -146,7 +150,7 @@ public class CompanyDB {
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteTheCompany(int id, Connection connection) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteCompanyRequest);) {
             preparedStatement.setInt(1, id);

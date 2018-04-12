@@ -68,7 +68,6 @@ public class DashboardServlet extends HttpServlet {
             }
             if (!(request.getParameter("sort") == null)) {
                 page.setSortBy(request.getParameter("sort"));
-                logger.error("Page get sort: {}", page.getSortBy());
             }
             if (!(request.getParameter("asc") == null)) {
                 page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));

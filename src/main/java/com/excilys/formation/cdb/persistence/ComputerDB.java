@@ -1,6 +1,5 @@
 package com.excilys.formation.cdb.persistence;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -16,13 +15,16 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.model.Computer;
 
 @Repository
+@EnableTransactionManagement
 public class ComputerDB {
     
     @Autowired
@@ -44,7 +46,7 @@ public class ComputerDB {
     public int countAllComputer(String keywords) throws DBException {
         String like = (keywords.length() > 0) ? " WHERE computer.name LIKE '%" + keywords + "%' OR company.name LIKE '%" + keywords + "%'" : "";
         String request = countAllRequest + like + ";";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             ResultSet result = preparedStatement.executeQuery(request);
             result.next();
@@ -61,7 +63,7 @@ public class ComputerDB {
      */
     public List<Computer> listAll() throws DBException {
         List<Computer> computerList = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
+        try (Connection conn = DataSourceUtils.getConnection(dataSource);
                 Statement statement = conn.createStatement();
                 ResultSet result = statement.executeQuery(selectAllRequest + " ;")) {
             while (result.next()) {
@@ -89,11 +91,9 @@ public class ComputerDB {
         if (sortBy.length() > 0) {
             sort += " ORDER BY " + sortBy;
             sort += asc ? " ASC" : " DESC";
-            LOGGER.error("Sort: {}", sort);
         }
         String request = selectAllRequest + like + sort + " LIMIT ? OFFSET ?;";
-        LOGGER.error("Request : {}", request);
-        try (Connection conn = dataSource.getConnection();
+        try (Connection conn = DataSourceUtils.getConnection(dataSource);
                 PreparedStatement preparedStatement = conn.prepareStatement(request);) {
             if (keywords.length() > 0) {
                 preparedStatement.setString(1 - indiceStatement, "%" + keywords + "%");
@@ -116,10 +116,11 @@ public class ComputerDB {
      * @param computer the computer object to create in the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void createComputer(Computer computer) throws DBException {
-        try (Connection connection = dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(createRequest);) {
+        try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
+            PreparedStatement preparedStatement = connection.prepareStatement(createRequest);
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -137,6 +138,7 @@ public class ComputerDB {
                 preparedStatement.setNull(4, java.sql.Types.INTEGER);
             }
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
@@ -147,10 +149,11 @@ public class ComputerDB {
      * @param computer the computer object to update in the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void updateComputer(Computer computer) throws DBException {
-        try (Connection connection = dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);) {
+        try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
+            PreparedStatement preparedStatement = connection.prepareStatement(updateRequest);
             preparedStatement.setString(1, computer.getName());
             if (computer.getDateIntroduced().isPresent()) {
                 preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
@@ -169,6 +172,7 @@ public class ComputerDB {
             }
             preparedStatement.setInt(5, computer.getId());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
             throw new DBException("Unable to reach the database.");
@@ -179,9 +183,10 @@ public class ComputerDB {
      * @param ids the IDs of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteComputer(int... ids) throws DBException {
-        try (Connection connection = dataSource.getConnection()) {
+        try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
             deleteComputerWithConnection(connection, ids);
         } catch (SQLException e) {
             LOGGER.error("Unable to reach the database: {}", e.getMessage(), e);
@@ -194,6 +199,7 @@ public class ComputerDB {
      * @param ids IDs of computers to delete
      * @throws SQLException if problem in database.
      */
+    @Transactional(rollbackFor = Exception.class)
     public void deleteComputerWithConnection(Connection connection, int... ids) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteRequest);) {
             for (int id : ids) {
@@ -212,7 +218,7 @@ public class ComputerDB {
      * @throws DBException if can't reach the database
      */
     public Optional<Computer> selectOne(int id) throws DBException {
-        try (Connection conn = dataSource.getConnection();
+        try (Connection conn = DataSourceUtils.getConnection(dataSource);
                 PreparedStatement ps = conn.prepareStatement(selectAllRequest + " WHERE cu.id = ?;");) {
             ps.setInt(1, id);
             ResultSet res = ps.executeQuery();
