@@ -30,6 +30,8 @@ public class DashboardServlet extends HttpServlet {
 
     @Autowired
     private ComputerService computerService;
+    @Autowired
+    private ComputerMapper computerMapper;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -82,7 +84,7 @@ public class DashboardServlet extends HttpServlet {
             logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }
         List<ComputerDTO> computersDTO = new ArrayList<>();
-        page.getContent().forEach(computer -> computersDTO.add(ComputerMapper.INSTANCE.computerToDTO(computer)));
+        page.getContent().forEach(computer -> computersDTO.add(computerMapper.computerToDTO(computer)));
         request.setAttribute("nbComputers", nbComputer);
         request.setAttribute("computer_list", computersDTO);
         request.setAttribute("keywords", page.getKeywords());

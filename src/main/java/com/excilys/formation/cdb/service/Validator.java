@@ -9,20 +9,19 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.CompanyDB;
-import com.excilys.formation.cdb.persistence.ComputerDB;
-import com.excilys.formation.cdb.persistence.DBException;
+import com.excilys.formation.cdb.persistence.CompanyDAO;
+import com.excilys.formation.cdb.persistence.ComputerDAO;
 
 @Service
 public class Validator {
     
     @Autowired
-    private CompanyDB companyDB;
+    private CompanyDAO companyDAO;
     
     @Autowired
-    private ComputerDB computerDB;
+    private ComputerDAO computerDAO;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getName());
 
     /**
      * @param date1 first date to compare
@@ -31,7 +30,7 @@ public class Validator {
      */
     protected void datesCompatibilityValidation(LocalDate date1, LocalDate date2) throws ServiceException {
         if (date2.isBefore(date1)) {
-            logger.error("Date introduced > date discontinued");
+            LOGGER.error("Date introduced > date discontinued");
             throw new ServiceException("Incompatibility of dates.");
         }
     }
@@ -42,11 +41,11 @@ public class Validator {
      */
     protected void dateValidation(LocalDate date) throws ServiceException {
         if (date.isAfter(LocalDate.now())) {
-            logger.error("The date ({}) must not be greater than today.", date.toString());
+            LOGGER.error("The date ({}) must not be greater than today.", date.toString());
             throw new ServiceException("The date must not be greater than today.");
         }
         if (date.isBefore(LocalDate.of(1975, 01, 01))) {
-            logger.error("The date ({}) must not be before 01/01/1975.", date.toString());
+            LOGGER.error("The date ({}) must not be before 01/01/1975.", date.toString());
             throw new ServiceException("The computer can't be a Turing machine!");
         }
     }
@@ -57,7 +56,7 @@ public class Validator {
      */
     protected void nameValidation(String name) throws ServiceException {
         if (name.compareTo("") == 0) {
-            logger.error("No name.");
+            LOGGER.error("No name.");
             throw new ServiceException("Name is required.");
         }
     }
@@ -68,16 +67,11 @@ public class Validator {
      * @throws ServiceException if the id does not exist
      */
     protected Computer computerIdValidation(int id) throws ServiceException {
-        try {
-            if (computerDB.selectOne(id).isPresent()) {
-                return computerDB.selectOne(id).get();
-            } else {
-                logger.error("Computer ID does not exist.");
-                throw new ServiceException("Computer ID does not exist.");
-            }
-        } catch (DBException e) {
-            logger.error("Problem encounter in database: {}", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database.");
+        if (computerDAO.selectOne(id).isPresent()) {
+            return computerDAO.selectOne(id).get();
+        } else {
+            LOGGER.error("Computer ID does not exist.");
+            throw new ServiceException("Computer ID does not exist.");
         }
     }
 
@@ -87,16 +81,11 @@ public class Validator {
      * @throws ServiceException if the id does no exist
      */
     protected Company manufactorValidation(int id) throws ServiceException {
-        try {
-            if (companyDB.selectOne(id).isPresent()) {
-                return companyDB.selectOne(id).get();
-            } else {
-                logger.error("Company ID does not exist: {}", id);
-                throw new ServiceException("Company ID does not exist.");
-            }
-        } catch (DBException e) {
-            logger.error("Problem encounter in database: {}", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database.");
+        if (companyDAO.selectOne(id).isPresent()) {
+            return companyDAO.selectOne(id).get();
+        } else {
+            LOGGER.error("Company ID does not exist: {}", id);
+            throw new ServiceException("Company ID does not exist.");
         }
     }
 }

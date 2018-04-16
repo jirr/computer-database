@@ -3,6 +3,8 @@ package com.excilys.formation.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.cdb.dto.CompanyDTO;
 import com.excilys.formation.cdb.model.Company;
 
@@ -10,8 +12,8 @@ import com.excilys.formation.cdb.model.Company;
  * @author jirr
  *
  */
-public enum CompanyMapper {
-    INSTANCE;
+@Component
+public class CompanyMapper {
     /**
      * @param resultSet ResultSet of a request
      * @return Company the DB object convert in java Object

@@ -33,14 +33,16 @@ import com.excilys.formation.cdb.service.ServiceException;
 @Controller
 public class EditComputerServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -2716486255895316442L;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    
     @Autowired
     private ComputerService computerService;
     @Autowired
     private CompanyService companyService;
-
-    private static final long serialVersionUID = -2716486255895316442L;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    @Autowired
+    private ComputerMapper computerMapper;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -64,8 +66,7 @@ public class EditComputerServlet extends HttpServlet {
         }
         try {
             final int computerId = Integer.parseInt(request.getParameter("id"));
-            final ComputerDTO computerDTO = ComputerMapper.INSTANCE
-                    .computerToDTO(computerService.selectOne(computerId));
+            final ComputerDTO computerDTO = computerMapper.computerToDTO(computerService.selectOne(computerId));
             request.setAttribute("computer", computerDTO);
         } catch (final NumberFormatException | ServiceException e1) {
             logger.info("No company selected.");

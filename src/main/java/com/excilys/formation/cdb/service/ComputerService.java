@@ -2,14 +2,11 @@ package com.excilys.formation.cdb.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.ComputerDB;
-import com.excilys.formation.cdb.persistence.DBException;
+import com.excilys.formation.cdb.persistence.ComputerDAO;
 
 /**
  * @author jirr
@@ -19,13 +16,11 @@ import com.excilys.formation.cdb.persistence.DBException;
 public class ComputerService {
 
     @Autowired
-    private ComputerDB computerDB;
+    private ComputerDAO computerDAO;
 
     @Autowired
     private Validator validator;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-
+    
     /**
      * @param offset index of the first element
      * @param numberToDisplay number of object to display
@@ -33,12 +28,7 @@ public class ComputerService {
      * @throws ServiceException if failure in persistence execution
      */
     public List<Computer> subListComputer(int offset, int numberToDisplay, String keywords, String sortBy, boolean asc) throws ServiceException {
-        try {
-            return computerDB.subList(offset, numberToDisplay, keywords, sortBy, asc);
-        } catch (DBException e) {
-            logger.error("Fail in persistence execution: {}", e.getMessage(), e);
-            throw new ServiceException("Fail in persistence execution.");
-        }
+        return computerDAO.subList(offset, numberToDisplay, keywords, sortBy, asc);
     }
 
     /**
@@ -46,12 +36,7 @@ public class ComputerService {
      * @throws ServiceException if failure in persistence execution
      */
     public int countAllComputers(String keywords) throws ServiceException {
-        try {
-            return computerDB.countAllComputer(keywords);
-        } catch (DBException e) {
-            logger.error("Fail in persistence execution: {}", e.getMessage(), e);
-            throw new ServiceException("Fail in persistence execution.");
-        }
+        return computerDAO.countAllComputer(keywords);
     }
 
     /**
@@ -82,12 +67,7 @@ public class ComputerService {
         if (computer.getManufactor().isPresent()) {
             validator.manufactorValidation(computer.getManufactor().get().getId());
         }
-        try {
-            computerDB.createComputer(computer);
-        } catch (DBException e) {
-            logger.error("Problem with database: {}", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database during creation.");
-        }
+        computerDAO.createComputer(computer);
         return "New computer added to database.";
     }
 
@@ -105,12 +85,7 @@ public class ComputerService {
         if (computer.getManufactor().isPresent()) {
             validator.manufactorValidation(computer.getManufactor().get().getId());
         }
-        try {
-            computerDB.updateComputer(computer);
-        } catch (DBException e) {
-            logger.error("Problem with database: {}", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database during update.");
-        }
+        computerDAO.updateComputer(computer);
         return "Computer " + computer.getId() + " updated.";
     }
 
@@ -121,12 +96,7 @@ public class ComputerService {
      */
     public String deleteComputer(int id) throws ServiceException {
         validator.computerIdValidation(id);
-        try {
-            computerDB.deleteComputer(id);
-        } catch (DBException e) {
-            logger.error("Problem with database: {}", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database during deletion.");
-        }
+        computerDAO.deleteComputer(id);
         return "Computer " + id + " removed from database.";
     }
 }

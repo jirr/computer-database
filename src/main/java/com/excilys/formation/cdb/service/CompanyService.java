@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.formation.cdb.model.Company;
-import com.excilys.formation.cdb.persistence.CompanyDB;
-import com.excilys.formation.cdb.persistence.DBException;
+import com.excilys.formation.cdb.persistence.CompanyDAO;
 
 /**
  * @author jirr
@@ -17,7 +16,7 @@ import com.excilys.formation.cdb.persistence.DBException;
 public class CompanyService {
     
     @Autowired
-    private CompanyDB companyDB;
+    private CompanyDAO companyDAO;
 
     @Autowired
     private Validator validator;
@@ -29,11 +28,7 @@ public class CompanyService {
      * @throws ServiceException if failure in persistence execution
      */
     public List<Company> subListCompany(int offset, int numberToDisplay) throws ServiceException {
-        try {
-            return companyDB.subList(offset, numberToDisplay);
-        } catch (DBException e) {
-            throw new ServiceException("Fail in persistence execution.");
-        }
+        return companyDAO.subList(offset, numberToDisplay);
     }
 
     /**
@@ -41,11 +36,7 @@ public class CompanyService {
      * @throws ServiceException if failure in persistence execution
      */
     public List<Company> listAllCompany() throws ServiceException {
-        try {
-            return companyDB.list();
-        } catch (DBException e) {
-            throw new ServiceException("Fail in persistence execution.");
-        }
+        return companyDAO.list();
     }
 
     /**
@@ -53,11 +44,7 @@ public class CompanyService {
      * @throws ServiceException if failure in persistence execution
      */
     public int countAllCompanies() throws ServiceException {
-        try {
-            return companyDB.countAllCompany();
-        } catch (DBException e) {
-            throw new ServiceException("Fail in persistence execution.");
-        }
+        return companyDAO.countAllCompany();
     }
 
     /**
@@ -76,11 +63,7 @@ public class CompanyService {
      */
     public String deleteCompany(int id) throws ServiceException {
         validator.manufactorValidation(id);
-        try {
-            companyDB.deleteCompany(id);
-        } catch (DBException e) {
-            throw new ServiceException("Problem encounter in database during deletion.");
-        }
+        companyDAO.deleteCompany(id);
         return "Companny " + id + " removed from database.";
     }
 }
