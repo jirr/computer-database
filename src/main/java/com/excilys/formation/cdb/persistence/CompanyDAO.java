@@ -32,14 +32,14 @@ public class CompanyDAO {
     private ComputerDAO computerDAO;
     private JdbcTemplate jdbcTemplate;
     private CompanyMapper companyMapper;
-    
+
     @Autowired
     public CompanyDAO(ComputerDAO computerDAO, DataSource dataSource, CompanyMapper companyMapper) {
         this.computerDAO = computerDAO;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.companyMapper = companyMapper;
     }
-    
+
     /**
      * @param id of Company that should be in the DB
      * @return Optional<Company> contains the company, could be empty if the id does not exist
@@ -49,7 +49,7 @@ public class CompanyDAO {
         Company company = (Company) this.jdbcTemplate.queryForList(SELECT_ONE_COMPANY, id, Company.class);
         return Optional.ofNullable(company);
     }
-    
+
     /**
      * @return List<Company>
      * @throws DBException if can't reach the database
@@ -57,11 +57,9 @@ public class CompanyDAO {
     public List<Company> list() {
         return this.jdbcTemplate.query(SELECT_ALL_COMPANIES, (resultSet, row) -> companyMapper.resToCompany(resultSet));
     }
-    
+
     /**
-     * @param keywords The keywords of the search, can be empty
-     * @return int number of computers
-     * @throws DBException if can't reach the database
+     * @return int number of companies
      */
     public int countAllCompany() {
         return this.jdbcTemplate.queryForObject(COUNT_ALL_COMPANIES, Integer.class);
@@ -76,7 +74,7 @@ public class CompanyDAO {
     public List<Company> subList(int offset, int limit) {
         return this.jdbcTemplate.queryForList(SELECT_SOME_COMPANIES, new Object[] {limit, offset}, Company.class);
     }
-    
+
     /**
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
@@ -84,7 +82,7 @@ public class CompanyDAO {
     @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int id) {
         List<Integer> ids = this.jdbcTemplate.queryForList(SELECT_COMPUTERS_WITH_COMPANY, int.class);
-        computerDAO.deleteComputer(ids.stream().mapToInt(i->i).toArray());
+        computerDAO.deleteComputer(ids.stream().mapToInt(i -> i).toArray());
         this.jdbcTemplate.update(DELETE_ONE_COMPANY, new Object[] {id});
     }
 }

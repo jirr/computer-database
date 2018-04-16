@@ -36,7 +36,7 @@ public class EditComputerServlet extends HttpServlet {
     private static final long serialVersionUID = -2716486255895316442L;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    
+
     @Autowired
     private ComputerService computerService;
     @Autowired

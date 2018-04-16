@@ -36,7 +36,7 @@ public class DashboardServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     private static final long serialVersionUID = 2741128895945909738L;
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -74,12 +74,7 @@ public class DashboardServlet extends HttpServlet {
             if (!(request.getParameter("asc") == null)) {
                 page.setAsc(Boolean.parseBoolean(request.getParameter("asc")));
             }
-            try {
-                nbComputer = computerService.countAllComputers(page.getKeywords());
-            } catch (ServiceException e) {
-                // TODO Auto-generated catch block
-                logger.error("Problem in service when count: {}", e.getMessage(), e);
-            }
+            nbComputer = computerService.countAllComputers(page.getKeywords());
         } catch (ServiceException e3) {
             logger.error("Error in Service execution: {}", e3.getMessage(), e3);
         }

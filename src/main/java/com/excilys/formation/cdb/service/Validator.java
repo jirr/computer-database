@@ -14,10 +14,9 @@ import com.excilys.formation.cdb.persistence.ComputerDAO;
 
 @Service
 public class Validator {
-    
+
     @Autowired
     private CompanyDAO companyDAO;
-    
     @Autowired
     private ComputerDAO computerDAO;
 

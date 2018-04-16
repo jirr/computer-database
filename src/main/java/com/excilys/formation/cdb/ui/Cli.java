@@ -18,7 +18,7 @@ import com.excilys.formation.cdb.service.pagination.Page;
 
 @Controller
 public class Cli {
-    
+
     @Autowired
     private ComputerService computerService;
 

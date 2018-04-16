@@ -1,8 +1,5 @@
 package com.excilys.formation.cdb.service.pagination;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.ComputerService;
 import com.excilys.formation.cdb.service.ServiceException;
@@ -13,7 +10,6 @@ import com.excilys.formation.cdb.service.ServiceException;
  */
 public class ComputerPage extends Page<Computer> {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     private ComputerService computerService;
 
     public ComputerPage(int size, ComputerService computerService) throws ServiceException {
@@ -29,12 +25,7 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setLastPageIndex() throws ServiceException {
-        try {
-            this.lastPageIndex = computerService.countAllComputers(this.getKeywords()) / this.getSize();
-        } catch (ServiceException e) {
-            logger.error("Can't reach the database {}:", e.getMessage(), e);
-            throw new ServiceException("Problem encounter in database.");
-        }
+        this.lastPageIndex = computerService.countAllComputers(this.getKeywords()) / this.getSize();
     }
 
     @Override

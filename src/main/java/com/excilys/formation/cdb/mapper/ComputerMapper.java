@@ -22,7 +22,7 @@ public class ComputerMapper {
 
     @Autowired
     private CompanyMapper companyMapper;
-    
+
     /**
      * @param resultSet ResultSet of a request
      * @return Computer the BD object convert in java object

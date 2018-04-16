@@ -14,7 +14,7 @@ import com.excilys.formation.cdb.persistence.CompanyDAO;
  */
 @Service
 public class CompanyService {
-    
+
     @Autowired
     private CompanyDAO companyDAO;
 

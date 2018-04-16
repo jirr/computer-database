@@ -44,7 +44,7 @@ public abstract class Page<T> {
         this.setLastPageIndex();
         this.currentPageIndex = 0;
     }
-    
+
     public String getSortBy() {
         return sortBy;
     }

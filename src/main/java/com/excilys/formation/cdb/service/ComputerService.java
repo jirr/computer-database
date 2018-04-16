@@ -20,10 +20,13 @@ public class ComputerService {
 
     @Autowired
     private Validator validator;
-    
+
     /**
      * @param offset index of the first element
      * @param numberToDisplay number of object to display
+     * @param keywords The keywords for the search, can be empty
+     * @param sortBy Name of the column to sort on
+     * @param asc Is the sort asc or desc
      * @return List<Computer> the sublist (page) of computers
      * @throws ServiceException if failure in persistence execution
      */
@@ -32,17 +35,17 @@ public class ComputerService {
     }
 
     /**
+     * @param keywords The keywords for the search, can be empty
      * @return int number of companies
-     * @throws ServiceException if failure in persistence execution
      */
-    public int countAllComputers(String keywords) throws ServiceException {
+    public int countAllComputers(String keywords) {
         return computerDAO.countAllComputer(keywords);
     }
 
     /**
      * @param id The id of computer
      * @return Computer with the right id
-     * @throws Exception if the id does not exist
+     * @throws ServiceException if the id does not exist
      */
     public Computer selectOne(int id) throws ServiceException {
         return validator.computerIdValidation(id);
@@ -51,7 +54,7 @@ public class ComputerService {
     /**
      * @param computer The computer object to create
      * @return String validation text
-     * @throws Exception if the creation becomes wild
+     * @throws ServiceException if the creation becomes wild
      */
     public String createComputer(Computer computer) throws ServiceException {
         validator.nameValidation(computer.getName());
@@ -74,7 +77,7 @@ public class ComputerService {
     /**
      * @param computer The computer object to update
      * @return String validation text
-     * @throws Exception if the updating becomes wild
+     * @throws ServiceException if the updating becomes wild
      */
     public String updateComputer(Computer computer) throws ServiceException {
         validator.computerIdValidation(computer.getId());
@@ -92,7 +95,7 @@ public class ComputerService {
     /**
      * @param id The id of the computer to delete from the DB
      * @return String validation test
-     * @throws Exception if the deleting becomes wild
+     * @throws ServiceException if the deleting becomes wild
      */
     public String deleteComputer(int id) throws ServiceException {
         validator.computerIdValidation(id);

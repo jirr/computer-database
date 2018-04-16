@@ -31,37 +31,41 @@ public class ComputerDAO {
 
     private JdbcTemplate jdbcTemplate;
     private ComputerMapper computerMapper;
-    
+
     @Autowired
     public ComputerDAO(DataSource dataSource, ComputerMapper computerMapper) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.computerMapper = computerMapper;
     }
-    
+
     /**
      * @return List<Computer> The list of all Computer object from the DB
      */
     public List<Computer> listAll() {
         return this.jdbcTemplate.queryForList(SELECT_ALL_COMPUTERS, Computer.class);
     }
-    
+
     /**
      * @param computer the computer object to create in the DB
      */
     @Transactional(rollbackFor = Exception.class)
     public void createComputer(Computer computer) {
-        this.jdbcTemplate.update(CREATE_COMPUTER, preparedStatement -> { computerToPreparedStatement(computer, preparedStatement); });
+        this.jdbcTemplate.update(CREATE_COMPUTER, preparedStatement -> {
+                computerToPreparedStatement(computer, preparedStatement);
+            });
     }
-    
+
     /**
      * @param computer the computer object to create in the DB
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateComputer(Computer computer) {
-        this.jdbcTemplate.update(UPDATE_COMPUTER, preparedStatement -> { computerToPreparedStatement(computer, preparedStatement);
-                                                                         preparedStatement.setInt(5, computer.getId()); });
+        this.jdbcTemplate.update(UPDATE_COMPUTER, preparedStatement -> {
+                computerToPreparedStatement(computer, preparedStatement);
+                preparedStatement.setInt(5, computer.getId());
+            });
     }
-    
+
     /**
      * @param ids the IDs of computer to delete from the DB
      */
@@ -71,7 +75,7 @@ public class ComputerDAO {
             this.jdbcTemplate.update(DELETE_COMPUTER, id);
         }
     }
-    
+
     /**
      * @param id the ID of Computer that should exist
      * @return Optional<Computer> contains the Computer, could be empty if the id does not exist
@@ -85,21 +89,23 @@ public class ComputerDAO {
         }
         return Optional.ofNullable(computer);
     }
-    
+
     /**
      * @param keywords The keywords of the search, can be empty
      * @return int number of computers
      */
     public int countAllComputer(String keywords) {
         String like = (keywords.length() > 0) ? " WHERE computer.name LIKE '%" + keywords + "%' OR company.name LIKE '%" + keywords + "%'" : "";
-        final String COUNT = COUNT_ALL_COMPUTERS + like + ";";
-        return this.jdbcTemplate.queryForObject(COUNT, Integer.class);
+        String count = COUNT_ALL_COMPUTERS + like + ";";
+        return this.jdbcTemplate.queryForObject(count, Integer.class);
     }
-    
+
     /**
      * @param limit index du dernier element
      * @param offset index du premier element
      * @param keywords The keywords of the search, can be empty
+     * @param sortBy Name of the column to sort on
+     * @param asc Is the sort asc or desc
      * @return List<Computer> The sublist of Computer object from the DB
      */
     public List<Computer> subList(int offset, int limit, String keywords, String sortBy, boolean asc) {
@@ -126,7 +132,7 @@ public class ComputerDAO {
      * @return PreparedStatement The PreparedStatement filled with computer's field
      * @throws SQLException if can't fill the PreparedStatement
      */
-    public PreparedStatement computerToPreparedStatement (Computer computer, PreparedStatement preparedStatement) throws SQLException {
+    public PreparedStatement computerToPreparedStatement(Computer computer, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, computer.getName());
         if (computer.getDateIntroduced().isPresent()) {
             preparedStatement.setDate(2, Date.valueOf(computer.getDateIntroduced().get()));
