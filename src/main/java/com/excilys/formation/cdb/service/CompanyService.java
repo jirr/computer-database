@@ -17,12 +17,16 @@ import com.excilys.formation.cdb.persistence.ComputerDAO;
 @Service
 public class CompanyService {
 
-    @Autowired
     private CompanyDAO companyDAO;
-    @Autowired
     private ComputerDAO computerDAO;
-    @Autowired
     private Validator validator;
+
+    @Autowired
+    public CompanyService(CompanyDAO companyDAO, ComputerDAO computerDAO, Validator validator) {
+        this.companyDAO = companyDAO;
+        this.computerDAO = computerDAO;
+        this.validator = validator;
+    }
 
     /**
      * @param offset index of the first element
@@ -30,7 +34,7 @@ public class CompanyService {
      * @return List<Company> the sublist (page) of companies
      * @throws ServiceException if failure in persistence execution
      */
-    public List<Company> subListCompany(int offset, int numberToDisplay) throws ServiceException {
+    public List<Company> subListCompany(int offset, int numberToDisplay) {
         return companyDAO.subList(offset, numberToDisplay);
     }
 
@@ -38,7 +42,7 @@ public class CompanyService {
      * @return List<Company> the list of all companies
      * @throws ServiceException if failure in persistence execution
      */
-    public List<Company> listAllCompany() throws ServiceException {
+    public List<Company> listAllCompany() {
         return companyDAO.list();
     }
 
@@ -46,7 +50,7 @@ public class CompanyService {
      * @return int number of companies
      * @throws ServiceException if failure in persistence execution
      */
-    public int countAllCompanies() throws ServiceException {
+    public int countAllCompanies() {
         return companyDAO.countAllCompany();
     }
 
@@ -64,7 +68,7 @@ public class CompanyService {
      * @return String validation test
      * @throws ServiceException if the deleting becomes wild
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String deleteCompany(int idCompany) throws ServiceException {
         validator.manufactorValidation(idCompany);
         for (int idComputer : computerDAO.getComputersWithCompanyId(idCompany)) {

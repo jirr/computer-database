@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.persistence.ComputerDAO;
@@ -33,7 +34,7 @@ public class ComputerService {
      * @return List<Computer> the sublist (page) of computers
      * @throws ServiceException if failure in persistence execution
      */
-    public List<Computer> subListComputer(int offset, int numberToDisplay, String keywords, String sortBy, boolean asc) throws ServiceException {
+    public List<Computer> subListComputer(int offset, int numberToDisplay, String keywords, String sortBy, boolean asc) {
         return computerDAO.subList(offset, numberToDisplay, keywords, sortBy, asc);
     }
 
@@ -100,6 +101,7 @@ public class ComputerService {
      * @return String validation test
      * @throws ServiceException if the deleting becomes wild
      */
+    @Transactional(rollbackFor = Exception.class)
     public String deleteComputer(int id) throws ServiceException {
         validator.computerIdValidation(id);
         computerDAO.deleteComputer(id);
