@@ -12,14 +12,11 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.model.Computer;
 
 @Repository
-@EnableTransactionManagement
 public class ComputerDAO {
 
     private final String SELECT_ALL_COMPUTERS = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id";
@@ -28,6 +25,7 @@ public class ComputerDAO {
     private final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? ";
     private final String DELETE_COMPUTER = "DELETE FROM computer WHERE id=?;";
     private final String COUNT_ALL_COMPUTERS = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company ON company.id = computer.company_id";
+    private final String SELECT_COMPUTERS_WITH_COMPANY = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
 
     private JdbcTemplate jdbcTemplate;
     private ComputerMapper computerMapper;
@@ -48,7 +46,6 @@ public class ComputerDAO {
     /**
      * @param computer the computer object to create in the DB
      */
-    @Transactional(rollbackFor = Exception.class)
     public void createComputer(Computer computer) {
         this.jdbcTemplate.update(CREATE_COMPUTER, preparedStatement -> {
                 computerToPreparedStatement(computer, preparedStatement);
@@ -58,7 +55,6 @@ public class ComputerDAO {
     /**
      * @param computer the computer object to create in the DB
      */
-    @Transactional(rollbackFor = Exception.class)
     public void updateComputer(Computer computer) {
         this.jdbcTemplate.update(UPDATE_COMPUTER, preparedStatement -> {
                 computerToPreparedStatement(computer, preparedStatement);
@@ -69,7 +65,6 @@ public class ComputerDAO {
     /**
      * @param ids the IDs of computer to delete from the DB
      */
-    @Transactional(rollbackFor = Exception.class)
     public void deleteComputer(int... ids) {
         for (int id : ids) {
             this.jdbcTemplate.update(DELETE_COMPUTER, id);
@@ -88,6 +83,15 @@ public class ComputerDAO {
             computer = null;
         }
         return Optional.ofNullable(computer);
+    }
+    
+    /**
+     * @param id the ID of Computer that should exist
+     * @return Optional<Computer> contains the Computer, could be empty if the id does not exist
+     */
+    public List<Integer> getComputersWithCompanyId(int id) {
+        List<Integer> ids = this.jdbcTemplate.queryForList(SELECT_COMPUTERS_WITH_COMPANY, int.class);
+        return ids;
     }
 
     /**

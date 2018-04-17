@@ -15,11 +15,14 @@ import com.excilys.formation.cdb.persistence.ComputerDAO;
 @Service
 public class ComputerService {
 
-    @Autowired
     private ComputerDAO computerDAO;
+    private Validator validator;
 
     @Autowired
-    private Validator validator;
+    public ComputerService (ComputerDAO computerDAO, Validator validator) {
+        this.computerDAO = computerDAO;
+        this.validator = validator;
+    }
 
     /**
      * @param offset index of the first element

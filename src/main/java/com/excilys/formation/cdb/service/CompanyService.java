@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.persistence.CompanyDAO;
+import com.excilys.formation.cdb.persistence.ComputerDAO;
 
 /**
  * @author jirr
@@ -17,7 +19,8 @@ public class CompanyService {
 
     @Autowired
     private CompanyDAO companyDAO;
-
+    @Autowired
+    private ComputerDAO computerDAO;
     @Autowired
     private Validator validator;
 
@@ -61,9 +64,13 @@ public class CompanyService {
      * @return String validation test
      * @throws ServiceException if the deleting becomes wild
      */
-    public String deleteCompany(int id) throws ServiceException {
-        validator.manufactorValidation(id);
-        companyDAO.deleteCompany(id);
-        return "Companny " + id + " removed from database.";
+    @Transactional
+    public String deleteCompany(int idCompany) throws ServiceException {
+        validator.manufactorValidation(idCompany);
+        for (int idComputer : computerDAO.getComputersWithCompanyId(idCompany)) {
+            computerDAO.deleteComputer(idComputer);
+        }
+        companyDAO.deleteCompany(idCompany);
+        return "Companny " + idCompany + " removed from database.";
     }
 }

@@ -8,8 +8,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.mapper.CompanyMapper;
 import com.excilys.formation.cdb.model.Company;
@@ -19,7 +17,6 @@ import com.excilys.formation.cdb.model.Company;
  *
  */
 @Repository
-@EnableTransactionManagement
 public class CompanyDAO {
 
     private final String SELECT_ALL_COMPANIES = "SELECT ca.id as caId, ca.name as caName FROM company ca";
@@ -27,15 +24,12 @@ public class CompanyDAO {
     private final String SELECT_SOME_COMPANIES = "SELECT ca.id as caId, ca.name as caName FROM company ca LIMIT ? OFFSET ?;";
     private final String SELECT_ONE_COMPANY = "SELECT ca.id as caId, ca.name as caName FROM company ca WHERE ca.id = ?;";
     private final String DELETE_ONE_COMPANY = "DELETE FROM computer WHERE id=?;";
-    private final String SELECT_COMPUTERS_WITH_COMPANY = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
 
-    private ComputerDAO computerDAO;
     private JdbcTemplate jdbcTemplate;
     private CompanyMapper companyMapper;
 
     @Autowired
-    public CompanyDAO(ComputerDAO computerDAO, DataSource dataSource, CompanyMapper companyMapper) {
-        this.computerDAO = computerDAO;
+    public CompanyDAO(DataSource dataSource, CompanyMapper companyMapper) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.companyMapper = companyMapper;
     }
@@ -79,10 +73,7 @@ public class CompanyDAO {
      * @param id the ID of computer to delete from the DB
      * @throws DBException if can't reach the database
      */
-    @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(int id) {
-        List<Integer> ids = this.jdbcTemplate.queryForList(SELECT_COMPUTERS_WITH_COMPANY, int.class);
-        computerDAO.deleteComputer(ids.stream().mapToInt(i -> i).toArray());
         this.jdbcTemplate.update(DELETE_ONE_COMPANY, new Object[] {id});
     }
 }
