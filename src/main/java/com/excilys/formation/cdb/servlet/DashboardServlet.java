@@ -24,7 +24,7 @@ import com.excilys.formation.cdb.service.ComputerService;
 import com.excilys.formation.cdb.service.ServiceException;
 import com.excilys.formation.cdb.service.pagination.ComputerPage;
 
-@WebServlet("/dashboard")
+@WebServlet("/dashboard.old")
 @Controller
 public class DashboardServlet extends HttpServlet {
 

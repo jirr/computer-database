@@ -52,11 +52,7 @@ public class AddComputerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/addComputer.jsp");
-        try {
-            request.setAttribute("companyList", companyService.listAllCompany());
-        } catch (ServiceException e) {
-            logger.error("Can't get the company list: {}", e.getMessage(), e);
-        }
+        request.setAttribute("companyList", companyService.listAllCompany());
         requestDispatcher.forward(request, response);
     }
 

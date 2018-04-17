@@ -59,11 +59,7 @@ public class EditComputerServlet extends HttpServlet {
             throws ServletException, IOException {
         // TODO Auto-generated method stub
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher("WEB-INF/view/editComputer.jsp");
-        try {
-            request.setAttribute("companyList", companyService.listAllCompany());
-        } catch (final ServiceException e) {
-            logger.error("Can't get the company list: {}", e.getMessage(), e);
-        }
+        request.setAttribute("companyList", companyService.listAllCompany());
         try {
             final int computerId = Integer.parseInt(request.getParameter("id"));
             final ComputerDTO computerDTO = computerMapper.computerToDTO(computerService.selectOne(computerId));
