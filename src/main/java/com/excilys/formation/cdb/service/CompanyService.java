@@ -64,7 +64,7 @@ public class CompanyService {
     }
 
     /**
-     * @param id The id of the computer to delete from the DB
+     * @param idCompany The id of the computer to delete from the DB
      * @return String validation test
      * @throws ServiceException if the deleting becomes wild
      */

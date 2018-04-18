@@ -15,10 +15,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
- 
+
 @Configuration
 @EnableWebMvc
-@PropertySource(value="classpath:db.properties")
+@PropertySource(value = "classpath:db.properties")
 @ComponentScan(basePackages = "com.excilys.formation.cdb")
 public class WebConfiguration implements  WebMvcConfigurer {
 
@@ -31,7 +31,7 @@ public class WebConfiguration implements  WebMvcConfigurer {
         dataSource.setDriverClassName(environment.getProperty("db.driver"));
         dataSource.setUrl(environment.getProperty("db.url"));
         dataSource.setUsername(environment.getProperty("db.user"));
-        dataSource.setPassword(environment.getProperty("db.password")); 
+        dataSource.setPassword(environment.getProperty("db.password"));
         return dataSource;
     }
 
@@ -43,8 +43,8 @@ public class WebConfiguration implements  WebMvcConfigurer {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
-    
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {  
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
      }
 }

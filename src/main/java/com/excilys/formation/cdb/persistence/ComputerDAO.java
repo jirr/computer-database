@@ -22,7 +22,7 @@ public class ComputerDAO {
     private final String SELECT_ALL_COMPUTERS = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id";
     private final String SELECT_ONE_COMPUTER = "SELECT cu.id as cuId, cu.name as cuName, introduced, discontinued, ca.id as caId, ca.name as caName FROM computer cu LEFT JOIN company ca ON ca.id = cu.company_id WHERE cu.id = ?;";
     private final String CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
-    private final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? ";
+    private final String UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE computer.id = ?;";
     private final String DELETE_COMPUTER = "DELETE FROM computer WHERE id=?;";
     private final String COUNT_ALL_COMPUTERS = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company ON company.id = computer.company_id";
     private final String SELECT_COMPUTERS_WITH_COMPANY = "SELECT cu.id FROM computer as cu LEFT JOIN company as ca ON cu.id = ca.id WHERE cu.company_id = ?;";
@@ -84,7 +84,7 @@ public class ComputerDAO {
         }
         return Optional.ofNullable(computer);
     }
-    
+
     /**
      * @param id the ID of Computer that should exist
      * @return Optional<Computer> contains the Computer, could be empty if the id does not exist

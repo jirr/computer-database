@@ -20,7 +20,7 @@ public class ComputerService {
     private Validator validator;
 
     @Autowired
-    public ComputerService (ComputerDAO computerDAO, Validator validator) {
+    public ComputerService(ComputerDAO computerDAO, Validator validator) {
         this.computerDAO = computerDAO;
         this.validator = validator;
     }
@@ -97,14 +97,18 @@ public class ComputerService {
     }
 
     /**
-     * @param id The id of the computer to delete from the DB
+     * @param ids The ids of the computer to delete from the DB
      * @return String validation test
      * @throws ServiceException if the deleting becomes wild
      */
     @Transactional(rollbackFor = Exception.class)
-    public String deleteComputer(int id) throws ServiceException {
-        validator.computerIdValidation(id);
-        computerDAO.deleteComputer(id);
-        return "Computer " + id + " removed from database.";
+    public String deleteComputer(int... ids) throws ServiceException {
+        String res = "";
+        for (int id : ids) {
+            validator.computerIdValidation(id);
+            computerDAO.deleteComputer(id);
+            res += "Computer " + id + " removed from database./n";
+        }
+        return res;
     }
 }

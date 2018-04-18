@@ -1,5 +1,6 @@
 package com.excilys.formation.cdb.persistence;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,12 @@ public class CompanyDAO {
      * @throws DBException if can't reach the database
      */
     public Optional<Company> selectOne(int id) {
-        Company company = (Company) this.jdbcTemplate.queryForList(SELECT_ONE_COMPANY, id, Company.class);
+        Company company;
+        try {
+            company = this.jdbcTemplate.query(SELECT_ONE_COMPANY, (ResultSet resultSet, int row) -> companyMapper.resToCompany(resultSet), id).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            company = null;
+        }
         return Optional.ofNullable(company);
     }
 
