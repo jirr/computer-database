@@ -1,12 +1,12 @@
 package com.excilys.formation.cdb.controller;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.model.Company;
-import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
 import com.excilys.formation.cdb.service.ComputerService;
 import com.excilys.formation.cdb.service.ServiceException;
@@ -77,29 +75,19 @@ public class ComputerController {
     public ModelAndView doGetAddComputer() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("companyList", companyService.listAllCompany());
+        modelAndView.addObject("computer", new ComputerDTO());
         return modelAndView;
     }
 
     @PostMapping("/add")
-    public ModelAndView doPostAddComputer(@RequestParam(value = "computerName", required = true) String name,
-            @RequestParam(value = "introduced", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate introduced,
-            @RequestParam(value = "discontinued", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate discontinued,
-            @RequestParam(value = "companyId", required = true) int companyId) {
+    public ModelAndView doPostAddComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            Company manufactor = null;
-            if (companyId > 0) {
-                manufactor = companyService.getCompany(companyId);
-            }
-            String confirmMessage = computerService.createComputer(new Computer.ComputerBuilder(name)
-                    .dateIntroduced(introduced)
-                    .dateDiscontinued(discontinued)
-                    .manufactor(manufactor)
-                    .build());
+            String confirmMessage = computerService.createComputer(computerMapper.dtoToComputer(computerDTO));
             modelAndView.addObject("confirmMessage", confirmMessage);
         } catch (ServiceException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
-        }
+        }  
         return modelAndView;
     }
     
@@ -117,23 +105,10 @@ public class ComputerController {
     }
 
     @PostMapping("/edit")
-    public ModelAndView doPostEditComputer(@RequestParam(value = "computerName", required = true) String name,
-            @RequestParam(value = "id", required = true) int computerId,
-            @RequestParam(value = "introduced", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate introduced,
-            @RequestParam(value = "discontinued", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate discontinued,
-            @RequestParam(value = "companyId", required = true) int companyId) {
+    public ModelAndView doPostEditComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            Company manufactor = null;
-            if (companyId > 0) {
-                manufactor = companyService.getCompany(companyId);
-            }
-            String confirmMessage = computerService.updateComputer(new Computer.ComputerBuilder(name)
-                    .id(computerId)
-                    .dateIntroduced(introduced)
-                    .dateDiscontinued(discontinued)
-                    .manufactor(manufactor)
-                    .build());
+            String confirmMessage = computerService.updateComputer(computerMapper.dtoToComputer(computerDTO));
             modelAndView.addObject("confirmMessage", confirmMessage);
         } catch (ServiceException e) {
             modelAndView.addObject("errorMessage", e.getMessage());

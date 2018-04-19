@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,15 @@ public class CompanyMapper {
      * @param company The object to map
      * @return CompanyDTO The object mapped to DTO version
      */
-    public CompanyDTO companyToDTO(Company company) {
-        return new CompanyDTO(company.getId(), company.getName());
+    public CompanyDTO companyToDTO(Optional<Company> company) {
+        return company.isPresent() ? new CompanyDTO(company.get().getId(), company.get().getName()) : null;
+    }
+    
+    /**
+     * @param company The object to map
+     * @return CompanyDTO The object mapped to DTO version
+     */
+    public Company dtoToCompany(CompanyDTO companyDTO) {
+        return companyDTO.getId() > 0 ? new Company(companyDTO.getId(), companyDTO.getName()) : null;
     }
 }

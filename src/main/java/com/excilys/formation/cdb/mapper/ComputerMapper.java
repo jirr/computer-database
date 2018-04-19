@@ -33,8 +33,8 @@ public class ComputerMapper {
         String nameComputer = resultSet.getString("cuName");
         Date intro = resultSet.getDate("introduced");
         Date disco = resultSet.getDate("discontinued");
-        LocalDate introducedComputer = intro == null ? null : resultSet.getDate("introduced").toLocalDate();
-        LocalDate discontinuedComputer = disco == null ? null : resultSet.getDate("discontinued").toLocalDate();
+        LocalDate introducedComputer = Optional.ofNullable(intro).isPresent() ? resultSet.getDate("introduced").toLocalDate() : null;
+        LocalDate discontinuedComputer = Optional.ofNullable(disco).isPresent() ? resultSet.getDate("discontinued").toLocalDate() : null;
         Company manufactor = companyMapper.resToCompany(resultSet);
         return new Computer.ComputerBuilder(nameComputer)
                             .id(idComputer)
@@ -53,9 +53,21 @@ public class ComputerMapper {
                                 .id(computer.getId())
                                 .dateIntroduced(optionalDateToString(computer.getDateIntroduced()))
                                 .dateDiscontinued(optionalDateToString(computer.getDateDiscontinued()))
-                                .manufactorId(optionalCompanyToId(computer.getManufactor()))
-                                .manufactorName(optionalCompanyToName(computer.getManufactor()))
+                                .manufactor(companyMapper.companyToDTO(computer.getManufactor()))
                                 .build();
+    }
+
+    /**
+     * @param computerDTO The object to map
+     * @return Computer The object mapped to model version
+     */
+    public Computer dtoToComputer(ComputerDTO computerDTO) {
+        return new Computer.ComputerBuilder(computerDTO.getName())
+                            .id(computerDTO.getId())
+                            .dateIntroduced(stringToLocalDate(computerDTO.getDateIntroduced()))
+                            .dateDiscontinued(stringToLocalDate(computerDTO.getDateDiscontinued()))
+                            .manufactor(companyMapper.dtoToCompany((computerDTO.getManufactor())))
+                            .build();
     }
 
     /**
@@ -63,34 +75,14 @@ public class ComputerMapper {
      * @return String The string version of LocalDate
      */
     private String optionalDateToString(Optional<LocalDate> date) {
-        if (date.isPresent()) {
-            return date.get().toString();
-        } else {
-            return "";
-        }
+        return date.isPresent() ? date.get().toString() : "";
     }
 
     /**
-     * @param company The Optional<Company> to check and convert to string
-     * @return String The string version of LocalDate
+     * @param stringDate The string version of date
+     * @return LocateDate The converted LocalDate
      */
-    private String optionalCompanyToName(Optional<Company> company) {
-        if (company.isPresent()) {
-            return company.get().getName();
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * @param company The Optional<Company> to check and convert to string
-     * @return String The string version of LocalDate
-     */
-    private int optionalCompanyToId(Optional<Company> company) {
-        if (company.isPresent()) {
-            return company.get().getId();
-        } else {
-            return -1;
-        }
+    private LocalDate stringToLocalDate(String stringDate) {
+        return Optional.ofNullable(stringDate).isPresent() && !stringDate.isEmpty() ? LocalDate.parse(stringDate) : null;
     }
 }

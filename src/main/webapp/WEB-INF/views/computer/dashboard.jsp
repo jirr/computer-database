@@ -93,7 +93,7 @@
                         </td>
                         <td><c:out value="${computer.dateIntroduced}" /></td>
                         <td><c:out value="${computer.dateDiscontinued}" /></td>
-                        <td><c:out value="${computer.manufactorName}" /></td>
+                        <td><c:out value="${computer.manufactor.name}" /></td>
                     </tr>
                 </c:forEach>
                 </tbody>

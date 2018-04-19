@@ -8,6 +8,8 @@ public class CompanyDTO {
     private int id;
     private String name;
 
+    public CompanyDTO() {}
+    
     /**
      * @param id unique identifier of company
      * @param name Name of company
