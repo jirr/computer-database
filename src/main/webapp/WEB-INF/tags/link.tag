@@ -18,36 +18,36 @@
     	<c:url value="/static/js/"/>${target}
     </c:when>
     <c:when test="${target == 'dashboard'}">
-		<c:url value="/dashboard"/>
+		<c:url value="/computer/dashboard"/>
 	</c:when>
     <c:when test="${target == 'dashboardPrev'}">
-    	<c:url value="/dashboard?prev&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?prev&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardNext'}">
-    	<c:url value="/dashboard?next&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?next&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardFirst'}">
-    	<c:url value="/dashboard?first&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?first&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardLast'}">
-    	<c:url value="/dashboard?last&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?last&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'dashboardIndex'}">
-    	<c:url value="/dashboard?index=${index}&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?index=${index}&size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'size'}">
-    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'sortBy'}">
-    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'search'}">
-    	<c:url value="/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
+    	<c:url value="/computer/dashboard?size=${size}&search=${search}&sort=${colum_name}&asc=${asc}"/>
     </c:when>
     <c:when test="${target == 'editComputer'}">
-    	<c:url value="/editComputer?id=${computerId}"/>
+    	<c:url value="/computer/edit?id=${computerId}"/>
     </c:when>
     <c:when test="${target == 'addComputer'}">
-    	<c:url value="/addComputer"/>
+    	<c:url value="/computer/add"/>
     </c:when>
 </c:choose>

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @PropertySource(value = "classpath:db.properties")
 @ComponentScan(basePackages = "com.excilys.formation.cdb")
-public class WebConfiguration implements  WebMvcConfigurer {
+public class WebConfiguration implements WebMvcConfigurer {
 
     @Resource
     private Environment environment;
@@ -44,6 +44,7 @@ public class WebConfiguration implements  WebMvcConfigurer {
         return viewResolver;
     }
 
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
      }
