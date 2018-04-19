@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,25 +16,25 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title"/> </a>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value ="${nbComputers}"/> Computers found
+                <c:out value ="${nbComputers}"/> <spring:message code="dashboard.title"/>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="" method="GET" class="form-inline">
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value='<c:out value="${search}"/>' />
-                        <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="dashboard.search.holder"/>" value='<c:out value="${search}"/>' />
+                        <input type="submit" id="searchsubmit" value="<spring:message code="dashboard.search.label"/>" class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="<tag:link target='addComputer'/>">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Delete</a>
+                    <a class="btn btn-success" id="addComputer" href="<tag:link target='addComputer'/>"><spring:message code="dashboard.add"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.delete"/></a>
                 </div>
             </div>
         </div>
@@ -59,24 +60,24 @@
                         </th>
                         <th>
                         	<a href="<tag:link target='sortBy' colum_name='cuName' asc="${sortBy == 'cuName' && asc != true}" computerId='${computer.id}'/>" onclick="">
-                            	Computer name
+                            	<spring:message code="dashboard.row.name"/>
                             </a>
                         </th>
                         <th>
                             <a href="<tag:link target='sortBy' colum_name='introduced' asc="${sortBy == 'introduced' && asc != true}" computerId='${computer.id}'/>" onclick="">
-                            	Introduced date
+                            	<spring:message code="dashboard.row.introduced"/>
                             </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
                             <a href="<tag:link target='sortBy' colum_name='discontinued' asc="${sortBy == 'discontinued' && asc != true}" computerId='${computer.id}'/>" onclick="">
-                            	Discontinued date
+                            	<spring:message code="dashboard.row.discontinued"/>
                             </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
                         	<a href="<tag:link target='sortBy' colum_name='caName' asc="${sortBy == 'caName' && asc != true}" computerId='${computer.id}'/>" onclick="">
-                            	Company
+                            	<spring:message code="dashboard.row.company"/>
                             </a>
                         </th>
                     </tr>

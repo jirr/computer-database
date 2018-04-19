@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title"/> </a>
         </div>
     </header>
     
@@ -27,24 +28,24 @@
                     <div class="label label-default pull-right">
                         id: ${computer.id}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><spring:message code="edit.title"/></h1>
                     <form:form action="edit" method="POST" modelAttribute="computer">
                         <input type="hidden" value="${computer.id}" id="id" name="id"/>
                         <fieldset>
                             <div class="form-group">
-                                <label for="name">Computer name</label>
+                                <label for="name"><spring:message code="edit.form.name"/></label>
                                 <input type="text" class="form-control" id="name" placeholder="Computer name" name="name" placeholder="" value="<c:out value="${computer.name}" />" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\.\* ]+$">
                             </div>
                             <div class="form-group">
-                                <label for="dateIntroduced">Introduced date</label>
+                                <label for="dateIntroduced"><spring:message code="edit.form.introduced"/></label>
                                 <input type="date" class="form-control" id="dateIntroduced" name="dateIntroduced" placeholder="Introduced Date" value="<c:out value="${computer.dateIntroduced}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
-                                <label for="dateDiscontinued">Discontinued date</label>
+                                <label for="dateDiscontinued"><spring:message code="edit.form.discontinued"/></label>
                                 <input type="date" class="form-control" id="dateDiscontinued" name="dateDiscontinued" placeholder="Discontinued Date" value="<c:out value="${computer.dateDiscontinued}" />" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
-                                <form:label for="companyId" path="manufactor">Company</form:label>
+                                <form:label for="companyId" path="manufactor"><spring:message code="edit.form.company"/></form:label>
                                 <form:select class="form-control" id="companyId" name="companyId" path="manufactor.id">
                                 <form:option value="-1">--</form:option>
                                     <c:forEach var="company" items="${companyList}">
@@ -54,9 +55,9 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Valid" class="btn btn-primary">
-                            or
-                            <a href="<tag:link target='dashboard'/>" class="btn btn-default">Cancel</a>
+                            <input type="submit" value="<spring:message code="edit"/>" class="btn btn-primary">
+                            <spring:message code="edit.button.or"/>
+                            <a href="<tag:link target='dashboard'/>" class="btn btn-default"><spring:message code="edit.button.cancel"/></a>
                         </div>
                     </form:form>
                 </div>

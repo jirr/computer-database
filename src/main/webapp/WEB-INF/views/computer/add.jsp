@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title"/> </a>
         </div>
     </header>
 
@@ -24,23 +25,23 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="add.title"/></h1>
                     <form:form action="add" method="POST" modelAttribute="computer">
                         <fieldset>
                             <div class="form-group">
-                                <label for="name">Computer name</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Computer name" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\.\* ]+$">
+                                <label for="name"><spring:message code="add.form.name"/></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="<spring:message code="add.form.name"/>" required pattern="^[\wÀ-ÿ]+[\wÀ-ÿ_\-'\+\.\* ]+$">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><spring:message code="add.form.introduced"/></label>
                                 <input type="date" class="form-control" id="dateIntroduced" name="dateIntroduced" placeholder="Introduced date" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><spring:message code="add.form.discontinued"/></label>
                                 <input type="date" class="form-control" id="dateDiscontinued" name="dateDiscontinued" placeholder="Discontinued date" data-validation="date" data-validation-format="yyyy-mm-dd">
                             </div>
                             <div class="form-group">
-                                <form:label for="companyId" path="manufactor">Company</form:label>
+                                <form:label for="companyId" path="manufactor"><spring:message code="add.form.company"/></form:label>
                                 <form:select class="form-control" id="companyId" name="companyId" path="manufactor.id">
                                 <form:option value="-1">--</form:option>
                                     <c:forEach var="company" items="${companyList}">
@@ -50,9 +51,9 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
-                            or
-                            <a href="<tag:link target='dashboard'/>" class="btn btn-default">Cancel</a>
+                            <input type="submit" value="<spring:message code="add.button.valid"/>" class="btn btn-primary">
+                            <spring:message code="add.button.or"/>
+                            <a href="<tag:link target='dashboard'/>" class="btn btn-default"><spring:message code="add.button.cancel"/></a>
                         </div>
                     </form:form>
                 </div>
