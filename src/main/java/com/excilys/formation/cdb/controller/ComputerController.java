@@ -40,12 +40,7 @@ public class ComputerController {
             @RequestParam(value = "sort", defaultValue = "") String sort,
             @RequestParam(value = "asc", defaultValue = "true") boolean asc) throws ServiceException {
         ModelAndView modelAndView = new ModelAndView();
-        ComputerPage page = new ComputerPage(size, computerService);
-        page.setKeywords(search);
-        page.setSize(size);
-        page.goToPage(index - 1);
-        page.setSortBy(sort);
-        page.setAsc(asc);
+        ComputerPage page = new ComputerPage(computerService, size, search, index - 1, sort, asc);
         int nbComputer = computerService.countAllComputers(page.getKeywords());
         List<ComputerDTO> computersDTO = new ArrayList<>();
         page.getContent().forEach(computer -> computersDTO.add(computerMapper.computerToDTO(computer)));
@@ -64,7 +59,7 @@ public class ComputerController {
     public ModelAndView doPostDashboard(@RequestParam(value = "selection") int[] ids) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            modelAndView.addObject("confirmMessage", computerService.deleteComputer(ids));
+            modelAndView.addObject("successMessage", computerService.deleteComputer(ids));
         } catch (ServiceException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
         }
@@ -83,8 +78,8 @@ public class ComputerController {
     public ModelAndView doPostAddComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            String confirmMessage = computerService.createComputer(computerMapper.dtoToComputer(computerDTO));
-            modelAndView.addObject("confirmMessage", confirmMessage);
+            String successMessage = computerService.createComputer(computerMapper.dtoToComputer(computerDTO));
+            modelAndView.addObject("successMessage", successMessage);
         } catch (ServiceException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
         }  
@@ -108,8 +103,8 @@ public class ComputerController {
     public ModelAndView doPostEditComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            String confirmMessage = computerService.updateComputer(computerMapper.dtoToComputer(computerDTO));
-            modelAndView.addObject("confirmMessage", confirmMessage);
+            String successMessage = computerService.updateComputer(computerMapper.dtoToComputer(computerDTO));
+            modelAndView.addObject("successMessage", successMessage);
         } catch (ServiceException e) {
             modelAndView.addObject("errorMessage", e.getMessage());
         }

@@ -105,12 +105,12 @@ public class ComputerService {
      */
     @Transactional(rollbackFor = Exception.class)
     public String deleteComputer(int... ids) throws ServiceException {
-        String res = "";
+        String strIds = "";
         for (int id : ids) {
             validator.computerIdValidation(id);
             computerDAO.deleteComputer(id);
-            res += "Computer " + id + " removed from database./n";
+            strIds += "(" + id + ")";
         }
-        return res;
+        return "Computer(s) " + strIds + " removed from database.\n";
     }
 }

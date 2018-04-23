@@ -11,6 +11,20 @@ import com.excilys.formation.cdb.service.ServiceException;
 public class ComputerPage extends Page<Computer> {
 
     private ComputerService computerService;
+    private String keywords = "";
+    private String sortBy = "";
+    private boolean asc = true;
+
+    public ComputerPage(ComputerService computerService, int size, String keywords, int index, String sortBy, boolean asc) throws ServiceException {
+        super(size);
+        this.computerService = computerService;
+        this.keywords = keywords;
+        this.sortBy = sortBy;
+        this.asc = asc;
+        this.setLastPageIndex();
+        this.goToPage(index);
+        ;
+    }
 
     public ComputerPage(int size, ComputerService computerService) throws ServiceException {
         super(size);
@@ -37,8 +51,16 @@ public class ComputerPage extends Page<Computer> {
         return keywords;
     }
 
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public boolean isAsc() {
+        return asc;
+    }
+
     public void setKeywords(String keywords) throws ServiceException {
-        super.keywords = keywords;
+        this.keywords = keywords;
         this.setContent(this.getOffset());
         this.setLastPageIndex();
         super.currentPageIndex = 0;
