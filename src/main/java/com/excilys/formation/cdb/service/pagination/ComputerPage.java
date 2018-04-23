@@ -25,7 +25,7 @@ public class ComputerPage extends Page<Computer> {
 
     @Override
     public void setLastPageIndex() throws ServiceException {
-        this.lastPageIndex = computerService.countAllComputers(this.getKeywords()) / this.getSize();
+        this.lastPageIndex = (computerService.countAllComputers(this.getKeywords())-1) / this.getSize();
     }
 
     @Override
