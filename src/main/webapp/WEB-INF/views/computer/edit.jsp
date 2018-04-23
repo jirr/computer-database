@@ -23,6 +23,16 @@
     
     <section id="main">
         <div class="container">
+            <c:if test="${not empty errorMessage}">            
+	        	<div class="alert alert-danger">
+	                Error: ${errorMessage}
+	            </div> 
+            </c:if>
+            <c:if test="${not empty successMessage}">            
+	        	<div class="alert alert-success">
+	                Success: ${successMessage}
+	            </div> 
+            </c:if>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
@@ -55,7 +65,7 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="<spring:message code="edit"/>" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="edit.button.valid"/>" class="btn btn-primary">
                             <spring:message code="edit.button.or"/>
                             <a href="<tag:link target='dashboard'/>" class="btn btn-default"><spring:message code="edit.button.cancel"/></a>
                         </div>

@@ -22,6 +22,16 @@
 
     <section id="main">
         <div class="container">
+            <c:if test="${not empty errorMessage}">            
+	        	<div class="alert alert-danger">
+	                Error: ${errorMessage}
+	            </div> 
+            </c:if>
+            <c:if test="${not empty successMessage}">            
+	        	<div class="alert alert-success">
+	                Success: ${successMessage}
+	            </div> 
+            </c:if>
             <h1 id="homeTitle">
                 <c:out value ="${nbComputers}"/> <spring:message code="dashboard.title"/>
             </h1>

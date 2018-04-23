@@ -23,6 +23,16 @@
 
     <section id="main">
         <div class="container">
+        	<c:if test="${not empty errorMessage}">            
+	        	<div class="alert alert-danger">
+	                Error: ${errorMessage}
+	            </div> 
+            </c:if>
+            <c:if test="${not empty successMessage}">            
+	        	<div class="alert alert-success">
+	                Success: ${successMessage}
+	            </div> 
+            </c:if>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1><spring:message code="add.title"/></h1>
