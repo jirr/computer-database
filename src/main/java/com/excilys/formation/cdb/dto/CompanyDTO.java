@@ -1,13 +1,22 @@
 package com.excilys.formation.cdb.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * @author jirr
  *
  */
 public class CompanyDTO {
     private int id;
+    @NotNull
+    @Size(min=1, max=30)
+    @Pattern(regexp="^[\\wÀ-ÿ]+[\\wÀ-ÿ_\\-'\\+\\.\\* ]+$")
     private String name;
 
+    public CompanyDTO() {}
+    
     /**
      * @param id unique identifier of company
      * @param name Name of company

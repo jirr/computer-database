@@ -1,24 +1,33 @@
 package com.excilys.formation.cdb.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * @author jirr
  *
  */
 public class ComputerDTO {
     private int id;
+    @NotNull
+    @Size(min=1, max=30)
+    @Pattern(regexp="^[\\wÀ-ÿ]+[\\wÀ-ÿ_\\-'\\+\\.\\* ]+$")
     private String name;
+    @Pattern(regexp="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))")
     private String dateIntroduced;
+    @Pattern(regexp="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))")
     private String dateDiscontinued;
-    private int manufactorId;
-    private String manufactorName;
+    private CompanyDTO manufactor;
+    
+    public ComputerDTO() { };
 
     private ComputerDTO(ComputerDTOBuilder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.dateIntroduced = builder.dateIntroduced;
         this.dateDiscontinued = builder.dateDiscontinued;
-        this.manufactorId = builder.manufactorId;
-        this.manufactorName = builder.manufactorName;
+        this.manufactor = builder.manufactor;
     }
 
     public int getId() {
@@ -53,20 +62,12 @@ public class ComputerDTO {
         this.dateDiscontinued = dateDiscontinued;
     }
 
-    public int getManufactorId() {
-        return manufactorId;
+    public CompanyDTO getManufactor() {
+        return manufactor;
     }
 
-    public void setManufactorId(int manufactorId) {
-        this.manufactorId = manufactorId;
-    }
-
-    public String getManufactorName() {
-        return manufactorName;
-    }
-
-    public void setManufactorName(String manufactorName) {
-        this.manufactorName = manufactorName;
+    public void setManufactor(CompanyDTO manufactor) {
+        this.manufactor = manufactor;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class ComputerDTO {
         result += " {nom: " + this.name;
         result += ", date1: " + this.dateIntroduced;
         result += ", date2: " + this.dateDiscontinued;
-        result += ", manufactor: " + this.manufactorName + "}";
+        result += ", manufactor: " + this.manufactor.getName() + "}";
         return result;
     }
 
@@ -85,8 +86,7 @@ public class ComputerDTO {
         private final String name;
         private String dateIntroduced;
         private String dateDiscontinued;
-        private int manufactorId;
-        private String manufactorName;
+        private CompanyDTO manufactor;
 
         public ComputerDTOBuilder(String name) {
             this.name = name;
@@ -107,13 +107,8 @@ public class ComputerDTO {
             return this;
         }
 
-        public ComputerDTOBuilder manufactorId(int manufactorId) {
-            this.manufactorId = manufactorId;
-            return this;
-        }
-
-        public ComputerDTOBuilder manufactorName(String manufactorName) {
-            this.manufactorName = manufactorName;
+        public ComputerDTOBuilder manufactor(CompanyDTO manufactor) {
+            this.manufactor = manufactor;
             return this;
         }
 
