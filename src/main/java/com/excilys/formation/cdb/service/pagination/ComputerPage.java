@@ -23,7 +23,6 @@ public class ComputerPage extends Page<Computer> {
         this.asc = asc;
         this.setLastPageIndex();
         this.goToPage(index);
-        ;
     }
 
     public ComputerPage(int size, ComputerService computerService) throws ServiceException {

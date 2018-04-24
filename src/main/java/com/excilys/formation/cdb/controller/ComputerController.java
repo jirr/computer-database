@@ -38,20 +38,17 @@ public class ComputerController {
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "index", defaultValue = "1") int index,
             @RequestParam(value = "sort", defaultValue = "") String sort,
-            @RequestParam(value = "asc", defaultValue = "true") boolean asc) throws ServiceException {
+            @RequestParam(value = "asc", defaultValue = "true") boolean asc) {
         ModelAndView modelAndView = new ModelAndView();
-        ComputerPage page = new ComputerPage(computerService, size, search, index - 1, sort, asc);
-        int nbComputer = computerService.countAllComputers(page.getKeywords());
-        List<ComputerDTO> computersDTO = new ArrayList<>();
-        page.getContent().forEach(computer -> computersDTO.add(computerMapper.computerToDTO(computer)));
-        modelAndView.addObject("nbComputers", nbComputer);
-        modelAndView.addObject("computer_list", computersDTO);
-        modelAndView.addObject("keywords", page.getKeywords());
-        modelAndView.addObject("maxIndex", page.getLastPageIndex() + 1);
-        modelAndView.addObject("currentIndex", page.getCurrentPageIndex() + 1);
-        modelAndView.addObject("sortBy", page.getSortBy());
-        modelAndView.addObject("asc", page.isAsc());
-        modelAndView.addObject("size", page.getSize());
+        try {
+            ComputerPage page = new ComputerPage(computerService, size, search, index - 1, sort, asc);
+            int nbComputer = computerService.countAllComputers(page.getKeywords());
+            List<ComputerDTO> computersDTO = new ArrayList<>();
+            page.getContent().forEach(computer -> computersDTO.add(computerMapper.computerToDTO(computer)));
+            addAllObject(modelAndView, nbComputer, computersDTO, page);
+        } catch (ServiceException e) {
+            modelAndView.addObject("errorMessage", e.getMessage());
+        }
         return modelAndView;
     }
 
@@ -110,4 +107,17 @@ public class ComputerController {
         }
         return modelAndView;
     }
+
+    private ModelAndView addAllObject (ModelAndView modelAndView, int nbComputer, List<ComputerDTO> computersDTO, ComputerPage page) {
+        modelAndView.addObject("nbComputers", nbComputer);
+        modelAndView.addObject("computer_list", computersDTO);
+        modelAndView.addObject("keywords", page.getKeywords());
+        modelAndView.addObject("maxIndex", page.getLastPageIndex() + 1);
+        modelAndView.addObject("currentIndex", page.getCurrentPageIndex() + 1);
+        modelAndView.addObject("sortBy", page.getSortBy());
+        modelAndView.addObject("asc", page.isAsc());
+        modelAndView.addObject("size", page.getSize());
+        return modelAndView;
+    }
+
 }

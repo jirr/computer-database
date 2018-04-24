@@ -11,7 +11,7 @@ import com.excilys.formation.cdb.service.ServiceException;
  */
 public abstract class Page<T> {
 
-    private int size;
+    protected int size;
     protected int currentPageIndex;
     protected int lastPageIndex;
     protected List<T> content = null;
