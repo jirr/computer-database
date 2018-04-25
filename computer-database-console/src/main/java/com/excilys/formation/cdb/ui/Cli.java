@@ -3,9 +3,10 @@ package com.excilys.formation.cdb.ui;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import com.excilys.formation.cdb.config.AppConfiguration;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
@@ -18,11 +19,13 @@ import com.excilys.formation.cdb.pagination.Page;
 @Controller
 public class Cli {
 
-    @Autowired
     private ComputerService computerService;
-
-    @Autowired
     private CompanyService companyService;
+
+    public Cli(ComputerService computerService, CompanyService companyService) {
+        this.companyService = companyService;
+        this.computerService = computerService;
+    }
 
     private static final int PAGE_SIZE = 50;
 
@@ -30,11 +33,10 @@ public class Cli {
      * @param args the arguments
      */
     public static void main(String[] args) {
-        //AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
-        Cli cli = new Cli();
-        //cli = context.getBean(Cli.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        Cli cli = context.getBean(Cli.class);
         cli.applicationLoop();
-        //context.close();
+        context.close();
     }
 
     private void applicationLoop() {
