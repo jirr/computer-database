@@ -3,15 +3,24 @@ package com.excilys.formation.cdb.model;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 /**
  * @author jirr
  *
  */
+@Entity
 public class Computer {
+    @Id
+    @GeneratedValue
     private int id;
     private String name;
     private LocalDate dateIntroduced;
     private LocalDate dateDiscontinued;
+    @ManyToOne
     private Company manufactor;
 
     private Computer(ComputerBuilder builder) {
