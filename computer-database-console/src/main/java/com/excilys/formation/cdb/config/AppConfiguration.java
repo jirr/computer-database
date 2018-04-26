@@ -1,5 +1,7 @@
 package com.excilys.formation.cdb.config;
 
+import java.util.Properties;
+
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
@@ -8,9 +10,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import com.excilys.formation.cdb.model.Company;
 
 @Configuration
 @PropertySource(value = "classpath:db.properties")
@@ -29,11 +34,34 @@ public class AppConfiguration {
         dataSource.setPassword(environment.getProperty("db.password"));
         return dataSource;
     }
-
+    
     @Bean
-    public PlatformTransactionManager txManager() {
-        DataSourceTransactionManager txManager = new DataSourceTransactionManager();
-        txManager.setDataSource(dataSource());
-        return txManager;
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager
+          = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
+    
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setAnnotatedClasses(Company.class);
+        sessionFactory.setPackagesToScan("com.excilys.formation.cdb.model");
+        sessionFactory.setHibernateProperties(hibernateProperties());
+
+        return sessionFactory;
+    }
+
+    private Properties hibernateProperties() {
+        return new Properties() {
+            {
+                setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
+                setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+                setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
+                setProperty("hibernate.globally_quoted_identifiers", "true");
+            }
+        };
     }
 }
