@@ -38,6 +38,7 @@
 		<querydsl.version>4.2.1</querydsl.version>
 		<jstl.version>1.2</jstl.version>
 		<jsp.version>2.3.1</jsp.version>
+		<tomcat-dbcp.version>7.0.55</tomcat-dbcp.version>
 		<!-- web.xml -->
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 	</properties>
@@ -116,6 +117,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+	    <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>${tomcat-dbcp.version}</version>
+        </dependency>
 		<!--  Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
