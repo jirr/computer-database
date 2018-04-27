@@ -8,20 +8,23 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.model.QCompany;
 import com.excilys.formation.cdb.model.QComputer;
-import com.querydsl.jpa.hibernate.HibernateQueryFactory;
+import com.querydsl.jpa.hibernate.HibernateDeleteClause;
+import com.querydsl.jpa.hibernate.HibernateQuery;
+import com.querydsl.jpa.hibernate.HibernateUpdateClause;
 
 @Repository
 public class ComputerDAO {
-    private HibernateQueryFactory hibernateQueryFactory;
+    private SessionFactory sessionFactory;
     private QComputer qComputer;
     private QCompany qCompany;
 
     @Autowired 
     public ComputerDAO(SessionFactory sessionFactory) {
-        this.hibernateQueryFactory = new HibernateQueryFactory(sessionFactory.openSession());
+        this.sessionFactory = sessionFactory;
         this.qComputer = QComputer.computer;
         this.qCompany = QCompany.company;
     }
@@ -30,22 +33,24 @@ public class ComputerDAO {
      * @return List<Computer> The list of all Computer object from the DB
      */
     public List<Computer> listAll() {
-        return (List<Computer>) this.hibernateQueryFactory.select(qComputer).from(qComputer).fetch();
+        return (List<Computer>) new HibernateQuery<Company>(this.sessionFactory.openSession()).select(qComputer)
+                .from(qComputer).fetch();
     }
 
     /**
      * @param computer the computer object to create in the DB
      */
     public void createComputer(Computer computer) {
-
+        this.sessionFactory.openSession().save(computer);
     }
 
     /**
      * @param computer the computer object to create in the DB
      */
     public void updateComputer(Computer computer) {
-        this.hibernateQueryFactory.update(qComputer)
-        .where(qComputer.id.eq(computer.getId())).set(qComputer, computer).execute();
+        new HibernateUpdateClause(this.sessionFactory.openSession(), qComputer)
+                .where(qComputer.id.eq(computer.getId()))
+                .set(qComputer, computer).execute();
     }
 
     /**
@@ -53,7 +58,8 @@ public class ComputerDAO {
      */
     public void deleteComputer(int... ids) {
         for (int id : ids) {
-            this.hibernateQueryFactory.delete(qComputer).where(qComputer.id.eq(id));
+            new HibernateDeleteClause(this.sessionFactory.openSession(), qComputer)
+                    .where(qComputer.id.eq(id));
         }
     }
 
@@ -62,8 +68,8 @@ public class ComputerDAO {
      * @return Optional<Computer> contains the Computer, could be empty if the id does not exist
      */
     public Optional<Computer> selectOne(int id) {
-        return Optional.ofNullable((Computer) this.hibernateQueryFactory.select(qComputer)
-                .from(qComputer).where(qComputer.id.eq(id)).fetchOne());
+        return Optional.ofNullable((Computer) new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qComputer).from(qComputer).where(qComputer.id.eq(id)).fetchOne());
     }
 
     /**
@@ -71,8 +77,8 @@ public class ComputerDAO {
      * @return Optional<Computer> contains the Computer, could be empty if the id does not exist
      */
     public List<Integer> getComputersWithCompanyId(int id) {
-        return (List<Integer>) this.hibernateQueryFactory.select(qComputer.id)
-                .from(qComputer).where(qComputer.manufactor.id.eq(id)).fetch();
+        return (List<Integer>) new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qComputer.id).from(qComputer).where(qComputer.manufactor.id.eq(id)).fetch();
     }
 
     /**
@@ -80,7 +86,7 @@ public class ComputerDAO {
      * @return int number of computers
      */
     public int countAllComputer(String keywords) {
-        return (int) this.hibernateQueryFactory.select(qComputer.id)
+        return (int) new HibernateQuery<Company>(this.sessionFactory.openSession()).select(qComputer.id)
                 .from(qComputer).leftJoin(qComputer.manufactor, qCompany)
                 .where(qComputer.name.contains(keywords)
                         .or(qComputer.manufactor.name.contains(keywords)))
@@ -96,9 +102,9 @@ public class ComputerDAO {
      * @return List<Computer> The sublist of Computer object from the DB
      */
     public List<Computer> subList(int offset, int limit, String keywords, String sortBy, boolean asc) {
-        return (List<Computer>) this.hibernateQueryFactory.select(qComputer)
-                                        .from(qComputer).leftJoin(qComputer.manufactor, qCompany)
-                                        .offset(offset).limit(limit).fetch();
-        //query = orderBy(query, sortBy, asc);
+        return (List<Computer>) new HibernateQuery<Company>(this.sessionFactory.openSession()).select(qComputer)
+                .from(qComputer).leftJoin(qComputer.manufactor, qCompany)
+                .offset(offset).limit(limit)
+                .fetch();
     }
 }
