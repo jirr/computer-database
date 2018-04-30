@@ -42,9 +42,10 @@ public class ComputerDAO {
 
     /**
      * @param computer the computer object to create in the DB
+     * @throws Exception 
      */
     public void createComputer(Computer computer) {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         session.save(computer);
         session.flush();
         session.close();
@@ -54,7 +55,7 @@ public class ComputerDAO {
      * @param computer the computer object to create in the DB
      */
     public void updateComputer(Computer computer) {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         session.update(computer);
         session.flush();
         session.close();
