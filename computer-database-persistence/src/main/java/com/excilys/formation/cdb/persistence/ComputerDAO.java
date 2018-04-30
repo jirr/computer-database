@@ -15,7 +15,6 @@ import com.excilys.formation.cdb.model.QCompany;
 import com.excilys.formation.cdb.model.QComputer;
 import com.querydsl.jpa.hibernate.HibernateDeleteClause;
 import com.querydsl.jpa.hibernate.HibernateQuery;
-import com.querydsl.jpa.hibernate.HibernateUpdateClause;
 
 @Repository
 public class ComputerDAO {
@@ -45,8 +44,9 @@ public class ComputerDAO {
      * @param computer the computer object to create in the DB
      */
     public void createComputer(Computer computer) {
-        Session session = this.sessionFactory.openSession();
+        Session session = this.sessionFactory.getCurrentSession();
         session.save(computer);
+        session.flush();
         session.close();
     }
 
@@ -54,10 +54,9 @@ public class ComputerDAO {
      * @param computer the computer object to create in the DB
      */
     public void updateComputer(Computer computer) {
-        Session session = this.sessionFactory.openSession();
-        new HibernateUpdateClause(session, qComputer)
-                .where(qComputer.id.eq(computer.getId()))
-                .set(qComputer, computer).execute();
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(computer);
+        session.flush();
         session.close();
     }
 
@@ -67,7 +66,7 @@ public class ComputerDAO {
     public void deleteComputer(int... ids) {
         Session session = this.sessionFactory.openSession();
         for (int id : ids) {
-            new HibernateDeleteClause(session, qComputer).where(qComputer.id.eq(id));
+            new HibernateDeleteClause(session, qComputer).where(qComputer.id.eq(id)).execute();
         }
         session.close();
     }
