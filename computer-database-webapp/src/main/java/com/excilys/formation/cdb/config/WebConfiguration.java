@@ -69,6 +69,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     private final Properties hibernateProperties() {
         return new Properties() {
+            private static final long serialVersionUID = -6659937884292195075L;
             {
                 setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));

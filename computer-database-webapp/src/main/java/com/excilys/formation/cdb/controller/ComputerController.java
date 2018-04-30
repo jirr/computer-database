@@ -78,9 +78,7 @@ public class ComputerController {
             String successMessage = computerService.createComputer(computerMapper.dtoToComputer(computerDTO));
             modelAndView.addObject("successMessage", successMessage);
         } catch (ServiceException e) {
-            System.out.println(e.getMessage());
             modelAndView.addObject("errorMessage", e.getMessage());
-            System.out.println("TEST");
         }
         return modelAndView;
     }

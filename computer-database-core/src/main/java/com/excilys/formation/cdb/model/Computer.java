@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
  * @author jirr
@@ -20,7 +21,7 @@ import javax.persistence.GeneratedValue;
 public class Computer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @Column(name="name")
