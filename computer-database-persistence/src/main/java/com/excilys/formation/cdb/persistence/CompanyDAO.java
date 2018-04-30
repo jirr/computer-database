@@ -3,7 +3,6 @@ package com.excilys.formation.cdb.persistence;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -30,33 +29,24 @@ public class CompanyDAO {
      * @return Optional<Company> contains the company, could be empty if the id does not exist
      */
     public Optional<Company> selectOne(int id) {
-        Session session = this.sessionFactory.openSession();
-        Company company = new HibernateQuery<Company>(session).select(qCompany)
-                .from(qCompany).where(qCompany.id.eq(id)).fetchOne();
-        session.close();
-        return Optional.ofNullable(company);
+        return Optional.ofNullable(new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qCompany).from(qCompany).where(qCompany.id.eq(id)).fetchOne());
     }
 
     /**
      * @return List<Company> The list of all companies
      */
     public List<Company> list() {
-        Session session = this.sessionFactory.openSession();
-        List<Company> companyList = new HibernateQuery<Company>(session).select(qCompany)
-                .from(qCompany).fetch();
-        session.close();
-        return companyList;
+        return (List<Company>) new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qCompany).from(qCompany).fetch();
     }
     
     /**
      * @return int number of companies
      */
     public int countAllCompany() {
-        Session session = this.sessionFactory.openSession();
-        int total = (int) new HibernateQuery<Company>(session).select(qCompany.id)
-                .from(qCompany).fetchCount();
-        session.close();
-        return total;
+        return (int) new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qCompany.id).from(qCompany).fetchCount();
     }
 
     /**
@@ -65,20 +55,15 @@ public class CompanyDAO {
      * @return List<Company> The sublist of Company object from the DB
      */
     public List<Company> subList(int offset, int limit) {
-        Session session = this.sessionFactory.openSession();
-        List<Company> companyList = new HibernateQuery<Company>(session).select(qCompany)
-                .from(qCompany).offset(offset).limit(limit).fetch();
-        session.close();
-        return companyList;
+        return (List<Company>) new HibernateQuery<Company>(this.sessionFactory.openSession())
+                .select(qCompany).from(qCompany).offset(offset).limit(limit).fetch();
     }
 
     /**
      * @param id the ID of computer to delete from the DB
      */
     public void deleteCompany(int id) {
-        Session session = this.sessionFactory.openSession();
-        new HibernateDeleteClause(session, qCompany)
+        new HibernateDeleteClause(this.sessionFactory.openSession(), qCompany)
                 .where(qCompany.id.eq(id)).execute();
-        session.close();
     }
 }

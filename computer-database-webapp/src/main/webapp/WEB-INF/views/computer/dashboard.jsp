@@ -69,24 +69,24 @@
                             </span>
                         </th>
                         <th>
-                        	<a href="<tag:link target='sortBy' colum_name='cuName' asc="${sortBy == 'cuName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                        	<a href="<tag:link target='sortBy' search='${keywords}' colum_name='cuName' asc="${sortBy == 'cuName' && asc != true}" computerId='${computer.id}'/>" onclick="">
                             	<spring:message code="dashboard.row.name"/>
                             </a>
                         </th>
                         <th>
-                            <a href="<tag:link target='sortBy' colum_name='introduced' asc="${sortBy == 'introduced' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            <a href="<tag:link target='sortBy' search='${keywords}' colum_name='introduced' asc="${sortBy == 'introduced' && asc != true}" computerId='${computer.id}'/>" onclick="">
                             	<spring:message code="dashboard.row.introduced"/>
                             </a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href="<tag:link target='sortBy' colum_name='discontinued' asc="${sortBy == 'discontinued' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                            <a href="<tag:link target='sortBy' search='${keywords}' colum_name='discontinued' asc="${sortBy == 'discontinued' && asc != true}" computerId='${computer.id}'/>" onclick="">
                             	<spring:message code="dashboard.row.discontinued"/>
                             </a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	<a href="<tag:link target='sortBy' colum_name='caName' asc="${sortBy == 'caName' && asc != true}" computerId='${computer.id}'/>" onclick="">
+                        	<a href="<tag:link target='sortBy' search='${keywords}' colum_name='caName' asc="${sortBy == 'caName' && asc != true}" computerId='${computer.id}'/>" onclick="">
                             	<spring:message code="dashboard.row.company"/>
                             </a>
                         </th>
