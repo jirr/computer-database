@@ -4,10 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.cdb.dto.UserDTO;
+import com.excilys.formation.cdb.model.User;
  
 @Controller
 public class SecurityController {
@@ -18,9 +17,10 @@ public class SecurityController {
         return modelAndView;
     }
     
-    @PostMapping("/login")
-    public ModelAndView doPostLogin(@ModelAttribute("user") UserDTO userDTO, Model model) {
+    @GetMapping("/logout")
+    public ModelAndView doPostLogin(@ModelAttribute("user") User user, Model model) {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("successMessage", "Successfully logged out !");
         return modelAndView;
     }
 }

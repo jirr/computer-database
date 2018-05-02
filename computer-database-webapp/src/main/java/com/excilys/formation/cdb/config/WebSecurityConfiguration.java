@@ -9,12 +9,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.excilys.formation.cdb.service.UserService;
 
 @Configuration
 @EnableWebMvc
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
-    /*private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
     
     public WebSecurityConfiguration(UserService userService) {
         this.userDetailsService = userService;
@@ -31,8 +31,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider
-          = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder());
         return authProvider;
@@ -40,8 +39,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      
     @Bean
     public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(10);
-    }*/
+        return new BCryptPasswordEncoder(11);
+    }
     
 
     @Override
@@ -51,12 +50,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
 
             .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/computer/edit", "/computer/add", "/computer/delete")
+                .hasRole("ADMIN")
                 .and()
 
             .formLogin()
                 .loginPage("/login")
-                .permitAll()
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/computer/dashboard")
                 .and()
         
             .logout()

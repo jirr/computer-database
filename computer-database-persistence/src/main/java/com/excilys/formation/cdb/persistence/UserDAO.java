@@ -4,11 +4,13 @@ import java.util.Optional;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.cdb.model.QUser;
 import com.excilys.formation.cdb.model.User;
 import com.querydsl.jpa.hibernate.HibernateQuery;
 
+@Repository
 public class UserDAO {
     
     private SessionFactory sessionFactory;
@@ -26,6 +28,6 @@ public class UserDAO {
      */
     public Optional<User> selectOne(String name) {
         return Optional.ofNullable(new HibernateQuery<User>(this.sessionFactory.openSession())
-                .select(qUser).from(qUser).where(qUser.login.eq(name)).fetchOne());
+                .select(qUser).from(qUser).where(qUser.username.eq(name)).fetchOne());
     }
 }
