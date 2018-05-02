@@ -1,22 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="<tag:link directory='css' target='bootstrap.min.css'/>"
-	rel="stylesheet" media="screen">
-<link href="<tag:link directory='css' target='font-awesome.css'/>"
-	rel="stylesheet" media="screen">
-<link href="<tag:link directory='css' target='main.css'/>"
-	rel="stylesheet" media="screen">
+	<title>Computer Database</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="<tag:link directory='css' target='bootstrap.min.css'/>" rel="stylesheet" media="screen">
+	<link href="<tag:link directory='css' target='font-awesome.css'/>" rel="stylesheet" media="screen">
+	<link href="<tag:link directory='css' target='main.css'/>" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -94,10 +90,10 @@
 	<script
 		src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 	<script>
-	  	$.validate({
-	    	lang: 'en',
-	    	modules: 'html5'
-	  	});
+		$.validate({
+			lang : 'en',
+			modules : 'html5'
+		});
 	</script>
 </body>
 </html>
