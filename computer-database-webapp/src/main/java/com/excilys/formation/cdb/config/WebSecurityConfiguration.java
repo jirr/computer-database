@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,13 +44,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-
-            .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/computer/edit", "/computer/add", "/computer/delete")
                 .hasRole("ADMIN")
+                .antMatchers("/computer/dashboard")
+                .hasAnyRole("USER", "ADMIN")
                 .and()
 
             .formLogin()
@@ -64,9 +61,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                //.logoutSuccessHandler(logoutSuccessHandler)
-                .invalidateHttpSession(true);
-                //.addLogoutHandler(logoutHandler)
+                .invalidateHttpSession(true)
+                .and()
                 //.deleteCookies(cookieNamesToClear);
+            .exceptionHandling()
+                .accessDeniedPage("/403");
+        
+//    .sessionManagement()
+//    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//    .and()
+
     }
 }

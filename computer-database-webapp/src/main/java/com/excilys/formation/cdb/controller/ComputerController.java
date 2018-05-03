@@ -52,7 +52,7 @@ public class ComputerController {
         return modelAndView;
     }
 
-    @PostMapping("/dashboard")
+    @PostMapping("/delete")
     public ModelAndView doPostDashboard(@RequestParam(value = "selection") int[] ids) {
         ModelAndView modelAndView = new ModelAndView();
         try {

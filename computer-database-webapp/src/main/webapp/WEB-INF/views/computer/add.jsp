@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -7,19 +8,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Computer Database</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Bootstrap -->
-	<link href="<tag:link directory='css' target='bootstrap.min.css'/>" rel="stylesheet" media="screen">
-	<link href="<tag:link directory='css' target='font-awesome.css'/>" rel="stylesheet" media="screen">
-	<link href="<tag:link directory='css' target='main.css'/>" rel="stylesheet" media="screen">
+<title>Computer Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="<tag:link directory='css' target='bootstrap.min.css'/>"
+	rel="stylesheet" media="screen">
+<link href="<tag:link directory='css' target='font-awesome.css'/>"
+	rel="stylesheet" media="screen">
+<link href="<tag:link directory='css' target='main.css'/>"
+	rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message
-					code="nav_bar.title" />
+			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title" />
 			</a>
+			<form action="<tag:link target='logout'/>" method="get">
+				<button type="submit" style="margin-top: 8px; float: right"
+					class="btn btn-default">Logout</button>
+			</form>
 		</div>
 	</header>
 

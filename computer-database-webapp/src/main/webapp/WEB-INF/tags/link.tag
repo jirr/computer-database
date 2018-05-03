@@ -17,7 +17,13 @@
     <c:when test="${directory == 'js'}">
     	<c:url value="/static/js/"/>${target}
     </c:when>
-    <c:when test="${target == 'dashboard'}">
+    <c:when test="${directory == 'js'}">
+    	<c:url value="/static/js/"/>${target}
+    </c:when>
+    <c:when test="${target == 'logout'}">
+		<c:url value="/logout"/>
+	</c:when>
+	<c:when test="${target == 'dashboard'}">
 		<c:url value="/computer/dashboard"/>
 	</c:when>
     <c:when test="${target == 'dashboardPrev'}">

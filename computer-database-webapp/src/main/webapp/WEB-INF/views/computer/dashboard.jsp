@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
@@ -6,20 +7,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Computer Database</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<!-- Bootstrap -->
-	<link href="<tag:link directory='css' target='bootstrap.min.css'/>" rel="stylesheet" media="screen">
-	<link href="<tag:link directory='css' target='font-awesome.css'/>" rel="stylesheet" media="screen">
-	<link href="<tag:link directory='css' target='main.css'/>" rel="stylesheet" media="screen">
+<title>Computer Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Bootstrap -->
+<link href="<tag:link directory='css' target='bootstrap.min.css'/>"
+	rel="stylesheet" media="screen">
+<link href="<tag:link directory='css' target='font-awesome.css'/>"
+	rel="stylesheet" media="screen">
+<link href="<tag:link directory='css' target='main.css'/>"
+	rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message
-					code="nav_bar.title" />
+			<a class="navbar-brand" href="<tag:link target='dashboard'/>">
+				<spring:message code="nav_bar.title" />
 			</a>
+			<form action="<tag:link target='logout'/>" method="get">
+				<button type="submit" style="margin-top: 8px; float: right"
+					class="btn btn-default">Logout</button>
+			</form>
 		</div>
 	</header>
 
@@ -51,14 +59,16 @@
 					<a class="btn btn-success" id="addComputer"
 						href="<tag:link target='addComputer'/>"><spring:message
 							code="dashboard.add" /></a> <a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="dashboard.delete" /></a>
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+						<spring:message code="dashboard.delete" />
+					</a>
 				</div>
 			</div>
 		</div>
 
 		<form id="deleteForm" action="#" method="POST">
 			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -119,14 +129,13 @@
 				<tag:pagination />
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="<tag:link target='size' size='10' search='${keywords}'/>"
-					aria-label="Next">
+				<a href="<tag:link target='size' size='10' search='${keywords}'/>" aria-label="Next">
 					<button type="button" class="btn btn-default">10</button>
-				</a> <a href="<tag:link target='size' size='50' search='${keywords}'/>"
-					aria-label="Next">
+				</a> 
+				<a href="<tag:link target='size' size='50' search='${keywords}'/>" aria-label="Next">
 					<button type="button" class="btn btn-default">50</button>
-				</a> <a href="<tag:link target='size' size='100' search='${keywords}'/>"
-					aria-label="Next">
+				</a> 
+				<a href="<tag:link target='size' size='100' search='${keywords}'/>" aria-label="Next">
 					<button type="button" class="btn btn-default">100</button>
 				</a>
 			</div>

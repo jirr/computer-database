@@ -20,7 +20,6 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String name) throws UsernameNotFoundException {
-        System.out.println("WOUHOUOOUUUUUU ::: " +name);
         if(userDAO.selectOne(name).isPresent()) {
             return userDAO.selectOne(name).get();
         } else {
