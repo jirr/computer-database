@@ -23,9 +23,9 @@
 		<div class="container">
 			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title" />
 			</a>
-			<form action="<tag:link target='logout'/>" method="get">
-				<button type="submit" style="margin-top: 8px; float: right"
-					class="btn btn-default">Logout</button>
+			<form id="logout-form" action="<tag:link target='logout'/>" method="POST">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<button type="submit" style="margin-top: 8px; float: right" class="btn btn-default">Logout</button>
 			</form>
 		</div>
 	</header>

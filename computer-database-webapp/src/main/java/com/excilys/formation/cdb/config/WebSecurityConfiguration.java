@@ -53,23 +53,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .formLogin()
                 .loginPage("/login")
+                .permitAll()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/computer/dashboard")
                 .and()
-        
+
             .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
                 .and()
-                //.deleteCookies(cookieNamesToClear);
-            .exceptionHandling()
-                .accessDeniedPage("/403");
-        
-//    .sessionManagement()
-//    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//    .and()
 
+            .exceptionHandling()
+                .accessDeniedPage("/403")
+                .and()
+
+            .csrf();
     }
 }

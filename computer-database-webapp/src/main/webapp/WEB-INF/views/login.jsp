@@ -26,16 +26,15 @@
 	<section id="main">
 		<div class="container">
 			<c:if test="${param.error != null}">
-				<div class="alert alert-danger">Error: Invalid username or
-					password.</div>
+				<div class="alert alert-danger">Error: Invalid username or password.</div>
 			</c:if>
-			<c:if test="${not empty successMessage}">
-				<div class="alert alert-success">Success: Successfully logged
-					out !</div>
+			<c:if test="${param.logout != null}">
+				<div class="alert alert-success">Success: Successfully logged out !</div>
 			</c:if>
 			<h1>Connexion</h1>
 			<div class="row">
 				<form:form action="login" method="POST" modelAttribute="user">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<fieldset>
 						<div class="form-group">
 							<label for="login">Username</label> <input type="text"

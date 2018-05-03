@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
@@ -24,9 +25,9 @@
 			<a class="navbar-brand" href="<tag:link target='dashboard'/>">
 				<spring:message code="nav_bar.title" />
 			</a>
-			<form action="<tag:link target='logout'/>" method="get">
-				<button type="submit" style="margin-top: 8px; float: right"
-					class="btn btn-default">Logout</button>
+			<form id="logout-form" action="<tag:link target='logout'/>" method="POST">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<button type="submit" style="margin-top: 8px; float: right" class="btn btn-default">Logout</button>
 			</form>
 		</div>
 	</header>
@@ -66,10 +67,10 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
-			<input type="hidden" name="selection" value="">
+		<form:form id="deleteForm" action="#" method="POST">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</form>
+			<input type="hidden" id="selection" name="selection" value="" />
+		</form:form>
 
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">

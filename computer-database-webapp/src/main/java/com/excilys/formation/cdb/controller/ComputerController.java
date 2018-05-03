@@ -34,7 +34,7 @@ public class ComputerController {
     }
 
     @GetMapping("/dashboard")
-    public ModelAndView doGetDashboard(@RequestParam(value = "search", defaultValue = "") String search,
+    private ModelAndView doGetDashboard(@RequestParam(value = "search", defaultValue = "") String search,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "index", defaultValue = "1") int index,
             @RequestParam(value = "sort", defaultValue = "") String sort,
@@ -53,7 +53,7 @@ public class ComputerController {
     }
 
     @PostMapping("/delete")
-    public ModelAndView doPostDashboard(@RequestParam(value = "selection") int[] ids) {
+    private ModelAndView deleteComputer(@RequestParam(value = "selection") int[] ids) {
         ModelAndView modelAndView = new ModelAndView();
         try {
             modelAndView.addObject("successMessage", computerService.deleteComputer(ids));
@@ -64,7 +64,7 @@ public class ComputerController {
     }
     
     @GetMapping("/add")
-    public ModelAndView doGetAddComputer() {
+    private ModelAndView doGetAddComputer() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("companyList", companyService.listAllCompany());
         modelAndView.addObject("computer", new ComputerDTO());
@@ -72,7 +72,7 @@ public class ComputerController {
     }
 
     @PostMapping("/add")
-    public ModelAndView doPostAddComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
+    private ModelAndView doPostAddComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
             String successMessage = computerService.createComputer(computerMapper.dtoToComputer(computerDTO));
@@ -84,7 +84,7 @@ public class ComputerController {
     }
     
     @GetMapping("/edit")
-    public ModelAndView doGetEditComputer(@RequestParam(value = "id") int id) {
+    private ModelAndView doGetEditComputer(@RequestParam(value = "id") int id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("companyList", companyService.listAllCompany());
         try {
@@ -97,7 +97,7 @@ public class ComputerController {
     }
 
     @PostMapping("/edit")
-    public ModelAndView doPostEditComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
+    private ModelAndView doPostEditComputer(@ModelAttribute("computer") ComputerDTO computerDTO, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         try {
             String successMessage = computerService.updateComputer(computerMapper.dtoToComputer(computerDTO));
@@ -119,5 +119,4 @@ public class ComputerController {
         modelAndView.addObject("size", page.getSize());
         return modelAndView;
     }
-
 }
