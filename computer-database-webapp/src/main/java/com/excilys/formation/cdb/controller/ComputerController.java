@@ -54,7 +54,7 @@ public class ComputerController {
 
     @PostMapping("/delete")
     private ModelAndView deleteComputer(@RequestParam(value = "selection") int[] ids) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("computer/dashboard");
         try {
             modelAndView.addObject("successMessage", computerService.deleteComputer(ids));
         } catch (ServiceException e) {
