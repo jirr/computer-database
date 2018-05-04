@@ -9,17 +9,25 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.model.User;
 import com.excilys.formation.cdb.persistence.CompanyDAO;
 import com.excilys.formation.cdb.persistence.ComputerDAO;
+import com.excilys.formation.cdb.persistence.UserDAO;
 import com.excilys.formation.cdb.service.ServiceException;
 
 @Component
 public class Validator {
 
-    @Autowired
+    private UserDAO userDAO;
     private CompanyDAO companyDAO;
-    @Autowired
     private ComputerDAO computerDAO;
+
+    @Autowired
+    public Validator(UserDAO userDAO, CompanyDAO companyDAO, ComputerDAO computerDAO) {
+        this.userDAO = userDAO;
+        this.companyDAO = companyDAO;
+        this.computerDAO = computerDAO;
+    }
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -86,6 +94,20 @@ public class Validator {
         } else {
             LOGGER.error("Company ID does not exist: {}", id);
             throw new ServiceException("Company ID does not exist.");
+        }
+    }
+
+    /**
+     * @param id The id to check
+     * @return Company The company object with the id
+     * @throws ServiceException if the id does no exist
+     */
+    public User userValidation(String name) throws ServiceException {
+        if (userDAO.selectOne(name).isPresent()) {
+            return userDAO.selectOne(name).get();
+        } else {
+            LOGGER.error("User name does not exist: {}", name);
+            throw new ServiceException("User name does not exist.");
         }
     }
 }

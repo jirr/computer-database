@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tag"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,9 +21,12 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message
-					code="nav_bar.title" />
+			<a class="navbar-brand" href="<tag:link target='dashboard'/>"> <spring:message code="nav_bar.title" />
 			</a>
+			<form id="logout-form" action="<tag:link target='logout'/>" method="POST">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<button type="submit" style="margin-top: 8px; float: right" class="btn btn-default">Logout</button>
+			</form>
 		</div>
 	</header>
 
@@ -94,10 +97,10 @@
 	<script
 		src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 	<script>
-	  	$.validate({
-	    	lang: 'en',
-	    	modules: 'html5'
-	  	});
+		$.validate({
+			lang : 'en',
+			modules : 'html5'
+		});
 	</script>
 </body>
 </html>

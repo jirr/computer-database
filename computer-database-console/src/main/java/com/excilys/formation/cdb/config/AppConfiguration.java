@@ -56,6 +56,8 @@ public class AppConfiguration {
 
     private Properties hibernateProperties() {
         return new Properties() {
+            private static final long serialVersionUID = -4344574768347085406L;
+
             {
                 setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));

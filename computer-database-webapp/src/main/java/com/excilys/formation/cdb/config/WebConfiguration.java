@@ -6,22 +6,31 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -120,6 +129,28 @@ public class WebConfiguration implements WebMvcConfigurer {
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    HandlerExceptionResolver customExceptionResolver() {
+        SimpleMappingExceptionResolver s = new SimpleMappingExceptionResolver();
+        Properties p = new Properties();
+        p.setProperty(NoHandlerFoundException.class.getName(), "404");
+        p.setProperty(HttpMessageNotWritableException.class.getName(), "500");
+        p.setProperty(ConversionNotSupportedException.class.getName(), "500");
+        p.setProperty(AccessDeniedException.class.getName(), "403");
+        s.setExceptionMappings(p);
+        s.addStatusCode("404", HttpStatus.NOT_FOUND.value());
+        s.addStatusCode("403", HttpStatus.FORBIDDEN.value());
+        s.addStatusCode("403", HttpStatus.UNAUTHORIZED.value());
+        s.addStatusCode("500", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        s.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return s;
     }
 
     @Override
