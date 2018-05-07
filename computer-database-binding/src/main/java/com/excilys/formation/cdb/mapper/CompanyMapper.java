@@ -33,6 +33,14 @@ public class CompanyMapper {
     public CompanyDTO companyToDTO(Optional<Company> company) {
         return company.isPresent() ? new CompanyDTO(company.get().getId(), company.get().getName()) : null;
     }
+
+    /**
+     * @param company The object to map
+     * @return CompanyDTO The object mapped to DTO version
+     */
+    public CompanyDTO companyToDTO(Company company) {
+        return new CompanyDTO(company.getId(), company.getName());
+    }
     
     /**
      * @param company The object to map

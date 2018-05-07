@@ -16,10 +16,6 @@
 	<name>computer-database-webapp</name>
 	<url>https://github.com/jirr/computer-database</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
