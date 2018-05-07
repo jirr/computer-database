@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.excilys.formation.cdb.model.User;
-import com.excilys.formation.cdb.persistence.UserDAO;
+import com.excilys.formation.cdb.persistence.dao.UserDAO;
 
 @Service
 public class UserService implements UserDetailsService {

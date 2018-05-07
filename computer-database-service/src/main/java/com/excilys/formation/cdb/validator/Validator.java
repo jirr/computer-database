@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.model.User;
-import com.excilys.formation.cdb.persistence.CompanyDAO;
-import com.excilys.formation.cdb.persistence.ComputerDAO;
-import com.excilys.formation.cdb.persistence.UserDAO;
+import com.excilys.formation.cdb.persistence.dao.CompanyDAO;
+import com.excilys.formation.cdb.persistence.dao.ComputerDAO;
+import com.excilys.formation.cdb.persistence.dao.UserDAO;
 import com.excilys.formation.cdb.service.ServiceException;
 
 @Component

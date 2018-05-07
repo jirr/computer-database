@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.model.Computer;
-import com.excilys.formation.cdb.persistence.ComputerDAO;
+import com.excilys.formation.cdb.persistence.dao.ComputerDAO;
 import com.excilys.formation.cdb.validator.Validator;
 
 /**
@@ -56,6 +56,15 @@ public class ComputerService {
      */
     public Computer selectOne(int id) throws ServiceException {
         return validator.computerIdValidation(id);
+    }
+
+    /**
+     * @param id The id of computer
+     * @return Computer with the right id
+     * @throws ServiceException if the id does not exist
+     */
+    public List<Computer> selectAllComputers() {
+        return computerDAO.listAll();
     }
 
     /**

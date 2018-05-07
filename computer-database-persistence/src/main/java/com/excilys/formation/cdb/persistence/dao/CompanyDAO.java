@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.persistence;
+package com.excilys.formation.cdb.persistence.dao;
 
 import java.util.List;
 import java.util.Optional;

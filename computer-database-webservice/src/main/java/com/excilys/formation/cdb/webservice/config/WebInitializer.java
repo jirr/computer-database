@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.config;
+package com.excilys.formation.cdb.webservice.config;
 
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
