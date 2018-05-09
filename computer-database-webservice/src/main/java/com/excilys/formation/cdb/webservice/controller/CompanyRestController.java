@@ -36,7 +36,7 @@ public class CompanyRestController {
         return new ResponseEntity<List<CompanyDTO>>(companyDTOList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/company")
+    @DeleteMapping("/company/{id}")
     public ResponseEntity<String> deleteCompany(@PathVariable int id) {
         try {
             this.companyService.deleteCompany(id);

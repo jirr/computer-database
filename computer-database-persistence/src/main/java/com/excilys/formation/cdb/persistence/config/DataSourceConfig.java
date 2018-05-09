@@ -15,13 +15,11 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 
 @Configuration
-@EnableWebMvc
 @PropertySource(value = "classpath:db.properties")
 @ComponentScan(basePackages = "com.excilys.formation.cdb.dao")
 public class DataSourceConfig {

@@ -48,6 +48,16 @@ public class ComputerRestController {
         }
     }
 
+    @DeleteMapping("/computer/{id}")
+    public ResponseEntity<String> deleteComputer(@PathVariable int id) {
+        try {
+            computerService.deleteComputer(id);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/computer")
     public ResponseEntity<String> getComputerById(@RequestBody ComputerDTO computerDTO) {
         try {
@@ -67,15 +77,4 @@ public class ComputerRestController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @DeleteMapping("/computer")
-    public ResponseEntity<String> deleteComputer(@PathVariable int id) {
-        try {
-            computerService.deleteComputer(id);
-            return new ResponseEntity<String>(HttpStatus.OK);
-        } catch (ServiceException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 }
