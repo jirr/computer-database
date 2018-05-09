@@ -78,7 +78,7 @@ public class ComputerDTO {
         result += " {nom: " + this.name;
         result += ", date1: " + this.dateIntroduced;
         result += ", date2: " + this.dateDiscontinued;
-        result += ", manufactor: " + this.manufactor.getName() + "}\n";
+        result += ", manufactor: " + (this.manufactor != null ? this.manufactor.getName() : " ") + "}\n";
         return result;
     }
 

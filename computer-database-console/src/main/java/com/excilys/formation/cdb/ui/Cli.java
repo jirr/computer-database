@@ -1,12 +1,21 @@
 package com.excilys.formation.cdb.ui;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.cdb.config.AppConfiguration;
+import com.excilys.formation.cdb.dto.CompanyDTO;
+import com.excilys.formation.cdb.dto.ComputerDTO;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.CompanyService;
@@ -21,13 +30,16 @@ public class Cli {
 
     private ComputerService computerService;
     private CompanyService companyService;
+    private Client client;
 
     public Cli(ComputerService computerService, CompanyService companyService) {
         this.companyService = companyService;
         this.computerService = computerService;
+        this.client = ClientBuilder.newClient();
     }
 
     private static final int PAGE_SIZE = 50;
+    private static final String WEB_SERVICE_URI = "http://localhost:8080/computer-database-webservice";
 
     /**
      * @param args the arguments
@@ -106,9 +118,12 @@ public class Cli {
     private void listComputer(Scanner scanner) {
         System.out.println("Computers list: \n");
         try {
-            ComputerPage page = new ComputerPage(PAGE_SIZE, computerService);
-            paginationChoices(scanner, page);
-        } catch (ServiceException e) {
+            this.client.target(WEB_SERVICE_URI).path("computers")
+                        .request(MediaType.APPLICATION_JSON).get(new GenericType<List<ComputerDTO>>(){})
+                .forEach(computerDTO -> System.out.println(computerDTO.toString()));;
+            //ComputerPage page = new ComputerPage(PAGE_SIZE, computerService);
+            //paginationChoices(scanner, page);
+        } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
@@ -119,9 +134,12 @@ public class Cli {
     private void listCompany(Scanner scanner) {
         System.out.println("Companies list: \n");
         try {
-            CompanyPage page = new CompanyPage(PAGE_SIZE);
-            paginationChoices(scanner, page);
-        } catch (ServiceException e) {
+            this.client.target(WEB_SERVICE_URI).path("companies")
+                        .request(MediaType.APPLICATION_JSON).get(new GenericType<List<CompanyDTO>>(){})
+                .forEach(companyDTO -> System.out.println(companyDTO.toString()));;
+            //CompanyPage page = new CompanyPage(PAGE_SIZE);
+            //paginationChoices(scanner, page);
+        } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
     }
@@ -166,7 +184,8 @@ public class Cli {
         System.out.println("Computer Id to detail ?");
         int id = scanner.nextInt();
         try {
-            System.out.println(computerService.selectOne(id));
+            System.out.println(client.target(WEB_SERVICE_URI).path("computer/" + id)
+                    .request(MediaType.APPLICATION_JSON).get(ComputerDTO.class));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -190,11 +209,14 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = companyService.getCompany(companyId);
-            System.out.println(computerService.createComputer(new Computer.ComputerBuilder(name)
-                                                                                    .dateIntroduced(introduced)
-                                                                                    .dateDiscontinued(discontinued)
-                                                                                    .manufactor(manufactor)
-                                                                                    .build()));
+            Computer computer = new Computer.ComputerBuilder(name)
+                                            .dateIntroduced(introduced)
+                                            .dateDiscontinued(discontinued)
+                                            .manufactor(manufactor)
+                                            .build();
+            this.client.target(WEB_SERVICE_URI).request(MediaType.APPLICATION_JSON)
+                        .post(Entity.entity(computer, MediaType.APPLICATION_JSON));
+            System.out.println("New computer added to database.");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -221,12 +243,14 @@ public class Cli {
             LocalDate introduced = LocalDate.parse(introducedStr);
             LocalDate discontinued = LocalDate.parse(discontinuedStr);
             Company manufactor = companyService.getCompany(companyId);
-            System.out.println(computerService.updateComputer(new Computer.ComputerBuilder(name)
-                                                                                    .id(id)
-                                                                                    .dateIntroduced(introduced)
-                                                                                    .dateDiscontinued(discontinued)
-                                                                                    .manufactor(manufactor)
-                                                                                    .build()));
+            Computer computer = new Computer.ComputerBuilder(name)
+                                            .id(id)
+                                            .dateIntroduced(introduced)
+                                            .dateDiscontinued(discontinued)
+                                            .manufactor(manufactor)
+                                            .build();
+            this.client.target(WEB_SERVICE_URI).request(MediaType.APPLICATION_JSON)
+                        .put(Entity.entity(computer, MediaType.APPLICATION_JSON));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -241,7 +265,8 @@ public class Cli {
         saisie = scanner.next();
         try {
             int id = Integer.parseInt(saisie);
-            System.out.println(computerService.deleteComputer(id));
+            this.client.target(WEB_SERVICE_URI).path("computer/" + id).request().delete();
+            System.out.println("Computer " + id + " has been deleted.");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -256,7 +281,8 @@ public class Cli {
         saisie = scanner.next();
         try {
             int id = Integer.parseInt(saisie);
-            System.out.println(companyService.deleteCompany(id));
+            this.client.target(WEB_SERVICE_URI).path("company/" + id).request().delete();
+            System.out.println("Company " + id + " has been deleted.");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

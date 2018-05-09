@@ -1,0 +1,2 @@
+insert into user (id,password,role,username) values (  1,'$2a$11$bV2GZl1RrU3SRdcx5Gto9eKCAzbAMCZtvmIEbDPkx05hSAAy8jECi', 'ROLE_ADMIN', 'admin');
+insert into user (id,password,role,username) values ( 2,'$2a$11$JFCCPD655H.t7uPTTjkgA.RaaMB6bNrSNFOXT2uvuqJiqFSBIfc4K', 'ROLE_USER', 'user');

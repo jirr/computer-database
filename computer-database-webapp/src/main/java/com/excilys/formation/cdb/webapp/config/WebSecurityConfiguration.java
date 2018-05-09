@@ -56,10 +56,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/computer/edit", "/computer/add", "/computer/delete").hasRole("ADMIN")
                 .antMatchers("/computer/dashboard").hasAnyRole("USER", "ADMIN").and()
 
-                .formLogin().loginPage("/login").permitAll().usernameParameter("username").passwordParameter("password")
-                .defaultSuccessUrl("/computer/dashboard").and()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/computer/dashboard")
+                    .and()
 
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login").and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login")
+                    .and()
 
                 .exceptionHandling().accessDeniedPage("/403").and()
 

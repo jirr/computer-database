@@ -59,7 +59,7 @@ public class ComputerRestController {
     }
 
     @PostMapping("/computer")
-    public ResponseEntity<String> getComputerById(@RequestBody ComputerDTO computerDTO) {
+    public ResponseEntity<String> addComputer(@RequestBody ComputerDTO computerDTO) {
         try {
             this.computerService.createComputer(this.computerMapper.dtoToComputer(computerDTO));
             return new ResponseEntity<String>(HttpStatus.OK);

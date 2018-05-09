@@ -59,7 +59,6 @@ public class DataSourceConfig {
         return new Properties() {
             private static final long serialVersionUID = -6659937884292195075L;
             {
-                setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
                 setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
                 setProperty("hibernate.globally_quoted_identifiers", "true");

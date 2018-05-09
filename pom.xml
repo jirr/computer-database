@@ -40,6 +40,7 @@
 		<jsp.version>2.3.1</jsp.version>
 		<!-- WebService -->
 		<jackson.version>2.9.5</jackson.version>
+		<jersey.version>2.27</jersey.version>
 		<!-- web.xml -->
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 	</properties>
@@ -174,6 +175,26 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.inject</groupId>
+				<artifactId>jersey-hk2</artifactId>
+				<version>${jersey.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
